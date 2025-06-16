@@ -414,7 +414,13 @@ class NotificationSystem {
     constructor() {
         this.notifications = [];
         this.socket = null;
-        this.init();
+        
+        // Wait for DOM to be ready before initializing
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.init());
+        } else {
+            this.init();
+        }
     }
 
     init() {
