@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Administration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-primary text-white">
+            <div class="p-6">
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
+                        <span class="material-icons">shield</span>
+                    </div>
+                    <div>
+                        <h1 class="font-brand text-2xl">MotivAI</h1>
+                        <p class="text-xs opacity-75">Admin Panel</p>
+                    </div>
+                </div>
+
+                <!-- Admin Profile Mini -->
+                <div class="bg-white/10 rounded-lg p-4 mb-6">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://placehold.co/40x40/e17055/ffffff?text=AD" alt="Admin" class="w-10 h-10 rounded-full" id="admin-avatar">
+                        <div>
+                            <p class="font-semibold" id="admin-name">Admin</p>
+                            <p class="text-xs opacity-75" id="admin-role">Super Admin</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="space-y-2">
+                    <a href="#dashboard" class="nav-link flex items-center space-x-3 p-3 rounded-lg bg-accent text-white">
+                        <span class="material-icons">dashboard</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#users" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">people</span>
+                        <span>Utilisateurs</span>
+                    </a>
+                    <a href="#companies" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">business</span>
+                        <span>Entreprises</span>
+                    </a>
+                    <a href="#jobs" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">work</span>
+                        <span>Offres d'emploi</span>
+                    </a>
+                    <a href="#applications" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">description</span>
+                        <span>Candidatures</span>
+                    </a>
+                    <a href="#settings" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">settings</span>
+                        <span>Paramètres</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Top Bar -->
+            <header class="bg-white shadow-sm sticky top-0 z-10">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <div class="flex items-center space-x-4">
+                        <h2 class="text-2xl font-bold text-primary" id="page-title">Dashboard</h2>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- Search -->
+                        <div class="relative">
+                            <input type="text" placeholder="Rechercher..." class="w-64 pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            <span class="material-icons absolute left-3 top-2.5 text-gray-400">search</span>
+                        </div>
+                        
+                        <!-- Logout -->
+                        <button id="logout-btn" class="p-2 hover:bg-gray-100 rounded-lg transition">
+                            <span class="material-icons">logout</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="p-6">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="page-section">
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white">
+                                    <span class="material-icons">people</span>
+                                </div>
+                                <span class="text-sm text-gray-500" id="users-trend">+12% ce mois</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-primary" id="users-count">0</h3>
+                            <p class="text-text-light">Utilisateurs</p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center text-white">
+                                    <span class="material-icons">work</span>
+                                </div>
+                                <span class="text-sm text-success" id="jobs-trend">+5 cette semaine</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-primary" id="jobs-count">0</h3>
+                            <p class="text-text-light">Offres d'emploi</p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white">
+                                    <span class="material-icons">business</span>
+                                </div>
+                                <span class="text-sm text-success" id="companies-trend">+15%</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-primary" id="companies-count">0</h3>
+                            <p class="text-text-light">Entreprises</p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-accent to-accent-dark rounded-xl flex items-center justify-center text-white">
+                                    <span class="material-icons">description</span>
+                                </div>
+                                <span class="text-sm text-warning" id="applications-trend">+24%</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-primary" id="applications-count">0</h3>
+                            <p class="text-text-light">Candidatures</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+                        <h3 class="text-xl font-bold text-primary mb-4">Activité récente</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-left text-xs text-gray-500 uppercase bg-gray-50">
+                                        <th class="px-6 py-3 font-medium">Utilisateur</th>
+                                        <th class="px-6 py-3 font-medium">Action</th>
+                                        <th class="px-6 py-3 font-medium">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100" id="activity-table-body">
+                                    <tr class="hover:bg-gray-50 transition">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <img src="https://placehold.co/40x40/667eea/ffffff?text=ML" alt="User" class="w-10 h-10 rounded-full mr-3">
+                                                <div>
+                                                    <p class="font-medium text-gray-900">Marie Laurent</p>
+                                                    <p class="text-sm text-gray-500">marie.laurent@email.com</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-600">A généré une lettre de motivation</td>
+                                        <td class="px-6 py-4 text-sm text-gray-600">Il y a 5 min</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 transition">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <img src="https://placehold.co/40x40/f093fb/ffffff?text=PD" alt="User" class="w-10 h-10 rounded-full mr-3">
+                                                <div>
+                                                    <p class="font-medium text-gray-900">Pierre Dubois</p>
+                                                    <p class="text-sm text-gray-500">p.dubois@gmail.com</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-600">S'est inscrit</td>
+                                        <td class="px-6 py-4 text-sm text-gray-600">Il y a 25 min</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 transition">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <img src="https://placehold.co/40x40/4facfe/ffffff?text=SB" alt="User" class="w-10 h-10 rounded-full mr-3">
+                                                <div>
+                                                    <p class="font-medium text-gray-900">Sophie Bernard</p>
+                                                    <p class="text-sm text-gray-500">s.bernard@outlook.fr</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-600">A postulé à une offre</td>
+                                        <td class="px-6 py-4 text-sm text-gray-600">Il y a 1h</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Users Section -->
+                <section id="users-section" class="page-section hidden">
+                    <div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-primary">Gestion des utilisateurs</h3>
+                            <button id="add-user-btn" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition">
+                                <span class="material-icons text-sm mr-1">add</span>
+                                Ajouter un utilisateur
+                            </button>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-left text-xs text-gray-500 uppercase bg-gray-50">
+                                        <th class="px-6 py-3 font-medium">ID</th>
+                                        <th class="px-6 py-3 font-medium">Nom</th>
+                                        <th class="px-6 py-3 font-medium">Email</th>
+                                        <th class="px-6 py-3 font-medium">Rôle</th>
+                                        <th class="px-6 py-3 font-medium">Date d'inscription</th>
+                                        <th class="px-6 py-3 font-medium">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100" id="users-table-body">
+                                    <!-- Users will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Companies Section -->
+                <section id="companies-section" class="page-section hidden">
+                    <div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-primary">Gestion des entreprises</h3>
+                            <button id="add-company-btn" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition">
+                                <span class="material-icons text-sm mr-1">add</span>
+                                Ajouter une entreprise
+                            </button>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-left text-xs text-gray-500 uppercase bg-gray-50">
+                                        <th class="px-6 py-3 font-medium">ID</th>
+                                        <th class="px-6 py-3 font-medium">Logo</th>
+                                        <th class="px-6 py-3 font-medium">Nom</th>
+                                        <th class="px-6 py-3 font-medium">Industrie</th>
+                                        <th class="px-6 py-3 font-medium">Taille</th>
+                                        <th class="px-6 py-3 font-medium">Note</th>
+                                        <th class="px-6 py-3 font-medium">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100" id="companies-table-body">
+                                    <!-- Companies will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Jobs Section -->
+                <section id="jobs-section" class="page-section hidden">
+                    <div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-primary">Gestion des offres d'emploi</h3>
+                            <button id="add-job-btn" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition">
+                                <span class="material-icons text-sm mr-1">add</span>
+                                Ajouter une offre
+                            </button>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-left text-xs text-gray-500 uppercase bg-gray-50">
+                                        <th class="px-6 py-3 font-medium">ID</th>
+                                        <th class="px-6 py-3 font-medium">Titre</th>
+                                        <th class="px-6 py-3 font-medium">Entreprise</th>
+                                        <th class="px-6 py-3 font-medium">Localisation</th>
+                                        <th class="px-6 py-3 font-medium">Salaire</th>
+                                        <th class="px-6 py-3 font-medium">Type</th>
+                                        <th class="px-6 py-3 font-medium">Date</th>
+                                        <th class="px-6 py-3 font-medium">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100" id="jobs-table-body">
+                                    <!-- Jobs will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Applications Section -->
+                <section id="applications-section" class="page-section hidden">
+                    <div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-primary">Gestion des candidatures</h3>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-left text-xs text-gray-500 uppercase bg-gray-50">
+                                        <th class="px-6 py-3 font-medium">ID</th>
+                                        <th class="px-6 py-3 font-medium">Utilisateur</th>
+                                        <th class="px-6 py-3 font-medium">Offre</th>
+                                        <th class="px-6 py-3 font-medium">Entreprise</th>
+                                        <th class="px-6 py-3 font-medium">Statut</th>
+                                        <th class="px-6 py-3 font-medium">Date</th>
+                                        <th class="px-6 py-3 font-medium">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100" id="applications-table-body">
+                                    <!-- Applications will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings-section" class="page-section hidden">
+                    <div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+                        <h3 class="text-xl font-bold text-primary mb-6">Paramètres du site</h3>
+                        
+                        <form id="settings-form" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nom du site</label>
+                                <input type="text" id="site-name" value="MotivAI" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email de contact</label>
+                                <input type="email" id="contact-email" value="contact@motivai.com" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Maintenance du site</label>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="maintenance-mode" class="mr-2">
+                                    <span>Activer le mode maintenance</span>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition">
+                                Sauvegarder les paramètres
+                            </button>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- User Modal -->
+    <div id="user-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl max-w-md w-full p-6">
+            <h3 class="text-xl font-bold text-primary mb-4" id="user-modal-title">Ajouter un utilisateur</h3>
+            
+            <form id="user-form" class="space-y-4">
+                <input type="hidden" id="user-id">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                    <input type="text" id="user-name" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" id="user-email" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" required>
+                </div>
+                
+                <div id="password-field">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+                    <input type="password" id="user-password" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
+                    <select id="user-role" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" required>
+                        <option value="user">Utilisateur</option>
+                        <option value="admin">Administrateur</option>
+                    </select>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" id="close-user-modal" class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Company Modal -->
+    <div id="company-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl max-w-md w-full p-6">
+            <h3 class="text-xl font-bold text-primary mb-4" id="company-modal-title">Ajouter une entreprise</h3>
+            
+            <form id="company-form" class="space-y-4">
+                <input type="hidden" id="company-id">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                    <input type="text" id="company-name" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Logo URL</label>
+                    <input type="url" id="company-logo" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" placeholder="https://logo.clearbit.com/company.com">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Industrie</label>
+                    <input type="text" id="company-industry" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="company-description" rows="3" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent resize-none"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Taille</label>
+                    <input type="text" id="company-size" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" placeholder="Ex: 150K+ employés">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Localisations</label>
+                    <input type="text" id="company-locations" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" placeholder="Ex: Paris, Lyon">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Site web</label>
+                    <input type="url" id="company-website" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Note (0-5)</label>
+                    <input type="number" id="company-rating" min="0" max="5" step="0.1" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" id="close-company-modal" class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Job Modal -->
+    <div id="job-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl max-w-md w-full p-6">
+            <h3 class="text-xl font-bold text-primary mb-4" id="job-modal-title">Ajouter une offre d'emploi</h3>
+            
+            <form id="job-form" class="space-y-4">
+                <input type="hidden" id="job-id">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Titre</label>
+                    <input type="text" id="job-title" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Entreprise</label>
+                    <select id="job-company" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" required>
+                        <!-- Companies will be loaded here -->
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Localisation</label>
+                    <input type="text" id="job-location" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="job-description" rows="3" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent resize-none"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Prérequis</label>
+                    <textarea id="job-requirements" rows="3" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent resize-none"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Fourchette de salaire</label>
+                    <input type="text" id="job-salary" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" placeholder="Ex: 70-90K€">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Type de contrat</label>
+                    <select id="job-type" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                        <option value="CDI">CDI</option>
+                        <option value="CDD">CDD</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Stage">Stage</option>
+                        <option value="Alternance">Alternance</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Télétravail</label>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="job-remote" class="mr-2">
+                        <span>Télétravail possible</span>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Compétences (séparées par des virgules)</label>
+                    <input type="text" id="job-skills" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" placeholder="Ex: React, Node.js, TypeScript">
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" id="close-job-modal" class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl max-w-md w-full p-6">
+            <h3 class="text-xl font-bold text-primary mb-4" id="confirm-title">Confirmation</h3>
+            <p class="text-text-light mb-6" id="confirm-message">Êtes-vous sûr de vouloir effectuer cette action ?</p>
+            
+            <div class="flex justify-end space-x-3">
+                <button id="cancel-confirm" class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Annuler</button>
+                <button id="confirm-action" class="px-4 py-2 bg-error text-white rounded-lg hover:bg-red-700 transition">Confirmer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let token = localStorage.getItem('admin_token');
+        let currentUser = null;
+        let currentAction = null;
+        let currentItemId = null;
+
+        // Check if user is logged in
+        function checkAuth() {
+            if (!token) {
+                window.location.href = '/login.html?redirect=admin';
+                return false;
+            }
+            return true;
+        }
+
+        // API functions
+        async function fetchWithAuth(url, options = {}) {
+            if (!token) return null;
+            
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+                ...options.headers
+            };
+            
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers
+                });
+                
+                if (response.status === 401 || response.status === 403) {
+                    // Token expired or invalid
+                    localStorage.removeItem('admin_token');
+                    window.location.href = '/login.html?redirect=admin';
+                    return null;
+                }
+                
+                return response;
+            } catch (error) {
+                console.error('API Error:', error);
+                return null;
+            }
+        }
+
+        // Load dashboard stats
+        async function loadDashboardStats() {
+            const response = await fetchWithAuth('/api/admin/stats');
+            if (!response) return;
+            
+            const stats = await response.json();
+            
+            document.getElementById('users-count').textContent = stats.users;
+            document.getElementById('jobs-count').textContent = stats.jobs;
+            document.getElementById('companies-count').textContent = stats.companies;
+            document.getElementById('applications-count').textContent = stats.applications || 0;
+        }
+
+        // Load users
+        async function loadUsers() {
+            const response = await fetchWithAuth('/api/admin/users');
+            if (!response) return;
+            
+            const users = await response.json();
+            const tableBody = document.getElementById('users-table-body');
+            tableBody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition';
+                row.innerHTML = `
+                    <td class="px-6 py-4">${user.id}</td>
+                    <td class="px-6 py-4">${user.name}</td>
+                    <td class="px-6 py-4">${user.email}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 ${user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'} rounded-full text-xs">
+                            ${user.role}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-600">${new Date(user.created_at).toLocaleDateString()}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                            <button class="edit-user-btn p-1 text-gray-400 hover:text-accent transition" data-id="${user.id}">
+                                <span class="material-icons text-sm">edit</span>
+                            </button>
+                            <button class="delete-user-btn p-1 text-gray-400 hover:text-error transition" data-id="${user.id}">
+                                <span class="material-icons text-sm">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners
+            document.querySelectorAll('.edit-user-btn').forEach(btn => {
+                btn.addEventListener('click', () => editUser(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.delete-user-btn').forEach(btn => {
+                btn.addEventListener('click', () => deleteUser(btn.dataset.id));
+            });
+        }
+
+        // Load companies
+        async function loadCompanies() {
+            const response = await fetchWithAuth('/api/admin/companies');
+            if (!response) return;
+            
+            const companies = await response.json();
+            const tableBody = document.getElementById('companies-table-body');
+            tableBody.innerHTML = '';
+            
+            companies.forEach(company => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition';
+                row.innerHTML = `
+                    <td class="px-6 py-4">${company.id}</td>
+                    <td class="px-6 py-4">
+                        <img src="${company.logo || 'https://placehold.co/40x40/e17055/ffffff?text=' + company.name.substring(0, 2).toUpperCase()}" 
+                             alt="${company.name}" class="w-10 h-10 rounded-lg object-contain">
+                    </td>
+                    <td class="px-6 py-4">${company.name}</td>
+                    <td class="px-6 py-4">${company.industry || '-'}</td>
+                    <td class="px-6 py-4">${company.size || '-'}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            <span class="text-yellow-400 mr-1">★</span>
+                            <span>${company.rating || '0'}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                            <button class="edit-company-btn p-1 text-gray-400 hover:text-accent transition" data-id="${company.id}">
+                                <span class="material-icons text-sm">edit</span>
+                            </button>
+                            <button class="delete-company-btn p-1 text-gray-400 hover:text-error transition" data-id="${company.id}">
+                                <span class="material-icons text-sm">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners
+            document.querySelectorAll('.edit-company-btn').forEach(btn => {
+                btn.addEventListener('click', () => editCompany(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.delete-company-btn').forEach(btn => {
+                btn.addEventListener('click', () => deleteCompany(btn.dataset.id));
+            });
+        }
+
+        // Load jobs
+        async function loadJobs() {
+            const response = await fetchWithAuth('/api/admin/jobs');
+            if (!response) return;
+            
+            const jobs = await response.json();
+            const tableBody = document.getElementById('jobs-table-body');
+            tableBody.innerHTML = '';
+            
+            jobs.forEach(job => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition';
+                row.innerHTML = `
+                    <td class="px-6 py-4">${job.id}</td>
+                    <td class="px-6 py-4">${job.title}</td>
+                    <td class="px-6 py-4">${job.company_name}</td>
+                    <td class="px-6 py-4">${job.location || '-'}</td>
+                    <td class="px-6 py-4">${job.salary_range || '-'}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs">
+                            ${job.type || 'CDI'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-600">${new Date(job.created_at).toLocaleDateString()}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                            <button class="edit-job-btn p-1 text-gray-400 hover:text-accent transition" data-id="${job.id}">
+                                <span class="material-icons text-sm">edit</span>
+                            </button>
+                            <button class="delete-job-btn p-1 text-gray-400 hover:text-error transition" data-id="${job.id}">
+                                <span class="material-icons text-sm">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners
+            document.querySelectorAll('.edit-job-btn').forEach(btn => {
+                btn.addEventListener('click', () => editJob(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.delete-job-btn').forEach(btn => {
+                btn.addEventListener('click', () => deleteJob(btn.dataset.id));
+            });
+        }
+
+        // User CRUD operations
+        async function addUser() {
+            document.getElementById('user-modal-title').textContent = 'Ajouter un utilisateur';
+            document.getElementById('user-id').value = '';
+            document.getElementById('user-name').value = '';
+            document.getElementById('user-email').value = '';
+            document.getElementById('user-password').value = '';
+            document.getElementById('user-role').value = 'user';
+            document.getElementById('password-field').style.display = 'block';
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        async function editUser(userId) {
+            const response = await fetchWithAuth(`/api/admin/users/${userId}`);
+            if (!response) return;
+            
+            const user = await response.json();
+            
+            document.getElementById('user-modal-title').textContent = 'Modifier l\'utilisateur';
+            document.getElementById('user-id').value = user.id;
+            document.getElementById('user-name').value = user.name;
+            document.getElementById('user-email').value = user.email;
+            document.getElementById('user-password').value = '';
+            document.getElementById('user-role').value = user.role;
+            document.getElementById('password-field').style.display = 'none';
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        async function deleteUser(userId) {
+            currentAction = 'deleteUser';
+            currentItemId = userId;
+            document.getElementById('confirm-title').textContent = 'Supprimer l\'utilisateur';
+            document.getElementById('confirm-message').textContent = 'Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.';
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        async function saveUser(event) {
+            event.preventDefault();
+            
+            const userId = document.getElementById('user-id').value;
+            const userData = {
+                name: document.getElementById('user-name').value,
+                email: document.getElementById('user-email').value,
+                role: document.getElementById('user-role').value
+            };
+            
+            if (!userId) {
+                // Add new user
+                userData.password = document.getElementById('user-password').value;
+                if (!userData.password) {
+                    alert('Le mot de passe est requis pour un nouvel utilisateur');
+                    return;
+                }
+                
+                const response = await fetchWithAuth('/api/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify(userData)
+                });
+                
+                if (!response) return;
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.error || 'Erreur lors de la création de l\'utilisateur');
+                    return;
+                }
+            } else {
+                // Update existing user
+                const response = await fetchWithAuth(`/api/admin/users/${userId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(userData)
+                });
+                
+                if (!response) return;
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.error || 'Erreur lors de la mise à jour de l\'utilisateur');
+                    return;
+                }
+            }
+            
+            document.getElementById('user-modal').classList.add('hidden');
+            loadUsers();
+        }
+
+        // Company CRUD operations
+        async function addCompany() {
+            document.getElementById('company-modal-title').textContent = 'Ajouter une entreprise';
+            document.getElementById('company-id').value = '';
+            document.getElementById('company-name').value = '';
+            document.getElementById('company-logo').value = '';
+            document.getElementById('company-industry').value = '';
+            document.getElementById('company-description').value = '';
+            document.getElementById('company-size').value = '';
+            document.getElementById('company-locations').value = '';
+            document.getElementById('company-website').value = '';
+            document.getElementById('company-rating').value = '';
+            document.getElementById('company-modal').classList.remove('hidden');
+        }
+
+        async function editCompany(companyId) {
+            const response = await fetchWithAuth(`/api/admin/companies/${companyId}`);
+            if (!response) return;
+            
+            const company = await response.json();
+            
+            document.getElementById('company-modal-title').textContent = 'Modifier l\'entreprise';
+            document.getElementById('company-id').value = company.id;
+            document.getElementById('company-name').value = company.name;
+            document.getElementById('company-logo').value = company.logo || '';
+            document.getElementById('company-industry').value = company.industry || '';
+            document.getElementById('company-description').value = company.description || '';
+            document.getElementById('company-size').value = company.size || '';
+            document.getElementById('company-locations').value = company.locations || '';
+            document.getElementById('company-website').value = company.website || '';
+            document.getElementById('company-rating').value = company.rating || '';
+            document.getElementById('company-modal').classList.remove('hidden');
+        }
+
+        async function deleteCompany(companyId) {
+            currentAction = 'deleteCompany';
+            currentItemId = companyId;
+            document.getElementById('confirm-title').textContent = 'Supprimer l\'entreprise';
+            document.getElementById('confirm-message').textContent = 'Êtes-vous sûr de vouloir supprimer cette entreprise ? Cette action est irréversible.';
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        async function saveCompany(event) {
+            event.preventDefault();
+            
+            const companyId = document.getElementById('company-id').value;
+            const companyData = {
+                name: document.getElementById('company-name').value,
+                logo: document.getElementById('company-logo').value,
+                industry: document.getElementById('company-industry').value,
+                description: document.getElementById('company-description').value,
+                size: document.getElementById('company-size').value,
+                locations: document.getElementById('company-locations').value,
+                website: document.getElementById('company-website').value,
+                rating: document.getElementById('company-rating').value || 0
+            };
+            
+            if (!companyId) {
+                // Add new company
+                const response = await fetchWithAuth('/api/admin/companies', {
+                    method: 'POST',
+                    body: JSON.stringify(companyData)
+                });
+                
+                if (!response) return;
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.error || 'Erreur lors de la création de l\'entreprise');
+                    return;
+                }
+            } else {
+                // Update existing company
+                const response = await fetchWithAuth(`/api/admin/companies/${companyId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(companyData)
+                });
+                
+                if (!response) return;
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.error || 'Erreur lors de la mise à jour de l\'entreprise');
+                    return;
+                }
+            }
+            
+            document.getElementById('company-modal').classList.add('hidden');
+            loadCompanies();
+        }
+
+        // Job CRUD operations
+        async function loadCompaniesForJobForm() {
+            const response = await fetchWithAuth('/api/admin/companies');
+            if (!response) return;
+            
+            const companies = await response.json();
+            const select = document.getElementById('job-company');
+            select.innerHTML = '<option value="">Sélectionnez une entreprise</option>';
+            
+            companies.forEach(company => {
+                const option = document.createElement('option');
+                option.value = company.id;
+                option.textContent = company.name;
+                select.appendChild(option);
+            });
+        }
+
+        async function addJob() {
+            await loadCompaniesForJobForm();
+            
+            document.getElementById('job-modal-title').textContent = 'Ajouter une offre d\'emploi';
+            document.getElementById('job-id').value = '';
+            document.getElementById('job-title').value = '';
+            document.getElementById('job-company').value = '';
+            document.getElementById('job-location').value = '';
+            document.getElementById('job-description').value = '';
+            document.getElementById('job-requirements').value = '';
+            document.getElementById('job-salary').value = '';
+            document.getElementById('job-type').value = 'CDI';
+            document.getElementById('job-remote').checked = false;
+            document.getElementById('job-skills').value = '';
+            document.getElementById('job-modal').classList.remove('hidden');
+        }
+
+        async function editJob(jobId) {
+            await loadCompaniesForJobForm();
+            
+            const response = await fetchWithAuth(`/api/admin/jobs/${jobId}`);
+            if (!response) return;
+            
+            const job = await response.json();
+            
+            document.getElementById('job-modal-title').textContent = 'Modifier l\'offre d\'emploi';
+            document.getElementById('job-id').value = job.id;
+            document.getElementById('job-title').value = job.title;
+            document.getElementById('job-company').value = job.company_id;
+            document.getElementById('job-location').value = job.location || '';
+            document.getElementById('job-description').value = job.description || '';
+            document.getElementById('job-requirements').value = job.requirements || '';
+            document.getElementById('job-salary').value = job.salary_range || '';
+            document.getElementById('job-type').value = job.type || 'CDI';
+            document.getElementById('job-remote').checked = job.remote === 1;
+            document.getElementById('job-skills').value = job.skills || '';
+            document.getElementById('job-modal').classList.remove('hidden');
+        }
+
+        async function deleteJob(jobId) {
+            currentAction = 'deleteJob';
+            currentItemId = jobId;
+            document.getElementById('confirm-title').textContent = 'Supprimer l\'offre d\'emploi';
+            document.getElementById('confirm-message').textContent = 'Êtes-vous sûr de vouloir supprimer cette offre d\'emploi ? Cette action est irréversible.';
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        async function saveJob(event) {
+            event.preventDefault();
+            
+            const jobId = document.getElementById('job-id').value;
+            const jobData = {
+                title: document.getElementById('job-title').value,
+                company_id: document.getElementById('job-company').value,
+                location: document.getElementById('job-location').value,
+                description: document.getElementById('job-description').value,
+                requirements: document.getElementById('job-requirements').value,
+                salary_range: document.getElementById('job-salary').value,
+                type: document.getElementById('job-type').value,
+                remote: document.getElementById('job-remote').checked,
+                skills: document.getElementById('job-skills').value
+            };
+            
+            if (!jobData.title || !jobData.company_id) {
+                alert('Le titre et l\'entreprise sont requis');
+                return;
+            }
+            
+            if (!jobId) {
+                // Add new job
+                const response = await fetchWithAuth('/api/admin/jobs', {
+                    method: 'POST',
+                    body: JSON.stringify(jobData)
+                });
+                
+                if (!response) return;
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.error || 'Erreur lors de la création de l\'offre');
+                    return;
+                }
+            } else {
+                // Update existing job
+                const response = await fetchWithAuth(`/api/admin/jobs/${jobId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(jobData)
+                });
+                
+                if (!response) return;
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.error || 'Erreur lors de la mise à jour de l\'offre');
+                    return;
+                }
+            }
+            
+            document.getElementById('job-modal').classList.add('hidden');
+            loadJobs();
+        }
+
+        // Confirmation actions
+        async function confirmAction() {
+            if (!currentAction || !currentItemId) return;
+            
+            let url = '';
+            let successMessage = '';
+            
+            switch (currentAction) {
+                case 'deleteUser':
+                    url = `/api/admin/users/${currentItemId}`;
+                    successMessage = 'Utilisateur supprimé avec succès';
+                    break;
+                case 'deleteCompany':
+                    url = `/api/admin/companies/${currentItemId}`;
+                    successMessage = 'Entreprise supprimée avec succès';
+                    break;
+                case 'deleteJob':
+                    url = `/api/admin/jobs/${currentItemId}`;
+                    successMessage = 'Offre supprimée avec succès';
+                    break;
+                default:
+                    return;
+            }
+            
+            const response = await fetchWithAuth(url, {
+                method: 'DELETE'
+            });
+            
+            if (!response) return;
+            if (!response.ok) {
+                const error = await response.json();
+                alert(error.error || 'Erreur lors de la suppression');
+                return;
+            }
+            
+            alert(successMessage);
+            document.getElementById('confirm-modal').classList.add('hidden');
+            
+            // Reload data
+            switch (currentAction) {
+                case 'deleteUser':
+                    loadUsers();
+                    break;
+                case 'deleteCompany':
+                    loadCompanies();
+                    break;
+                case 'deleteJob':
+                    loadJobs();
+                    break;
+            }
+            
+            currentAction = null;
+            currentItemId = null;
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(`${sectionId}-section`).classList.remove('hidden');
+            
+            // Update page title
+            document.getElementById('page-title').textContent = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('bg-accent', 'text-white');
+                link.classList.add('hover:bg-white/10');
+            });
+            
+            document.querySelector(`.nav-link[href="#${sectionId}"]`).classList.add('bg-accent', 'text-white');
+            document.querySelector(`.nav-link[href="#${sectionId}"]`).classList.remove('hover:bg-white/10');
+            
+            // Load section data
+            switch (sectionId) {
+                case 'dashboard':
+                    loadDashboardStats();
+                    break;
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'companies':
+                    loadCompanies();
+                    break;
+                case 'jobs':
+                    loadJobs();
+                    break;
+                case 'applications':
+                    // loadApplications();
+                    break;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!checkAuth()) return;
+            
+            // Load user info
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                currentUser = {
+                    id: payload.id,
+                    email: payload.email,
+                    role: payload.role
+                };
+                
+                document.getElementById('admin-name').textContent = currentUser.email;
+                document.getElementById('admin-role').textContent = currentUser.role === 'admin' ? 'Super Admin' : 'Admin';
+                document.getElementById('admin-avatar').src = `https://placehold.co/40x40/e17055/ffffff?text=${currentUser.email.substring(0, 2).toUpperCase()}`;
+            } catch (error) {
+                console.error('Error parsing token:', error);
+            }
+            
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const sectionId = link.getAttribute('href').substring(1);
+                    showSection(sectionId);
+                });
+            });
+            
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('admin_token');
+                window.location.href = '/login.html';
+            });
+            
+            // User form
+            document.getElementById('add-user-btn').addEventListener('click', addUser);
+            document.getElementById('close-user-modal').addEventListener('click', () => {
+                document.getElementById('user-modal').classList.add('hidden');
+            });
+            document.getElementById('user-form').addEventListener('submit', saveUser);
+            
+            // Company form
+            document.getElementById('add-company-btn').addEventListener('click', addCompany);
+            document.getElementById('close-company-modal').addEventListener('click', () => {
+                document.getElementById('company-modal').classList.add('hidden');
+            });
+            document.getElementById('company-form').addEventListener('submit', saveCompany);
+            
+            // Job form
+            document.getElementById('add-job-btn').addEventListener('click', addJob);
+            document.getElementById('close-job-modal').addEventListener('click', () => {
+                document.getElementById('job-modal').classList.add('hidden');
+            });
+            document.getElementById('job-form').addEventListener('submit', saveJob);
+            
+            // Confirmation modal
+            document.getElementById('cancel-confirm').addEventListener('click', () => {
+                document.getElementById('confirm-modal').classList.add('hidden');
+                currentAction = null;
+                currentItemId = null;
+            });
+            document.getElementById('confirm-action').addEventListener('click', confirmAction);
+            
+            // Settings form
+            document.getElementById('settings-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Paramètres sauvegardés avec succès');
+            });
+            
+            // Show dashboard by default
+            showSection('dashboard');
+        });
+    </script>
+</body>
+</html>
