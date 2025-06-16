@@ -1,0 +1,15 @@
+{
+    "rewrites": [
+      { "source": "/login", "destination": "/login.html" },
+      { "source": "/dashboard", "destination": "/dashboard.html" },
+      { "source": "/jobs", "destination": "/jobs.html" },
+      { "source": "/companies", "destination": "/companies.html" },
+      { "source": "/form", "destination": "/form.html" },
+      { "source": "/result", "destination": "/result.html" },
+      { "source": "/cv-builder", "destination": "/cv-builder.html" },
+      { "source": "/profile", "destination": "/profile.html" },
+      { "source": "/admin-dashboard", "destination": "/admin-dashboard.html" },
+      { "source": "/", "destination": "/index.html" }
+    ]
+  }
+  
