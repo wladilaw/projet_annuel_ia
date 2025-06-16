@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Google - Profil Entreprise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/jobs" class="text-text-light hover:text-primary transition">Offres</a>
+                    <a href="/companies" class="text-primary font-semibold">Entreprises</a>
+                    <a href="/cv-builder" class="text-text-light hover:text-primary transition">CV</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Company Hero -->
+    <section class="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-12">
+                <div class="flex-shrink-0">
+                    <img src="https://logo.clearbit.com/google.com" alt="Google" class="w-32 h-32 bg-white rounded-2xl p-6 shadow-lg">
+                </div>
+                
+                <div class="flex-1 text-center md:text-left">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Google</h1>
+                    <p class="text-xl text-blue-100 mb-6">Leader mondial de la technologie et de l'innovation</p>
+                    
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4 mb-6">
+                        <div class="bg-white/20 backdrop-blur rounded-lg px-4 py-2">
+                            <span class="text-sm">150K+ employés</span>
+                        </div>
+                        <div class="bg-white/20 backdrop-blur rounded-lg px-4 py-2">
+                            <span class="text-sm">Technologie</span>
+                        </div>
+                        <div class="bg-white/20 backdrop-blur rounded-lg px-4 py-2">
+                            <span class="text-sm">Fondée en 1998</span>
+                        </div>
+                        <div class="bg-white/20 backdrop-blur rounded-lg px-4 py-2 flex items-center">
+                            <span class="material-icons text-yellow-300 mr-1">star</span>
+                            <span class="text-sm">4.8/5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                        <button class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
+                            <span class="material-icons mr-2">work</span>
+                            156 postes ouverts
+                        </button>
+                        <button class="bg-white/20 backdrop-blur text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/30 transition">
+                            <span class="material-icons mr-2">favorite_border</span>
+                            Suivre l'entreprise
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- About -->
+                <div class="bg-white rounded-xl p-8 shadow-sm">
+                    <h2 class="text-2xl font-bold text-primary mb-6">À propos de Google</h2>
+                    
+                    <div class="prose max-w-none">
+                        <p class="text-text-dark leading-relaxed mb-6">
+                            Google est une entreprise technologique américaine qui développe des services et produits 
+                            liés à Internet. Fondée en 1998 par Larry Page et Sergey Brin, Google est devenue l'une 
+                            des entreprises les plus influentes au monde dans le domaine de la technologie.
+                        </p>
+                        
+                        <p class="text-text-dark leading-relaxed mb-6">
+                            Avec plus de 150 000 employés dans le monde, Google continue d'innover dans des domaines 
+                            variés comme l'intelligence artificielle, le cloud computing, les appareils connectés, 
+                            et bien plus encore.
+                        </p>
+
+                        <h3 class="text-xl font-semibold text-primary mb-4">Notre mission</h3>
+                        <p class="text-text-dark leading-relaxed">
+                            Organiser l'information mondiale et la rendre universellement accessible et utile.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Culture & Values -->
+                <div class="bg-white rounded-xl p-8 shadow-sm">
+                    <h2 class="text-2xl font-bold text-primary mb-6">Culture & Valeurs</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-6 bg-blue-50 rounded-lg">
+                            <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
+                                <span class="material-icons text-white">lightbulb</span>
+                            </div>
+                            <h3 class="font-semibold text-primary mb-2">Innovation</h3>
+                            <p class="text-text-light text-sm">Nous encourageons la créativité et l'innovation dans tous nos projets.</p>
+                        </div>
+                        
+                        <div class="p-6 bg-green-50 rounded-lg">
+                            <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
+                                <span class="material-icons text-white">groups</span>
+                            </div>
+                            <h3 class="font-semibold text-primary mb-2">Collaboration</h3>
+                            <p class="text-text-light text-sm">Le travail d'équipe est au cœur de notre réussite.</p>
+                        </div>
+                        
+                        <div class="p-6 bg-purple-50 rounded-lg">
+                            <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4">
+                                <span class="material-icons text-white">diversity_3</span>
+                            </div>
+                            <h3 class="font-semibold text-primary mb-2">Diversité</h3>
+                            <p class="text-text-light text-sm">Nous valorisons la diversité et l'inclusion dans toutes nos équipes.</p>
+                        </div>
+                        
+                        <div class="p-6 bg-orange-50 rounded-lg">
+                            <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mb-4">
+                                <span class="material-icons text-white">eco</span>
+                            </div>
+                            <h3 class="font-semibold text-primary mb-2">Durabilité</h3>
+                            <p class="text-text-light text-sm">Nous nous engageons pour un avenir plus durable et responsable.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Office Photos -->
+                <div class="bg-white rounded-xl p-8 shadow-sm">
+                    <h2 class="text-2xl font-bold text-primary mb-6">Nos bureaux</h2>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <img src="https://placehold.co/600x400/4285f4/ffffff?text=Bureau+Google+1" alt="Bureau Google" class="rounded-lg w-full h-40 object-cover">
+                        <img src="https://placehold.co/600x400/ea4335/ffffff?text=Bureau+Google+2" alt="Bureau Google" class="rounded-lg w-full h-40 object-cover">
+                        <img src="https://placehold.co/600x400/fbbc05/ffffff?text=Bureau+Google+3" alt="Bureau Google" class="rounded-lg w-full h-40 object-cover">
+                        <img src="https://placehold.co/600x400/34a853/ffffff?text=Bureau+Google+4" alt="Bureau Google" class="rounded-lg w-full h-40 object-cover">
+                        <img src="https://placehold.co/600x400/4285f4/ffffff?text=Bureau+Google+5" alt="Bureau Google" class="rounded-lg w-full h-40 object-cover">
+                        <div class="relative rounded-lg overflow-hidden">
+                            <img src="https://placehold.co/600x400/ea4335/ffffff?text=Bureau+Google+6" alt="Bureau Google" class="w-full h-40 object-cover">
+                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                <span class="text-white font-semibold">+12 photos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Employee Reviews -->
+                <div class="bg-white rounded-xl p-8 shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-primary">Avis des employés</h2>
+                        <div class="flex items-center">
+                            <span class="material-icons text-yellow-400 mr-1">star</span>
+                            <span class="font-semibold">4.8</span>
+                            <span class="text-text-light ml-1">(1,234 avis)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="border-b border-gray-100 pb-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="font-semibold text-primary">Excellent environnement de travail</h3>
+                                    <p class="text-sm text-text-light">Software Engineer • Paris • 2 ans</p>
+                                </div>
+                                <div class="flex text-yellow-400">
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                </div>
+                            </div>
+                            <p class="text-text-dark">
+                                L'environnement de travail est exceptionnel, avec des collègues brillants et des projets stimulants. 
+                                La culture d'entreprise favorise l'innovation et l'équilibre vie pro/perso est respecté.
+                            </p>
+                        </div>
+                        
+                        <div class="border-b border-gray-100 pb-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="font-semibold text-primary">Opportunités d'apprentissage incroyables</h3>
+                                    <p class="text-sm text-text-light">Product Manager • Paris • 3 ans</p>
+                                </div>
+                                <div class="flex text-yellow-400">
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star_half</span>
+                                </div>
+                            </div>
+                            <p class="text-text-dark">
+                                Google offre d'incroyables opportunités d'apprentissage et de développement professionnel. 
+                                Les avantages sont excellents et l'ambiance de travail est collaborative.
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="font-semibold text-primary">Entreprise qui valorise ses employés</h3>
+                                    <p class="text-sm text-text-light">UX Designer • Lyon • 1 an</p>
+                                </div>
+                                <div class="flex text-yellow-400">
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                    <span class="material-icons text-sm">star</span>
+                                </div>
+                            </div>
+                            <p class="text-text-dark">
+                                Google valorise vraiment ses employés et leur bien-être. Les bureaux sont magnifiques, 
+                                la nourriture est excellente, et les projets sont passionnants.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="block text-center text-accent hover:text-accent-dark transition mt-6 text-sm font-medium">
+                        Voir tous les avis →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Company Stats -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">Statistiques</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Offres actives</span>
+                            <span class="font-semibold">156</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Taux de réponse</span>
+                            <span class="font-semibold text-success">87%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Délai de réponse</span>
+                            <span class="font-semibold">~7 jours</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Processus d'embauche</span>
+                            <span class="font-semibold">4-5 étapes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Benefits -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">Avantages</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="material-icons text-success mr-3">health_and_safety</span>
+                            <span class="text-sm">Mutuelle premium</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="material-icons text-success mr-3">restaurant</span>
+                            <span class="text-sm">Repas gratuits</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="material-icons text-success mr-3">fitness_center</span>
+                            <span class="text-sm">Salle de sport</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="material-icons text-success mr-3">school</span>
+                            <span class="text-sm">Formation continue</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="material-icons text-success mr-3">home</span>
+                            <span class="text-sm">Télétravail flexible</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Locations -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">Localisations</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="material-icons text-gray-400 mr-3">location_on</span>
+                                <span class="text-sm">Paris</span>
+                            </div>
+                            <span class="text-xs text-accent">98 postes</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="material-icons text-gray-400 mr-3">location_on</span>
+                                <span class="text-sm">Lyon</span>
+                            </div>
+                            <span class="text-xs text-accent">34 postes</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="material-icons text-gray-400 mr-3">location_on</span>
+                                <span class="text-sm">Toulouse</span>
+                            </div>
+                            <span class="text-xs text-accent">24 postes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Similar Companies -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">Entreprises similaires</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <img src="https://logo.clearbit.com/microsoft.com" alt="Microsoft" class="w-10 h-10 rounded-lg">
+                            <div>
+                                <h4 class="font-medium text-primary">Microsoft</h4>
+                                <p class="text-xs text-text-light">124 postes ouverts</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <img src="https://logo.clearbit.com/amazon.com" alt="Amazon" alt="Microsoft" class="w-10 h-10 rounded-lg">
+                            <div>
+                                <h4 class="font-medium text-primary">Amazon</h4>
+                                <p class="text-xs text-text-light">98 postes ouverts</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <img src="https://logo.clearbit.com/apple.com" alt="Apple" class="w-10 h-10 rounded-lg">
+                            <div>
+                                <h4 class="font-medium text-primary">Apple</h4>
+                                <p class="text-xs text-text-light">56 postes ouverts</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Open Positions -->
+        <div class="mt-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-primary">Postes ouverts</h2>
+                <div class="flex items-center space-x-4">
+                    <select class="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-accent">
+                        <option>Tous les départements</option>
+                        <option>Ingénierie</option>
+                        <option>Produit</option>
+                        <option>Design</option>
+                        <option>Marketing</option>
+                    </select>
+                    <select class="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-accent">
+                        <option>Toutes les localisations</option>
+                        <option>Paris</option>
+                        <option>Lyon</option>
+                        <option>Toulouse</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl overflow-hidden shadow-sm">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Poste</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Département</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Localisation</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publié</th>
+                            <th class="px-6 py-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="font-medium text-primary">Senior Full Stack Engineer</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Engineering</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <span class="material-icons text-gray-400 text-sm mr-1">location_on</span>
+                                    <span>Paris</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span>CDI</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-text-light">
+                                Il y a 2h
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <a href="/job-detail" class="text-accent hover:text-accent-dark transition">Voir →</a>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="font-medium text-primary">Product Manager</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Product</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <span class="material-icons text-gray-400 text-sm mr-1">location_on</span>
+                                    <span>Paris</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span>CDI</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-text-light">
+                                Il y a 1j
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <a href="/job-detail" class="text-accent hover:text-accent-dark transition">Voir →</a>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="font-medium text-primary">UX Designer</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Design</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <span class="material-icons text-gray-400 text-sm mr-1">location_on</span>
+                                    <span>Lyon</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span>CDI</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-text-light">
+                                Il y a 2j
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <a href="/job-detail" class="text-accent hover:text-accent-dark transition">Voir →</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="bg-gray-50 px-6 py-4 text-center">
+                    <a href="/jobs?company=google" class="text-accent hover:text-accent-dark transition font-medium">
+                        Voir tous les postes chez Google →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('/login');
+        }
+
+        // Gestion des boutons d'action
+        document.addEventListener('DOMContentLoaded', () => {
+            // Bouton suivre l'entreprise
+            const followButton = document.querySelector('button:has(.material-icons[text="favorite_border"])');
+            if (followButton) {
+                followButton.addEventListener('click', () => {
+                    const icon = followButton.querySelector('.material-icons');
+                    if (icon.textContent === 'favorite_border') {
+                        icon.textContent = 'favorite';
+                        // Sauvegarder dans localStorage
+                        const followedCompanies = JSON.parse(localStorage.getItem('followed_companies') || '[]');
+                        if (!followedCompanies.includes('google')) {
+                            followedCompanies.push('google');
+                            localStorage.setItem('followed_companies', JSON.stringify(followedCompanies));
+                        }
+                    } else {
+                        icon.textContent = 'favorite_border';
+                        // Retirer de localStorage
+                        const followedCompanies = JSON.parse(localStorage.getItem('followed_companies') || '[]');
+                        const updatedCompanies = followedCompanies.filter(company => company !== 'google');
+                        localStorage.setItem('followed_companies', JSON.stringify(updatedCompanies));
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
