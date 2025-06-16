@@ -644,7 +644,6 @@
             to { transform: translate(-50%, -50%) rotate(360deg); }
         }
     </style>
-    <script src="config.js"></script>
 </head>
 <body>
     <!-- Background Shapes -->
@@ -780,6 +779,13 @@
 
     <script>
         let isLoginMode = true;
+        let redirectTo = '';
+
+        // Check for redirect parameter
+        function getRedirectParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('redirect') || '';
+        }
 
         // Tab switching
         function switchTab(mode) {
@@ -855,29 +861,68 @@
             submitBtn.classList.add('btn-loading');
 
             try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                let response;
+                let endpoint = isLoginMode ? '/api/auth/login' : '/api/auth/register';
+                
+                if (isLoginMode) {
+                    response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+                } else {
+                    response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password, name })
+                    });
+                }
 
-                // Mock authentication
-                const userData = {
-                    email,
-                    name: name || 'Utilisateur',
-                    token: 'mock-jwt-token'
-                };
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Une erreur est survenue');
+                }
 
-                // Store user data
-                localStorage.setItem('user', JSON.stringify(userData));
+                const data = await response.json();
+                
+                // Store token
+                if (data.token) {
+                    if (redirectTo === 'admin' && data.role !== 'admin') {
+                        showError('Accès réservé aux administrateurs');
+                        submitBtn.classList.remove('btn-loading');
+                        return;
+                    }
+                    
+                    // Store token in the appropriate place
+                    if (redirectTo === 'admin') {
+                        localStorage.setItem('admin_token', data.token);
+                    } else {
+                        localStorage.setItem('motivai_token', data.token);
+                    }
+                    
+                    // Store user data
+                    localStorage.setItem('motivai_user', JSON.stringify({
+                        id: data.id,
+                        email: data.email,
+                        name: data.name,
+                        role: data.role
+                    }));
+                }
 
                 // Show success
                 showSuccess();
 
                 // Redirect
                 setTimeout(() => {
-                    window.location.href = '/dashboard.html';
+                    if (redirectTo === 'admin') {
+                        window.location.href = '/admin';
+                    } else {
+                        window.location.href = '/dashboard.html';
+                    }
                 }, 1500);
 
             } catch (error) {
-                showError('Une erreur est survenue. Veuillez réessayer.');
+                showError(error.message || 'Une erreur est survenue. Veuillez réessayer.');
                 submitBtn.classList.remove('btn-loading');
             }
         }
@@ -888,11 +933,7 @@
             
             // In a real app, this would redirect to OAuth provider
             // For demo, we'll simulate it
-            showSuccess();
-            
-            setTimeout(() => {
-                window.location.href = '/dashboard.html';
-            }, 1500);
+            showError('Fonctionnalité en cours de développement');
         }
 
         // Error handling
@@ -921,30 +962,31 @@
             alert('Fonctionnalité de récupération de mot de passe à venir !');
         });
 
-        // Auto-focus on email field
-        window.onload = () => {
-            document.getElementById('email').focus();
-        };
-
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get redirect parameter
+            redirectTo = getRedirectParam();
             
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // Simulation d'authentification (à remplacer par votre API)
-            if (email && password) {
-                const userData = {
-                    email: email,
-                    name: email.split('@')[0],
-                    role: 'user'
-                };
+            // Check if already logged in
+            const token = redirectTo === 'admin' 
+                ? localStorage.getItem('admin_token') 
+                : localStorage.getItem('motivai_token');
                 
-                Auth.setUser(userData);
-                Navigation.redirectTo('DASHBOARD');
+            if (token) {
+                if (redirectTo === 'admin') {
+                    window.location.href = '/admin';
+                } else {
+                    window.location.href = '/dashboard.html';
+                }
+                return;
             }
+            
+            // Set up form submission
+            document.getElementById('loginForm').addEventListener('submit', handleSubmit);
+            
+            // Auto-focus on email field
+            document.getElementById('email').focus();
         });
     </script>
 </body>
 </html>
-
