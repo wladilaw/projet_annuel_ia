@@ -5,9 +5,9 @@
 const CONFIG = {
     APP_NAME: 'MotivAI',
     VERSION: '2.0.0',
-    API_BASE_URL: process.env.NODE_ENV === 'production' 
-        ? 'https://api.motivai.com' 
-        : 'http://localhost:3000/api',
+    API_BASE_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:3000/api' 
+        : 'https://api.motivai.com',
     FEATURES: {
         AI_COACH: true,
         INTERVIEW_PREP: true,
