@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Offres d'emploi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Add your styles here */
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header with Search -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <!-- Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-xl mx-8">
+                    <div class="relative w-full">
+                        <input type="text" placeholder="Rechercher un poste, une entreprise..." 
+                               class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:border-accent focus:bg-white transition-all">
+                        <span class="material-icons absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">search</span>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex items-center space-x-6">
+                    <a href="/dashboard.html" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/jobs.html" class="text-primary font-semibold">Offres</a>
+                    <a href="/companies.html" class="text-text-light hover:text-primary transition">Entreprises</a>
+                    <a href="/cv-builder.html" class="text-text-light hover:text-primary transition">CV</a>
+                    
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition">
+                            <div class="w-9 h-9 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                                JD
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Search -->
+        <div class="md:hidden px-4 pb-4">
+            <div class="relative">
+                <input type="text" placeholder="Rechercher..." 
+                       class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                <span class="material-icons absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl">search</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Sidebar Filters -->
+            <aside class="lg:col-span-1">
+                <div class="bg-white rounded-xl p-6 sticky top-24">
+                    <h3 class="font-semibold text-lg mb-4 flex items-center">
+                        <span class="material-icons text-accent mr-2">tune</span>
+                        Filtres
+                    </h3>
+
+                    <!-- Location -->
+                    <div class="mb-6">
+                        <label class="text-sm font-medium text-gray-700 mb-2 block">Localisation</label>
+                        <div class="relative">
+                            <input type="text" placeholder="Ville, région..." value="Paris" 
+                                   class="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            <span class="material-icons absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl">location_on</span>
+                        </div>
+                    </div>
+
+                    <!-- Distance -->
+                    <div class="mb-6">
+                        <label class="text-sm font-medium text-gray-700 mb-2 block">Distance</label>
+                        <select class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            <option>0-10 km</option>
+                            <option>0-25 km</option>
+                            <option>0-50 km</option>
+                            <option>0-100 km</option>
+                            <option>France entière</option>
+                        </select>
+                    </div>
+
+                    <!-- Contract Type -->
+                    <div class="mb-6">
+                        <label class="text-sm font-medium text-gray-700 mb-2 block">Type de contrat</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="text-accent rounded" checked>
+                                <span class="ml-2 text-sm">CDI</span>
+                                <span class="ml-auto text-xs text-gray-500">2,541</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="text-accent rounded">
+                                <span class="ml-2 text-sm">CDD</span>
+                                <span class="ml-auto text-xs text-gray-500">834</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="text-accent rounded">
+                                <span class="ml-2 text-sm">Freelance</span>
+                                <span class="ml-auto text-xs text-gray-500">458</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="text-accent rounded" checked>
+                                <span class="ml-2 text-sm">Alternance</span>
+                                <span class="ml-auto text-xs text-gray-500">321</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Salary Range -->
+                    <div class="mb-6">
+                        <label class="text-sm font-medium text-gray-700 mb-2 block">Salaire annuel</label>
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <input type="number" placeholder="Min" class="w-1/2 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                                <input type="number" placeholder="Max" class="w-1/2 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            </div>
+                            <input type="range" min="0" max="100000" step="5000" class="w-full accent-accent">
+                        </div>
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="mb-6">
+                        <label class="text-sm font-medium text-gray-700 mb-2 block">Expérience</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="experience" class="text-accent">
+                                <span class="ml-2 text-sm">Débutant (0-2 ans)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="experience" class="text-accent" checked>
+                                <span class="ml-2 text-sm">Junior (2-5 ans)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="experience" class="text-accent">
+                                <span class="ml-2 text-sm">Senior (5+ ans)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Remote -->
+                    <div class="mb-6">
+                        <label class="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition">
+                            <span class="text-sm font-medium">Télétravail possible</span>
+                            <input type="checkbox" class="text-accent rounded">
+                        </label>
+                    </div>
+
+                    <button class="w-full bg-accent text-white py-2.5 rounded-lg font-medium hover:bg-accent-dark transition">
+                        Appliquer les filtres
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Job Listings -->
+            <div class="lg:col-span-3">
+                <!-- Results Header -->
+                <div class="bg-white rounded-xl p-4 mb-4 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-xl font-semibold">
+                            <span class="gradient-text">3,842 offres</span> correspondent à votre recherche
+                        </h1>
+                        <p class="text-sm text-gray-500 mt-1">Développeur Full Stack à Paris et alentours</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <select class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-accent">
+                            <option>Plus récentes</option>
+                            <option>Plus pertinentes</option>
+                            <option>Salaire décroissant</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Job Cards -->
+                <div class="space-y-4">
+                    <!-- Job Card 1 - Featured -->
+                    <article class="bg-white rounded-xl p-6 border-2 border-accent/20 relative hover:shadow-lg transition-all duration-300 group">
+                        <div class="absolute top-4 right-4 bg-gradient-to-r from-accent to-accent-dark text-white text-xs px-3 py-1 rounded-full font-medium">
+                            ⭐ Recommandé pour vous
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <img src="https://logo.clearbit.com/google.com" alt="Google" class="w-16 h-16 rounded-xl object-contain bg-gray-50 p-2">
+                            
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h2 class="text-xl font-semibold text-primary group-hover:text-accent transition">
+                                            Senior Full Stack Engineer
+                                        </h2>
+                                        <div class="flex items-center space-x-3 mt-1">
+                                            <span class="font-medium text-gray-700">Google</span>
+                                            <span class="text-gray-400">•</span>
+                                            <div class="flex items-center text-sm text-gray-600">
+                                                <span class="material-icons text-base mr-1">location_on</span>
+                                                Paris 08
+                                            </div>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-sm text-gray-600">Il y a 2h</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-gray-600 mt-3 line-clamp-2">
+                                    Nous recherchons un développeur Full Stack passionné pour rejoindre notre équipe Cloud Platform. 
+                                    Vous travaillerez sur des projets innovants à grande échelle...
+                                </p>
+                                
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium">React</span>
+                                    <span class="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-medium">Node.js</span>
+                                    <span class="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs font-medium">TypeScript</span>
+                                    <span class="px-3 py-1 bg-orange-50 text-orange-600 rounded-full text-xs font-medium">GCP</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between mt-4">
+                                    <div class="flex items-center space-x-4">
+                                        <span class="text-lg font-semibold text-primary">70-90K€</span>
+                                        <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm">CDI</span>
+                                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-sm flex items-center">
+                                            <span class="material-icons text-base mr-1">home</span>
+                                            Télétravail flexible
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button class="p-2 text-gray-400 hover:text-accent transition">
+                                            <span class="material-icons">bookmark_border</span>
+                                        </button>
+                                        <button class="px-4 py-2 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition flex items-center">
+                                            <span class="material-icons text-base mr-1">send</span>
+                                            Postuler
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Match Score -->
+                                <div class="mt-4 pt-4 border-t border-gray-100">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-600">Correspondance avec votre profil</span>
+                                        <div class="flex items-center">
+                                            <div class="w-32 h-2 bg-gray-200 rounded-full mr-3">
+                                                <div class="w-5/6 h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-green-600">85%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Job Card 2 -->
+                    <article class="bg-white rounded-xl p-6 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex items-start space-x-4">
+                            <img src="https://logo.clearbit.com/spotify.com" alt="Spotify" class="w-16 h-16 rounded-xl object-contain bg-gray-50 p-2">
+                            
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h2 class="text-xl font-semibold text-primary group-hover:text-accent transition">
+                                            Frontend Developer - Growth Team
+                                        </h2>
+                                        <div class="flex items-center space-x-3 mt-1">
+                                            <span class="font-medium text-gray-700">Spotify</span>
+                                            <span class="text-gray-400">•</span>
+                                            <div class="flex items-center text-sm text-gray-600">
+                                                <span class="material-icons text-base mr-1">location_on</span>
+                                                Paris, La Défense
+                                            </div>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-sm text-gray-600">Il y a 5h</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-gray-600 mt-3 line-clamp-2">
+                                    Rejoignez l'équipe Growth de Spotify pour créer des expériences utilisateur exceptionnelles. 
+                                    Vous travaillerez sur l'optimisation de notre onboarding...
+                                </p>
+                                
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium">React</span>
+                                    <span class="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs font-medium">Redux</span>
+                                    <span class="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-medium">A/B Testing</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between mt-4">
+                                    <div class="flex items-center space-x-4">
+                                        <span class="text-lg font-semibold text-primary">55-70K€</span>
+                                        <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm">CDI</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm">Hybrid</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button class="p-2 text-gray-400 hover:text-accent transition">
+                                            <span class="material-icons">bookmark_border</span>
+                                        </button>
+                                        <button class="px-4 py-2 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition flex items-center">
+                                            <span class="material-icons text-base mr-1">send</span>
+                                            Postuler
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Job Card 3 -->
+                    <article class="bg-white rounded-xl p-6 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex items-start space-x-4">
+                            <img src="https://logo.clearbit.com/leboncoin.fr" alt="Leboncoin" class="w-16 h-16 rounded-xl object-contain bg-gray-50 p-2">
+                            
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h2 class="text-xl font-semibold text-primary group-hover:text-accent transition">
+                                            Lead Backend Developer
+                                        </h2>
+                                        <div class="flex items-center space-x-3 mt-1">
+                                            <span class="font-medium text-gray-700">Leboncoin</span>
+                                            <span class="text-gray-400">•</span>
+                                            <div class="flex items-center text-sm text-gray-600">
+                                                <span class="material-icons text-base mr-1">location_on</span>
+                                                Paris 10
+                                            </div>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-sm text-gray-600">Il y a 1 jour</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-gray-600 mt-3 line-clamp-2">
+                                    Nous recherchons un Lead Backend pour diriger notre équipe technique et participer à la refonte 
+                                    de notre architecture microservices...
+                                </p>
+                                
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="px-3 py-1 bg-yellow-50 text-yellow-600 rounded-full text-xs font-medium">Python</span>
+                                    <span class="px-3 py-1 bg-red-50 text-red-600 rounded-full text-xs font-medium">Go</span>
+                                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium">Kubernetes</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between mt-4">
+                                    <div class="flex items-center space-x-4">
+                                        <span class="text-lg font-semibold text-primary">80-100K€</span>
+                                        <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm">CDI</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button class="p-2 text-gray-400 hover:text-accent transition">
+                                            <span class="material-icons">bookmark_border</span>
+                                        </button>
+                                        <button class="px-4 py-2 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition flex items-center">
+                                            <span class="material-icons text-base mr-1">send</span>
+                                            Postuler
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Job Alert Banner -->
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Ne ratez aucune opportunité !</h3>
+                                <p class="text-blue-100">Créez une alerte emploi et recevez les nouvelles offres par email</p>
+                            </div>
+                            <button class="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50 transition">
+                                Créer une alerte
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- More Job Cards -->
+                    <article class="bg-white rounded-xl p-6 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
+                                SA
+                            </div>
+                            
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h2 class="text-xl font-semibold text-primary group-hover:text-accent transition">
+                                            Développeur Full Stack Junior
+                                        </h2>
+                                        <div class="flex items-center space-x-3 mt-1">
+                                            <span class="font-medium text-gray-700">StartupTech</span>
+                                            <span class="text-gray-400">•</span>
+                                            <div class="flex items-center text-sm text-gray-600">
+                                                <span class="material-icons text-base mr-1">location_on</span>
+                                                Station F, Paris
+                                            </div>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-sm text-gray-600">Il y a 2 jours</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-gray-600 mt-3 line-clamp-2">
+                                    Startup en pleine croissance recherche un développeur junior motivé pour rejoindre notre équipe 
+                                    et participer au développement de notre plateforme SaaS...
+                                </p>
+                                
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium">Vue.js</span>
+                                    <span class="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-medium">Laravel</span>
+                                    <span class="px-3 py-1 bg-yellow-50 text-yellow-600 rounded-full text-xs font-medium">MySQL</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between mt-4">
+                                    <div class="flex items-center space-x-4">
+                                        <span class="text-lg font-semibold text-primary">35-45K€</span>
+                                        <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm">CDI</span>
+                                        <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-lg text-sm">Startup</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button class="p-2 text-gray-400 hover:text-accent transition">
+                                            <span class="material-icons">bookmark_border</span>
+                                        </button>
+                                        <button class="px-4 py-2 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition flex items-center">
+                                            <span class="material-icons text-base mr-1">send</span>
+                                            Postuler
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex justify-center items-center space-x-2 mt-8">
+                    <button class="p-2 rounded-lg hover:bg-gray-100 transition">
+                        <span class="material-icons">chevron_left</span>
+                    </button>
+                    <button class="px-4 py-2 bg-accent text-white rounded-lg font-medium">1</button>
+                    <button class="px-4 py-2 hover:bg-gray-100 rounded-lg transition">2</button>
+                    <button class="px-4 py-2 hover:bg-gray-100 rounded-lg transition">3</button>
+                    <span class="px-2">...</span>
+                    <button class="px-4 py-2 hover:bg-gray-100 rounded-lg transition">24</button>
+                    <button class="p-2 rounded-lg hover:bg-gray-100 transition">
+                        <span class="material-icons">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Quick Apply Modal -->
+    <div id="quickApplyModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden animate-scale-in">
+                <!-- Modal Header -->
+                <div class="bg-gradient-to-r from-accent to-accent-dark text-white p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h2 class="text-2xl font-bold mb-2">Postuler chez Google</h2>
+                            <p class="text-white/80">Senior Full Stack Engineer</p>
+                        </div>
+                        <button onclick="closeQuickApply()" class="text-white/80 hover:text-white transition">
+                            <span class="material-icons">close</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal Content -->
+                <div class="p-6 overflow-y-auto max-h-[60vh]">
+                    <!-- Match Analysis -->
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-start space-x-3">
+                            <span class="material-icons text-green-600 mt-1">check_circle</span>
+                            <div>
+                                <h4 class="font-semibold text-green-900">Excellente correspondance !</h4>
+                                <p class="text-green-700 text-sm mt-1">Votre profil correspond à 85% des critères recherchés</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <button class="flex items-center justify-center space-x-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                            <span class="material-icons text-accent">description</span>
+                            <span>Utiliser mon CV actuel</span>
+                        </button>
+                        <button class="flex items-center justify-center space-x-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                            <span class="material-icons text-accent">auto_awesome</span>
+                            <span>Générer une lettre IA</span>
+                        </button>
+                    </div>
+
+                    <!-- Form -->
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Message de motivation (optionnel)</label>
+                            <textarea rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent" 
+                                      placeholder="Ajoutez un message personnel pour vous démarquer..."></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Disponibilité</label>
+                            <select class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                                <option>Immédiatement</option>
+                                <option>Dans 1 mois</option>
+                                <option>Dans 2 mois</option>
+                                <option>Dans 3 mois</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Prétention salariale</label>
+                            <input type="text" placeholder="Ex: 70-80K€" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="followCompany" class="text-accent rounded">
+                            <label for="followCompany" class="ml-2 text-sm">Suivre Google pour recevoir leurs prochaines offres</label>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="bg-gray-50 p-6 flex justify-between items-center">
+                    <button onclick="closeQuickApply()" class="px-6 py-3 text-gray-700 hover:bg-gray-200 rounded-lg transition">
+                        Annuler
+                    </button>
+                    <button class="px-8 py-3 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition flex items-center">
+                        <span class="material-icons mr-2">send</span>
+                        Envoyer ma candidature
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quick Apply Modal
+        function openQuickApply() {
+            document.getElementById('quickApplyModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeQuickApply() {
+            document.getElementById('quickApplyModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Attach click handlers to all apply buttons
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent.includes('Postuler')) {
+                button.addEventListener('click', openQuickApply);
+            }
+        });
+
+        // Bookmark functionality
+        document.querySelectorAll('button').forEach(button => {
+            if (button.innerHTML.includes('bookmark_border')) {
+                button.addEventListener('click', function() {
+                    const icon = this.querySelector('.material-icons');
+                    if (icon.textContent === 'bookmark_border') {
+                        icon.textContent = 'bookmark';
+                        this.classList.add('text-accent');
+                        this.classList.remove('text-gray-400');
+                    } else {
+                        icon.textContent = 'bookmark_border';
+                        this.classList.remove('text-accent');
+                        this.classList.add('text-gray-400');
+                    }
+                });
+            }
+        });
+
+        // Filter animations
+        const filterInputs = document.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+        filterInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                // Add loading animation
+                const jobCards = document.querySelectorAll('article');
+                jobCards.forEach((card, index) => {
+                    card.style.animation = 'none';
+                    setTimeout(() => {
+                        card.style.animation = `fadeIn 0.5s ease ${index * 0.1}s both`;
+                    }, 100);
+                });
+            });
+        });
+
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('LOGIN');
+        }
+
+        // Données simulées des offres d'emploi (à remplacer par votre API)
+        const jobs = [
+            {
+                id: 1,
+                title: 'Développeur Full Stack',
+                company: 'Tech Solutions',
+                location: 'Paris',
+                type: 'CDI',
+                description: 'Nous recherchons un développeur full stack expérimenté...',
+                requirements: ['React', 'Node.js', 'MongoDB'],
+                salary: '45-55K€'
+            },
+            // Ajoutez d'autres offres ici
+        ];
+
+        // Affichage des offres d'emploi
+        function displayJobs() {
+            const jobsContainer = document.querySelector('.jobs-container');
+            if (jobsContainer) {
+                jobsContainer.innerHTML = jobs.map(job => `
+                    <div class="job-card">
+                        <h3>${job.title}</h3>
+                        <p class="company">${job.company}</p>
+                        <p class="location">${job.location}</p>
+                        <p class="type">${job.type}</p>
+                        <p class="salary">${job.salary}</p>
+                        <div class="requirements">
+                            ${job.requirements.map(req => `<span class="tag">${req}</span>`).join('')}
+                        </div>
+                        <div class="actions">
+                            <button onclick="applyForJob(${job.id})" class="btn-apply">Postuler</button>
+                            <button onclick="generateLetter(${job.id})" class="btn-generate">Générer une lettre</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Fonction pour postuler à une offre
+        function applyForJob(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (job) {
+                // Rediriger vers le formulaire de candidature
+                localStorage.setItem('selected_job', JSON.stringify(job));
+                Navigation.redirectTo('FORM');
+            }
+        }
+
+        // Fonction pour générer une lettre
+        function generateLetter(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (job) {
+                // Pré-remplir le formulaire de lettre
+                const letterData = {
+                    jobTitle: job.title,
+                    company: job.company,
+                    requirements: job.requirements.join(', ')
+                };
+                localStorage.setItem('current_letter_data', JSON.stringify(letterData));
+                Navigation.redirectTo('FORM');
+            }
+        }
+
+        // Initialisation
+        displayJobs();
+
+        // Gestion du bouton de déconnexion
+        const logoutBtn = document.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                Auth.logout();
+            });
+        }
+    </script>
+</body>
+</html>

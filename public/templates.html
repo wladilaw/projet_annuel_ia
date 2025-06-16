@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Templates de Lettres</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Barlow:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2d3436;
+            --accent-color: #e17055;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --background-light: #fff5f3;
+            --background-white: #ffffff;
+            --shadow-soft: 0 2px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--background-light);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: var(--background-white);
+            box-shadow: var(--shadow-soft);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 2rem;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 100px auto 2rem;
+            padding: 0 2rem;
+        }
+
+        /* Templates Grid */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .template-card {
+            background: var(--background-white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .template-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .template-category {
+            background: var(--background-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: var(--accent-color);
+        }
+
+        .template-preview {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--background-light);
+            border-radius: var(--border-radius);
+            font-size: 0.875rem;
+            color: var(--text-light);
+            max-height: 150px;
+            overflow: hidden;
+        }
+
+        .template-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--background-light);
+            color: var(--accent-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: var(--background-white);
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            min-height: 150px;
+            resize: vertical;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">MotivAI</a>
+            <button id="logout-btn" class="btn btn-secondary">Déconnexion</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h1>Templates de Lettres</h1>
+        <p>Choisissez un template ou créez le vôtre pour commencer.</p>
+
+        <div class="templates-grid" id="templatesGrid">
+            <!-- Les templates seront ajoutés dynamiquement ici -->
+        </div>
+
+        <button class="btn btn-primary" onclick="showNewTemplateModal()">Créer un nouveau template</button>
+    </main>
+
+    <!-- Modal pour créer/éditer un template -->
+    <div id="templateModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Nouveau Template</h2>
+            <form id="templateForm">
+                <div class="form-group">
+                    <label class="form-label" for="templateTitle">Titre</label>
+                    <input type="text" id="templateTitle" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="templateCategory">Catégorie</label>
+                    <select id="templateCategory" class="form-input" required>
+                        <option value="tech">Technologie</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="sales">Ventes</option>
+                        <option value="finance">Finance</option>
+                        <option value="other">Autre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="templateContent">Contenu</label>
+                    <textarea id="templateContent" class="form-textarea" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('LOGIN');
+        }
+
+        // Données des templates (à remplacer par votre API)
+        const templates = [
+            {
+                id: 1,
+                title: 'Template Tech',
+                category: 'tech',
+                content: 'Cher recruteur,\n\nJe vous écris concernant le poste de développeur...',
+                isDefault: true
+            },
+            {
+                id: 2,
+                title: 'Template Marketing',
+                category: 'marketing',
+                content: 'Cher recruteur,\n\nJe vous écris concernant le poste de responsable marketing...',
+                isDefault: true
+            }
+        ];
+
+        // Affichage des templates
+        function displayTemplates() {
+            const grid = document.getElementById('templatesGrid');
+            if (grid) {
+                grid.innerHTML = templates.map(template => `
+                    <div class="template-card">
+                        <div class="template-header">
+                            <h3 class="template-title">${template.title}</h3>
+                            <span class="template-category">${template.category}</span>
+                        </div>
+                        <div class="template-preview">${template.content}</div>
+                        <div class="template-actions">
+                            <button onclick="useTemplate(${template.id})" class="btn btn-primary">Utiliser</button>
+                            ${!template.isDefault ? `
+                                <button onclick="editTemplate(${template.id})" class="btn btn-secondary">Modifier</button>
+                                <button onclick="deleteTemplate(${template.id})" class="btn btn-secondary">Supprimer</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Gestion du modal
+        function showNewTemplateModal() {
+            const modal = document.getElementById('templateModal');
+            const form = document.getElementById('templateForm');
+            form.reset();
+            document.getElementById('modalTitle').textContent = 'Nouveau Template';
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('templateModal');
+            modal.style.display = 'none';
+        }
+
+        // Gestion des templates
+        function useTemplate(templateId) {
+            const template = templates.find(t => t.id === templateId);
+            if (template) {
+                localStorage.setItem('selected_template', JSON.stringify(template));
+                Navigation.redirectTo('FORM');
+            }
+        }
+
+        function editTemplate(templateId) {
+            const template = templates.find(t => t.id === templateId);
+            if (template) {
+                const modal = document.getElementById('templateModal');
+                const form = document.getElementById('templateForm');
+                
+                document.getElementById('templateTitle').value = template.title;
+                document.getElementById('templateCategory').value = template.category;
+                document.getElementById('templateContent').value = template.content;
+                
+                document.getElementById('modalTitle').textContent = 'Modifier le Template';
+                modal.style.display = 'block';
+            }
+        }
+
+        function deleteTemplate(templateId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce template ?')) {
+                const index = templates.findIndex(t => t.id === templateId);
+                if (index !== -1) {
+                    templates.splice(index, 1);
+                    displayTemplates();
+                }
+            }
+        }
+
+        // Gestion du formulaire
+        const templateForm = document.getElementById('templateForm');
+        if (templateForm) {
+            templateForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const newTemplate = {
+                    id: Date.now(),
+                    title: document.getElementById('templateTitle').value,
+                    category: document.getElementById('templateCategory').value,
+                    content: document.getElementById('templateContent').value,
+                    isDefault: false
+                };
+
+                templates.push(newTemplate);
+                displayTemplates();
+                closeModal();
+            });
+        }
+
+        // Initialisation
+        displayTemplates();
+
+        // Gestion du bouton de déconnexion
+        const logoutBtn = document.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                Auth.logout();
+            });
+        }
+    </script>
+</body>
+</html> 

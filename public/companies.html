@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Entreprises qui recrutent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .company-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .company-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .gradient-overlay {
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.6s ease-out forwards;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard.html" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/jobs.html" class="text-text-light hover:text-primary transition">Offres</a>
+                    <a href="/companies.html" class="text-primary font-semibold">Entreprises</a>
+                    <a href="/cv-builder.html" class="text-text-light hover:text-primary transition">CV</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-text-light hover:text-primary transition">
+                        <span class="material-icons">notifications</span>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full"></span>
+                    </button>
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-accent to-accent-dark text-white py-20 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-white rounded-full"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-white rounded-full"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-5xl font-display font-bold mb-6">
+                    Découvrez les entreprises qui recrutent
+                </h1>
+                <p class="text-xl text-white/80 mb-8">
+                    Explorez les meilleures entreprises tech et trouvez votre futur employeur idéal
+                </p>
+                
+                <!-- Search Bar -->
+                <div class="max-w-2xl mx-auto relative">
+                    <input type="text" placeholder="Rechercher une entreprise, un secteur..." 
+                           class="w-full px-6 py-4 pr-14 rounded-full text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-white/20">
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-accent hover:bg-accent-dark text-white p-3 rounded-full transition">
+                        <span class="material-icons">search</span>
+                    </button>
+                </div>
+
+                <!-- Quick Filters -->
+                <div class="flex flex-wrap justify-center gap-3 mt-6">
+                    <button class="px-4 py-2 bg-white/20 backdrop-blur text-white rounded-full hover:bg-white/30 transition">
+                        <span class="material-icons text-sm mr-1">trending_up</span>
+                        En croissance
+                    </button>
+                    <button class="px-4 py-2 bg-white/20 backdrop-blur text-white rounded-full hover:bg-white/30 transition">
+                        <span class="material-icons text-sm mr-1">home</span>
+                        Télétravail
+                    </button>
+                    <button class="px-4 py-2 bg-white/20 backdrop-blur text-white rounded-full hover:bg-white/30 transition">
+                        <span class="material-icons text-sm mr-1">rocket_launch</span>
+                        Startups
+                    </button>
+                    <button class="px-4 py-2 bg-white/20 backdrop-blur text-white rounded-full hover:bg-white/30 transition">
+                        <span class="material-icons text-sm mr-1">public</span>
+                        International
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Featured Companies -->
+        <section class="mb-16">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-3xl font-display font-bold text-primary">Entreprises à la une</h2>
+                    <p class="text-text-light mt-2">Les employeurs les plus attractifs du moment</p>
+                </div>
+                <a href="#" class="text-accent font-medium hover:underline">Voir toutes →</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Google Card -->
+                <div class="company-card bg-white rounded-2xl overflow-hidden cursor-pointer animate-slide-up">
+                    <div class="h-48 relative bg-gradient-to-br from-blue-500 to-blue-600">
+                        <img src="https://logo.clearbit.com/google.com" alt="Google" 
+                             class="absolute bottom-4 left-4 w-20 h-20 bg-white rounded-xl p-3 shadow-lg">
+                        <span class="absolute top-4 right-4 px-3 py-1 bg-white/20 backdrop-blur text-white text-sm rounded-full">
+                            ⭐ Top employeur
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Google</h3>
+                        <p class="text-text-light mb-4">Leader mondial de la technologie et de l'innovation</p>
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="material-icons text-base mr-1">location_on</span>
+                                Paris, Lyon
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="material-icons text-base mr-1">people</span>
+                                150K+ employés
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium">Tech</span>
+                            <span class="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-medium">Cloud</span>
+                            <span class="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs font-medium">IA</span>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t">
+                            <span class="text-lg font-semibold text-accent">156 postes ouverts</span>
+                            <button class="text-gray-400 hover:text-accent transition">
+                                <span class="material-icons">bookmark_border</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spotify Card -->
+                <div class="company-card bg-white rounded-2xl overflow-hidden cursor-pointer animate-slide-up" style="animation-delay: 0.1s">
+                    <div class="h-48 relative bg-gradient-to-br from-green-500 to-green-600">
+                        <img src="https://logo.clearbit.com/spotify.com" alt="Spotify" 
+                             class="absolute bottom-4 left-4 w-20 h-20 bg-white rounded-xl p-3 shadow-lg">
+                        <span class="absolute top-4 right-4 px-3 py-1 bg-white/20 backdrop-blur text-white text-sm rounded-full">
+                            🎯 Match 92%
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Spotify</h3>
+                        <p class="text-text-light mb-4">Révolutionne l'industrie musicale avec la technologie</p>
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="material-icons text-base mr-1">location_on</span>
+                                Paris
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="material-icons text-base mr-1">people</span>
+                                9K+ employés
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-medium">Music</span>
+                            <span class="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs font-medium">Streaming</span>
+                            <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium">Data</span>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t">
+                            <span class="text-lg font-semibold text-accent">42 postes ouverts</span>
+                            <button class="text-gray-400 hover:text-accent transition">
+                                <span class="material-icons">bookmark_border</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Airbnb Card -->
+                <div class="company-card bg-white rounded-2xl overflow-hidden cursor-pointer animate-slide-up" style="animation-delay: 0.2s">
+                    <div class="h-48 relative bg-gradient-to-br from-red-500 to-pink-600">
+                        <img src="https://logo.clearbit.com/airbnb.com" alt="Airbnb" 
+                             class="absolute bottom-4 left-4 w-20 h-20 bg-white rounded-xl p-3 shadow-lg">
+                        <span class="absolute top-4 right-4 px-3 py-1 bg-white/20 backdrop-blur text-white text-sm rounded-full">
+                            🌍 Remote first
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Airbnb</h3>
+                        <p class="text-text-light mb-4">Connecte les voyageurs du monde entier</p>
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="material-icons text-base mr-1">location_on</span>
+                                Remote
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="material-icons text-base mr-1">people</span>
+                                6K+ employés
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-red-50 text-red-600 rounded-full text-xs font-medium">Travel</span>
+                            <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium">Platform</span>
+                            <span class="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-medium">Remote</span>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t">
+                            <span class="text-lg font-semibold text-accent">28 postes ouverts</span>
+                            <button class="text-accent">
+                                <span class="material-icons">bookmark</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-display font-bold text-primary mb-8">Explorer par secteur</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <a href="#" class="group p-6 bg-white rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                        <span class="material-icons">computer</span>
+                    </div>
+                    <div>
+                        <h4 className="font-semibold text-primary">Tech & IT</h4>
+                        <p class="text-sm text-gray-500">2,341 entreprises</p>
+                    </div>
+                </a>
+
+                <a href="#" class="group p-6 bg-white rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                        <span class="material-icons">trending_up</span>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-primary">Finance</h4>
+                        <p class="text-sm text-gray-500">1,127 entreprises</p>
+                    </div>
+                </a>
+
+                <a href="#" class="group p-6 bg-white rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                        <span class="material-icons">campaign</span>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-primary">Marketing</h4>
+                        <p class="text-sm text-gray-500">892 entreprises</p>
+                    </div>
+                </a>
+
+                <a href="#" class="group p-6 bg-white rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                        <span class="material-icons">favorite</span>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-primary">Santé</h4>
+                        <p class="text-sm text-gray-500">654 entreprises</p>
+                    </div>
+                </a>
+
+                <a href="#" class="group p-6 bg-white rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                        <span class="material-icons">shopping_bag</span>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-primary">E-commerce</h4>
+                        <p class="text-sm text-gray-500">1,423 entreprises</p>
+                    </div>
+                </a>
+
+                <a href="#" class="group p-6 bg-white rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                        <span class="material-icons">school</span>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-primary">Éducation</h4>
+                        <p class="text-sm text-gray-500">567 entreprises</p>
+                    </div>
+                </a>
+
+                <a href="#" class="group p-6 bg-white rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                        <span class="material-icons">restaurant</span>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-primary">Food & Resto</h4>
+                        <p class="text-sm text-gray-500">783 entreprises</p>
+                    </div>
+                </a>
+
+                <a href="#" class="group p-6 bg-white rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                        <span class="material-icons">more_horiz</span>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-primary">Voir plus</h4>
+                        <p class="text-sm text-gray-500">15+ secteurs</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Company Rankings -->
+        <section class="mb-16">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-3xl font-display font-bold text-primary">Classements</h2>
+                    <p class="text-text-light mt-2">Les entreprises les mieux notées par nos utilisateurs</p>
+                </div>
+                <select class="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                    <option>Équilibre vie pro/perso</option>
+                    <option>Salaire & avantages</option>
+                    <option>Culture d'entreprise</option>
+                    <option>Opportunités de carrière</option>
+                </select>
+            </div>
+
+            <div class="bg-white rounded-2xl overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rang</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entreprise</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avis</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Postes</th>
+                            <th class="px-6 py-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center justify-center w-8 h-8 bg-yellow-100 text-yellow-600 rounded-full font-bold">
+                                    1
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <img class="w-10 h-10 rounded-lg" src="https://logo.clearbit.com/salesforce.com" alt="Salesforce">
+                                    <div class="ml-4">
+                                        <div class="font-medium text-gray-900">Salesforce</div>
+                                        <div class="text-sm text-gray-500">CRM & Cloud</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="text-lg font-semibold text-primary">4.8</div>
+                                    <div class="ml-2 flex text-yellow-400">
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                1,234 avis
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-accent font-medium">87 postes</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <a href="#" class="text-accent hover:text-accent-dark">Voir →</a>
+                            </td>
+                        </tr>
+
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center justify-center w-8 h-8 bg-gray-100 text-gray-600 rounded-full font-bold">
+                                    2
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <img class="w-10 h-10 rounded-lg" src="https://logo.clearbit.com/microsoft.com" alt="Microsoft">
+                                    <div class="ml-4">
+                                        <div class="font-medium text-gray-900">Microsoft</div>
+                                        <div class="text-sm text-gray-500">Software & Cloud</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="text-lg font-semibold text-primary">4.7</div>
+                                    <div class="ml-2 flex text-yellow-400">
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                2,891 avis
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-accent font-medium">124 postes</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <a href="#" class="text-accent hover:text-accent-dark">Voir →</a>
+                            </td>
+                        </tr>
+
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center justify-center w-8 h-8 bg-orange-100 text-orange-600 rounded-full font-bold">
+                                    3
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <img class="w-10 h-10 rounded-lg" src="https://logo.clearbit.com/adobe.com" alt="Adobe">
+                                    <div class="ml-4">
+                                        <div class="font-medium text-gray-900">Adobe</div>
+                                        <div class="text-sm text-gray-500">Creative Software</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="text-lg font-semibold text-primary">4.6</div>
+                                    <div class="ml-2 flex text-yellow-400">
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star</span>
+                                        <span class="material-icons text-sm">star_half</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                967 avis
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-accent font-medium">56 postes</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <a href="#" class="text-accent hover:text-accent-dark">Voir →</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="bg-gray-50 px-6 py-3 text-center">
+                    <a href="#" class="text-accent font-medium hover:underline">Voir le classement complet →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Company Culture Spotlight -->
+        <section class="bg-gradient-to-r from-purple-600 to-purple-700 rounded-3xl p-8 text-white mb-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h2 class="text-3xl font-display font-bold mb-4">
+                        Découvrez la culture d'entreprise
+                    </h2>
+                    <p class="text-purple-100 mb-6 text-lg">
+                        Plongez dans les coulisses des entreprises tech les plus innovantes. 
+                        Photos, vidéos, témoignages... Découvrez votre futur environnement de travail.
+                    </p>
+                    <button class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition">
+                        Explorer les entreprises
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="https://placehold.co/300x200/9333ea/ffffff?text=Bureau+moderne" 
+                         alt="Bureau moderne" class="rounded-lg">
+                    <img src="https://placehold.co/300x200/a855f7/ffffff?text=Équipe+tech" 
+                         alt="Équipe tech" class="rounded-lg">
+                    <img src="https://placehold.co/300x200/8b5cf6/ffffff?text=Espace+détente" 
+                         alt="Espace détente" class="rounded-lg">
+                    <img src="https://placehold.co/300x200/7c3aed/ffffff?text=Team+building" 
+                         alt="Team building" class="rounded-lg">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('LOGIN');
+        }
+
+        // Données simulées des entreprises (à remplacer par votre API)
+        const companies = [
+            {
+                id: 1,
+                name: 'Tech Solutions',
+                industry: 'Technologie',
+                location: 'Paris',
+                description: 'Entreprise leader dans le développement de solutions innovantes...',
+                size: '50-200 employés',
+                website: 'https://techsolutions.com',
+                jobs: [
+                    {
+                        id: 1,
+                        title: 'Développeur Full Stack',
+                        type: 'CDI'
+                    }
+                ]
+            },
+            // Ajoutez d'autres entreprises ici
+        ];
+
+        // Affichage des entreprises
+        function displayCompanies() {
+            const companiesContainer = document.querySelector('.companies-container');
+            if (companiesContainer) {
+                companiesContainer.innerHTML = companies.map(company => `
+                    <div class="company-card">
+                        <h3>${company.name}</h3>
+                        <p class="industry">${company.industry}</p>
+                        <p class="location">${company.location}</p>
+                        <p class="size">${company.size}</p>
+                        <p class="description">${company.description}</p>
+                        <div class="jobs">
+                            <h4>Offres disponibles</h4>
+                            ${company.jobs.map(job => `
+                                <div class="job-item">
+                                    <span>${job.title}</span>
+                                    <span class="type">${job.type}</span>
+                                    <button onclick="viewJob(${job.id})" class="btn-view">Voir l'offre</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="actions">
+                            <a href="${company.website}" target="_blank" class="btn-website">Site web</a>
+                            <button onclick="followCompany(${company.id})" class="btn-follow">Suivre</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Fonction pour voir une offre d'emploi
+        function viewJob(jobId) {
+            Navigation.redirectTo('JOBS');
+        }
+
+        // Fonction pour suivre une entreprise
+        function followCompany(companyId) {
+            const followedCompanies = JSON.parse(localStorage.getItem('followed_companies') || '[]');
+            if (!followedCompanies.includes(companyId)) {
+                followedCompanies.push(companyId);
+                localStorage.setItem('followed_companies', JSON.stringify(followedCompanies));
+                alert('Entreprise suivie avec succès !');
+            }
+        }
+
+        // Initialisation
+        displayCompanies();
+
+        // Gestion du bouton de déconnexion
+        const logoutBtn = document.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                Auth.logout();
+            });
+        }
+
+        // Company card interactions
+        document.querySelectorAll('.company-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Simulate navigation to company page
+                window.location.href = '#company-detail';
+            });
+        });
+
+        // Bookmark functionality
+        document.querySelectorAll('button').forEach(button => {
+            if (button.innerHTML.includes('bookmark')) {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const icon = this.querySelector('.material-icons');
+                    if (icon.textContent === 'bookmark_border') {
+                        icon.textContent = 'bookmark';
+                        this.classList.add('text-accent');
+                        this.classList.remove('text-gray-400');
+                    } else {
+                        icon.textContent = 'bookmark_border';
+                        this.classList.remove('text-accent');
+                        this.classList.add('text-gray-400');
+                    }
+                });
+            }
+        });
+
+        // Filter animations
+        const filterButtons = document.querySelectorAll('button');
+        filterButtons.forEach(button => {
+            if (button.textContent.includes('En croissance') || 
+                button.textContent.includes('Télétravail') || 
+                button.textContent.includes('Startups')) {
+                button.addEventListener('click', function() {
+                    this.classList.toggle('bg-white/30');
+                    this.classList.toggle('bg-white');
+                    this.classList.toggle('text-white');
+                    this.classList.toggle('text-accent');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

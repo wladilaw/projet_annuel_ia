@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Tableau de bord</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'slide-down': 'slideDown 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'scale-in': 'scaleIn 0.3s ease-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        slideUp: {
+                            from: { transform: 'translateY(10px)', opacity: '0' },
+                            to: { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideDown: {
+                            from: { transform: 'translateY(-10px)', opacity: '0' },
+                            to: { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeIn: {
+                            from: { opacity: '0' },
+                            to: { opacity: '1' },
+                        },
+                        scaleIn: {
+                            from: { transform: 'scale(0.95)', opacity: '0' },
+                            to: { transform: 'scale(1)', opacity: '1' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #e17055;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c44569;
+        }
+
+        /* Gradient text effect */
+        .gradient-text {
+            background: linear-gradient(135deg, #e17055 0%, #c44569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Glass morphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Hover card effect */
+        .hover-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animated gradient background */
+        .animated-gradient {
+            background: linear-gradient(270deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 800% 800%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass border-b border-gray-100">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <!-- Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard.html" class="text-primary font-semibold">Tableau de bord</a>
+                    <a href="/letters.html" class="text-text-light hover:text-primary transition">Mes lettres</a>
+                    <a href="/templates.html" class="text-text-light hover:text-primary transition">Modèles</a>
+                    <a href="/profile.html" class="text-text-light hover:text-primary transition">Profil</a>
+                </div>
+
+                <!-- Right side -->
+                <div class="flex items-center space-x-4">
+                    <!-- Notification -->
+                    <button class="relative p-2 text-text-light hover:text-primary transition">
+                        <span class="material-icons">notifications</span>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full"></span>
+                    </button>
+
+                    <!-- User Menu -->
+                    <div class="relative group">
+                        <button class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition">
+                            <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                                JD
+                            </div>
+                            <span class="hidden md:block text-sm font-medium">Jean Dupont</span>
+                            <span class="material-icons text-sm">expand_more</span>
+                        </button>
+                        
+                        <!-- Dropdown -->
+                        <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right scale-95 group-hover:scale-100">
+                            <div class="p-2">
+                                <a href="/profile.html" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
+                                    <span class="material-icons text-gray-400">person</span>
+                                    <span>Mon profil</span>
+                                </a>
+                                <a href="/settings.html" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
+                                    <span class="material-icons text-gray-400">settings</span>
+                                    <span>Paramètres</span>
+                                </a>
+                                <hr class="my-2">
+                                <a href="/logout" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-red-50 text-red-600 transition">
+                                    <span class="material-icons">logout</span>
+                                    <span>Déconnexion</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile menu -->
+                    <button class="md:hidden p-2 text-text-light hover:text-primary transition">
+                        <span class="material-icons">menu</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <div class="mb-8 animate-fade-in">
+            <h1 class="text-4xl font-display font-bold text-primary mb-2">
+                Bonjour Jean, 
+                <span class="gradient-text">prêt à décrocher un job ?</span>
+            </h1>
+            <p class="text-text-light text-lg">Créez une nouvelle lettre de motivation ou consultez vos précédentes créations.</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Total Letters -->
+            <div class="bg-white rounded-2xl p-6 hover-card border border-gray-100 animate-slide-up">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white">
+                        <span class="material-icons">description</span>
+                    </div>
+                    <span class="text-sm text-gray-500">+12% ce mois</span>
+                </div>
+                <h3 class="text-2xl font-bold text-primary">24</h3>
+                <p class="text-text-light">Lettres créées</p>
+            </div>
+
+            <!-- Applications -->
+            <div class="bg-white rounded-2xl p-6 hover-card border border-gray-100 animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center text-white">
+                        <span class="material-icons">send</span>
+                    </div>
+                    <span class="text-sm text-success">+5 cette semaine</span>
+                </div>
+                <h3 class="text-2xl font-bold text-primary">18</h3>
+                <p class="text-text-light">Candidatures envoyées</p>
+            </div>
+
+            <!-- Response Rate -->
+            <div class="bg-white rounded-2xl p-6 hover-card border border-gray-100 animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white">
+                        <span class="material-icons">trending_up</span>
+                    </div>
+                    <span class="text-sm text-success">+15%</span>
+                </div>
+                <h3 class="text-2xl font-bold text-primary">72%</h3>
+                <p class="text-text-light">Taux de réponse</p>
+            </div>
+
+            <!-- Interviews -->
+            <div class="bg-white rounded-2xl p-6 hover-card border border-gray-100 animate-slide-up" style="animation-delay: 0.3s;">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-accent to-accent-dark rounded-xl flex items-center justify-center text-white">
+                        <span class="material-icons">event_available</span>
+                    </div>
+                    <span class="text-sm text-warning">3 à venir</span>
+                </div>
+                <h3 class="text-2xl font-bold text-primary">8</h3>
+                <p class="text-text-light">Entretiens obtenus</p>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <!-- Create New Letter -->
+            <div class="lg:col-span-2">
+                <div class="bg-gradient-to-br from-accent to-accent-dark rounded-3xl p-8 text-white relative overflow-hidden hover-card">
+                    <!-- Background Pattern -->
+                    <div class="absolute inset-0 opacity-10">
+                        <div class="absolute -top-24 -right-24 w-64 h-64 bg-white rounded-full"></div>
+                        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-white rounded-full"></div>
+                    </div>
+                    
+                    <div class="relative">
+                        <h2 class="text-3xl font-display font-bold mb-4">Crée une nouvelle lettre</h2>
+                        <p class="text-white/80 mb-8 max-w-md">Notre IA génère des lettres personnalisées qui captent l'attention des recruteurs. Prêt à décrocher ton prochain job ?</p>
+                        
+                        <div class="flex flex-wrap gap-4">
+                            <a href="/form.html" class="inline-flex items-center bg-white text-accent px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                                <span class="material-icons mr-2">add_circle</span>
+                                Nouvelle lettre
+                            </a>
+                            <button class="inline-flex items-center bg-white/20 backdrop-blur text-white px-6 py-3 rounded-full font-semibold hover:bg-white/30 transition">
+                                <span class="material-icons mr-2">auto_awesome</span>
+                                Utiliser un modèle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-2xl p-6 border border-gray-100">
+                <h3 class="text-xl font-semibold text-primary mb-4 flex items-center">
+                    <span class="material-icons mr-2 text-accent">history</span>
+                    Activité récente
+                </h3>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-2 h-2 bg-success rounded-full mt-2"></div>
+                        <div>
+                            <p class="text-sm font-medium">Lettre envoyée à Google</p>
+                            <p class="text-xs text-text-light">Il y a 2 heures</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-2 h-2 bg-info rounded-full mt-2"></div>
+                        <div>
+                            <p class="text-sm font-medium">Nouvelle lettre créée</p>
+                            <p class="text-xs text-text-light">Il y a 1 jour</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
+                        <div>
+                            <p class="text-sm font-medium">Profil mis à jour</p>
+                            <p class="text-xs text-text-light">Il y a 3 jours</p>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#" class="text-accent text-sm font-medium mt-4 inline-block hover:underline">
+                    Voir toute l'activité →
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Letters -->
+        <section class="mb-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-display font-bold text-primary">Lettres récentes</h2>
+                <a href="/letters.html" class="text-accent font-medium hover:underline">Voir toutes →</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Letter Card 1 -->
+                <div class="bg-white rounded-xl overflow-hidden hover-card border border-gray-100 group animate-fade-in">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 h-32 relative">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <p class="text-white/80 text-sm">Développeur Full Stack</p>
+                            <h3 class="text-white text-xl font-semibold">Google France</h3>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-sm text-text-light">15 Nov 2024</span>
+                            <span class="px-2 py-1 bg-success/10 text-success text-xs rounded-full font-medium">Envoyée</span>
+                        </div>
+                        <p class="text-text-light text-sm mb-4 line-clamp-2">
+                            Passionné par le développement web et fort d'une expérience de 3 ans...
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <a href="/result.html?id=1" class="text-accent font-medium text-sm hover:underline">Voir la lettre</a>
+                            <div class="flex space-x-1">
+                                <button class="p-1.5 text-gray-400 hover:text-accent transition">
+                                    <span class="material-icons text-sm">content_copy</span>
+                                </button>
+                                <button class="p-1.5 text-gray-400 hover:text-accent transition">
+                                    <span class="material-icons text-sm">download</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Letter Card 2 -->
+                <div class="bg-white rounded-xl overflow-hidden hover-card border border-gray-100 group animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 h-32 relative">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <p class="text-white/80 text-sm">Product Manager</p>
+                            <h3 class="text-white text-xl font-semibold">Spotify</h3>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-sm text-text-light">12 Nov 2024</span>
+                            <span class="px-2 py-1 bg-warning/10 text-warning text-xs rounded-full font-medium">Brouillon</span>
+                        </div>
+                        <p class="text-text-light text-sm mb-4 line-clamp-2">
+                            Expert en gestion de produits digitaux avec une approche data-driven...
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <a href="/result.html?id=2" class="text-accent font-medium text-sm hover:underline">Continuer l'édition</a>
+                            <div class="flex space-x-1">
+                                <button class="p-1.5 text-gray-400 hover:text-accent transition">
+                                    <span class="material-icons text-sm">edit</span>
+                                </button>
+                                <button class="p-1.5 text-gray-400 hover:text-error transition">
+                                    <span class="material-icons text-sm">delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Letter Card 3 -->
+                <div class="bg-white rounded-xl overflow-hidden hover-card border border-gray-100 group animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="bg-gradient-to-br from-green-500 to-green-600 h-32 relative">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <p class="text-white/80 text-sm">UX Designer</p>
+                            <h3 class="text-white text-xl font-semibold">Adobe</h3>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-sm text-text-light">10 Nov 2024</span>
+                            <span class="px-2 py-1 bg-success/10 text-success text-xs rounded-full font-medium">Envoyée</span>
+                        </div>
+                        <p class="text-text-light text-sm mb-4 line-clamp-2">
+                            Designer passionné avec 5 ans d'expérience en création d'interfaces...
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <a href="/result.html?id=3" class="text-accent font-medium text-sm hover:underline">Voir la lettre</a>
+                            <div class="flex space-x-1">
+                                <button class="p-1.5 text-gray-400 hover:text-accent transition">
+                                    <span class="material-icons text-sm">content_copy</span>
+                                </button>
+                                <button class="p-1.5 text-gray-400 hover:text-accent transition">
+                                    <span class="material-icons text-sm">download</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips Section -->
+        <section class="bg-gradient-to-r from-bg-light to-white rounded-3xl p-8 animate-fade-in">
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="flex-1 mb-6 lg:mb-0">
+                    <h2 class="text-2xl font-display font-bold text-primary mb-3">
+                        <span class="material-icons text-accent mr-2">lightbulb</span>
+                        Astuce du jour
+                    </h2>
+                    <p class="text-text-light mb-4">
+                        Personnalise toujours ta lettre en mentionnant un projet ou une valeur spécifique de l'entreprise. 
+                        Cela montre ton intérêt genuine et augmente tes chances de 40% !
+                    </p>
+                    <button class="text-accent font-semibold hover:underline">
+                        Plus de conseils →
+                    </button>
+                </div>
+                <div class="lg:ml-8">
+                    <div class="w-48 h-48 bg-gradient-to-br from-accent/20 to-accent/10 rounded-full flex items-center justify-center animate-pulse-slow">
+                        <span class="material-icons text-6xl text-accent">tips_and_updates</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="dashboard-actions">
+            <a href="form.html" class="btn btn-primary">Nouvelle lettre</a>
+            <a href="templates.html" class="btn btn-secondary">Gérer les templates</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center">
+                <p class="text-gray-400">© 2024 MotivAI. Tous droits réservés. Fait avec passion en France.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('LOGIN');
+        }
+
+        // Affichage des informations utilisateur
+        const user = Auth.getUser();
+        if (user) {
+            const userNameElement = document.querySelector('.user-name');
+            if (userNameElement) {
+                userNameElement.textContent = user.name;
+            }
+        }
+
+        // Affichage des lettres sauvegardées
+        function displaySavedLetters() {
+            const savedLetters = JSON.parse(localStorage.getItem('saved_letters') || '[]');
+            const lettersContainer = document.querySelector('.saved-letters');
+            
+            if (lettersContainer && savedLetters.length > 0) {
+                lettersContainer.innerHTML = savedLetters.map((letter, index) => `
+                    <div class="letter-card">
+                        <h3>${letter.jobTitle}</h3>
+                        <p class="company">${letter.company}</p>
+                        <p class="date">${new Date(letter.timestamp).toLocaleDateString()}</p>
+                        <div class="actions">
+                            <button onclick="viewLetter(${index})" class="btn-view">Voir</button>
+                            <button onclick="deleteLetter(${index})" class="btn-delete">Supprimer</button>
+                        </div>
+                    </div>
+                `).join('');
+            } else if (lettersContainer) {
+                lettersContainer.innerHTML = '<p class="no-letters">Aucune lettre sauvegardée</p>';
+            }
+        }
+
+        // Fonction pour voir une lettre
+        function viewLetter(index) {
+            const savedLetters = JSON.parse(localStorage.getItem('saved_letters') || '[]');
+            const letter = savedLetters[index];
+            if (letter) {
+                localStorage.setItem('current_letter_data', JSON.stringify(letter));
+                Navigation.redirectTo('RESULT');
+            }
+        }
+
+        // Fonction pour supprimer une lettre
+        function deleteLetter(index) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette lettre ?')) {
+                const savedLetters = JSON.parse(localStorage.getItem('saved_letters') || '[]');
+                savedLetters.splice(index, 1);
+                localStorage.setItem('saved_letters', JSON.stringify(savedLetters));
+                displaySavedLetters();
+            }
+        }
+
+        // Initialisation
+        displaySavedLetters();
+
+        // Gestion du bouton de déconnexion
+        const logoutBtn = document.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                Auth.logout();
+            });
+        }
+
+        // Add interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate numbers on scroll
+            const animateNumbers = () => {
+                const numbers = document.querySelectorAll('[data-count]');
+                numbers.forEach(num => {
+                    const target = parseInt(num.getAttribute('data-count'));
+                    let current = 0;
+                    const increment = target / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            current = target;
+                            clearInterval(timer);
+                        }
+                        num.textContent = Math.floor(current);
+                    }, 30);
+                });
+            };
+
+            // Intersection Observer for animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.hover-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
+

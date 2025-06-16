@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                        purple: '#a29bfe',
+                        'purple-dark': '#6c5ce7',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        /* Animated counter */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .counter {
+            animation: countUp 0.8s ease-out;
+        }
+
+        /* Pulse animation for live indicator */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Activity feed animation */
+        .activity-item {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Status badge animations */
+        .status-badge {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-badge::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 bg-gradient-to-br from-primary to-gray-800 text-white overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
+                        <span class="material-icons">shield</span>
+                    </div>
+                    <div>
+                        <h1 class="font-brand text-2xl">MotivAI</h1>
+                        <p class="text-xs opacity-75">Admin Panel</p>
+                    </div>
+                </div>
+
+                <!-- Admin Profile Mini -->
+                <div class="bg-white/10 rounded-lg p-4 mb-6">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://placehold.co/40x40/e17055/ffffff?text=AD" alt="Admin" class="w-10 h-10 rounded-full">
+                        <div>
+                            <p class="font-semibold">Admin Principal</p>
+                            <p class="text-xs opacity-75">Super Admin</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="space-y-2">
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg bg-accent text-white">
+                        <span class="material-icons">dashboard</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">people</span>
+                        <span>Utilisateurs</span>
+                        <span class="ml-auto bg-accent rounded-full px-2 py-1 text-xs">2.4k</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">description</span>
+                        <span>Lettres</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">business</span>
+                        <span>Entreprises</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">work</span>
+                        <span>Offres d'emploi</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">payments</span>
+                        <span>Abonnements</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">analytics</span>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">mail</span>
+                        <span>Messages</span>
+                        <span class="ml-auto bg-warning text-primary rounded-full px-2 py-1 text-xs">12</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
+                        <span class="material-icons">settings</span>
+                        <span>Paramètres</span>
+                    </a>
+                </nav>
+
+                <!-- System Status -->
+                <div class="mt-8 pt-8 border-t border-white/20">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm opacity-75">Statut système</span>
+                        <span class="flex items-center text-xs">
+                            <span class="w-2 h-2 bg-success rounded-full pulse mr-1"></span>
+                            En ligne
+                        </span>
+                    </div>
+                    <div class="space-y-2">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="opacity-75">CPU</span>
+                                <span>42%</span>
+                            </div>
+                            <div class="w-full bg-white/20 rounded-full h-1">
+                                <div class="bg-success h-1 rounded-full" style="width: 42%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="opacity-75">RAM</span>
+                                <span>68%</span>
+                            </div>
+                            <div class="w-full bg-white/20 rounded-full h-1">
+                                <div class="bg-warning h-1 rounded-full" style="width: 68%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Top Bar -->
+            <header class="bg-white shadow-sm sticky top-0 z-10">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <div class="flex items-center space-x-4">
+                        <h2 class="text-2xl font-bold text-primary">Dashboard Overview</h2>
+                        <span class="px-3 py-1 bg-info/10 text-info rounded-full text-sm font-medium">
+                            Dernière mise à jour: il y a 2 min
+                        </span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- Search -->
+                        <div class="relative">
+                            <input type="text" placeholder="Rechercher..." class="w-64 pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            <span class="material-icons absolute left-3 top-2.5 text-gray-400">search</span>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <button class="p-2 hover:bg-gray-100 rounded-lg transition relative">
+                            <span class="material-icons">notifications</span>
+                            <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+                        </button>
+                        
+                        <button class="p-2 hover:bg-gray-100 rounded-lg transition">
+                            <span class="material-icons">settings</span>
+                        </button>
+                        
+                        <div class="h-8 w-px bg-gray-200"></div>
+                        
+                        <!-- Admin Menu -->
+                        <div class="relative group">
+                            <button class="flex items-center space-x-2 hover:bg-gray-100 rounded-lg p-2 transition">
+                                <img src="https://placehold.co/32x32/e17055/ffffff?text=AD" alt="Admin" class="w-8 h-8 rounded-full">
+                                <span class="material-icons text-sm">expand_more</span>
+                            </button>
+                            
+                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-50 transition">Mon compte</a>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-50 transition">Déconnexion</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="p-6">
+                <!-- Key Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Total Users -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-info to-blue-600 rounded-lg flex items-center justify-center text-white">
+                                <span class="material-icons">people</span>
+                            </div>
+                            <span class="text-sm text-gray-500">+12.5%</span>
+                        </div>
+                        <h3 class="text-3xl font-bold text-primary counter" data-target="2438">2,438</h3>
+                        <p class="text-gray-600">Utilisateurs actifs</p>
+                        <div class="mt-4">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-info to-blue-600 h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Letters Generated -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-success to-green-600 rounded-lg flex items-center justify-center text-white">
+                                <span class="material-icons">description</span>
+                            </div>
+                            <span class="text-sm text-success">+28.4%</span>
+                        </div>
+                        <h3 class="text-3xl font-bold text-primary counter" data-target="8754">8,754</h3>
+                        <p class="text-gray-600">Lettres générées</p>
+                        <div class="mt-4 flex items-center text-sm text-gray-500">
+                            <span class="material-icons text-base mr-1">trending_up</span>
+                            +124 aujourd'hui
+                        </div>
+                    </div>
+
+                    <!-- Revenue -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-accent to-accent-dark rounded-lg flex items-center justify-center text-white">
+                                <span class="material-icons">euro</span>
+                            </div>
+                            <span class="text-sm text-accent">+15.2%</span>
+                        </div>
+                        <h3 class="text-3xl font-bold text-primary counter" data-target="45280">45,280 €</h3>
+                        <p class="text-gray-600">Revenus du mois</p>
+                        <div class="mt-4">
+                            <span class="px-3 py-1 bg-accent/10 text-accent rounded-full text-xs font-medium status-badge">
+                                Premium: 312
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Conversion Rate -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple to-purple-dark rounded-lg flex items-center justify-center text-white">
+                                <span class="material-icons">show_chart</span>
+                            </div>
+                            <span class="text-sm text-purple-dark">+5.8%</span>
+                        </div>
+                        <h3 class="text-3xl font-bold text-primary counter" data-target="67">67%</h3>
+                        <p class="text-gray-600">Taux de conversion</p>
+                        <div class="mt-4 text-sm text-gray-500">
+                            <span>Free → Premium</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- User Growth Chart -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-primary">Croissance des utilisateurs</h3>
+                            <select class="text-sm border border-gray-200 rounded-lg px-3 py-1 focus:outline-none focus:border-accent">
+                                <option>30 derniers jours</option>
+                                <option>3 mois</option>
+                                <option>1 an</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="userGrowthChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Chart -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-primary">Revenus</h3>
+                            <div class="flex space-x-4 text-sm">
+                                <label class="flex items-center">
+                                    <input type="checkbox" checked class="mr-2">
+                                    <span>Premium</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" checked class="mr-2">
+                                    <span>Pro</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables and Lists -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Recent Users -->
+                    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm">
+                        <div class="p-6 border-b border-gray-100">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-bold text-primary">Nouveaux utilisateurs</h3>
+                                <a href="#" class="text-accent hover:text-accent-dark transition text-sm">Voir tous →</a>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-left text-xs text-gray-500 uppercase bg-gray-50">
+                                        <th class="px-6 py-3 font-medium">Utilisateur</th>
+                                        <th class="px-6 py-3 font-medium">Date d'inscription</th>
+                                        <th class="px-6 py-3 font-medium">Plan</th>
+                                        <th class="px-6 py-3 font-medium">Statut</th>
+                                        <th class="px-6 py-3 font-medium">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr class="hover:bg-gray-50 transition activity-item">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <img src="https://placehold.co/40x40/667eea/ffffff?text=ML" alt="User" class="w-10 h-10 rounded-full mr-3">
+                                                <div>
+                                                    <p class="font-medium text-gray-900">Marie Laurent</p>
+                                                    <p class="text-sm text-gray-500">marie.laurent@email.com</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-600">Il y a 10 min</td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 bg-purple/10 text-purple-dark rounded-full text-xs font-medium">Premium</span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="flex items-center text-sm">
+                                                <span class="w-2 h-2 bg-success rounded-full mr-2"></span>
+                                                Actif
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <button class="text-gray-400 hover:text-accent transition">
+                                                <span class="material-icons text-sm">more_vert</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 transition activity-item">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <img src="https://placehold.co/40x40/f093fb/ffffff?text=PD" alt="User" class="w-10 h-10 rounded-full mr-3">
+                                                <div>
+                                                    <p class="font-medium text-gray-900">Pierre Dubois</p>
+                                                    <p class="text-sm text-gray-500">p.dubois@gmail.com</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-600">Il y a 25 min</td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Free</span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="flex items-center text-sm">
+                                                <span class="w-2 h-2 bg-success rounded-full mr-2"></span>
+                                                Actif
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <button class="text-gray-400 hover:text-accent transition">
+                                                <span class="material-icons text-sm">more_vert</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 transition activity-item">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <img src="https://placehold.co/40x40/4facfe/ffffff?text=SB" alt="User" class="w-10 h-10 rounded-full mr-3">
+                                                <div>
+                                                    <p class="font-medium text-gray-900">Sophie Bernard</p>
+                                                    <p class="text-sm text-gray-500">s.bernard@outlook.fr</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-600">Il y a 1h</td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 bg-accent/10 text-accent rounded-full text-xs font-medium">Pro</span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="flex items-center text-sm">
+                                                <span class="w-2 h-2 bg-warning rounded-full mr-2"></span>
+                                                En attente
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <button class="text-gray-400 hover:text-accent transition">
+                                                <span class="material-icons text-sm">more_vert</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Activity Feed -->
+                    <div class="bg-white rounded-xl shadow-sm">
+                        <div class="p-6 border-b border-gray-100">
+                            <h3 class="text-lg font-bold text-primary">Activité récente</h3>
+                        </div>
+                        <div class="p-6 space-y-4 max-h-96 overflow-y-auto">
+                            <div class="flex items-start space-x-3 activity-item">
+                                <div class="w-2 h-2 bg-success rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm">
+                                        <span class="font-medium">Marie Laurent</span> a généré une lettre de motivation
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">Il y a 5 min</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 activity-item">
+                                <div class="w-2 h-2 bg-info rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm">
+                                        <span class="font-medium">Tech Corp</span> a publié 3 nouvelles offres
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">Il y a 12 min</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 activity-item">
+                                <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm">
+                                        Pic d'utilisation détecté - <span class="font-medium">142 utilisateurs</span> en ligne
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">Il y a 20 min</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 activity-item">
+                                <div class="w-2 h-2 bg-purple rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm">
+                                        <span class="font-medium">5 utilisateurs</span> ont upgradé vers Premium
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">Il y a 35 min</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 activity-item">
+                                <div class="w-2 h-2 bg-error rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm">
+                                        Erreur API détectée - <span class="font-medium">corrigée</span>
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">Il y a 1h</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Row -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                    <!-- AI Usage -->
+                    <div class="bg-gradient-to-br from-purple to-purple-dark text-white rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold">Utilisation IA</h4>
+                            <span class="material-icons text-white/50">psychology</span>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Tokens utilisés</span>
+                                    <span>2.4M / 5M</span>
+                                </div>
+                                <div class="w-full bg-white/20 rounded-full h-2">
+                                    <div class="bg-white h-2 rounded-full" style="width: 48%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Requêtes/min</span>
+                                    <span>124</span>
+                                </div>
+                                <div class="w-full bg-white/20 rounded-full h-2">
+                                    <div class="bg-white h-2 rounded-full" style="width: 62%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Server Health -->
+                    <div class="bg-gradient-to-br from-success to-green-600 text-white rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold">Santé serveur</h4>
+                            <span class="material-icons text-white/50">monitor_heart</span>
+                        </div>
+                        <div class="text-center py-4">
+                            <div class="text-4xl font-bold mb-2">99.9%</div>
+                            <p class="text-white/80 text-sm">Uptime ce mois</p>
+                        </div>
+                        <div class="flex justify-around text-sm">
+                            <div class="text-center">
+                                <p class="font-semibold">24ms</p>
+                                <p class="text-xs text-white/70">Latence</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="font-semibold">0</p>
+                                <p class="text-xs text-white/70">Erreurs</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support Tickets -->
+                    <div class="bg-gradient-to-br from-info to-blue-600 text-white rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold">Support</h4>
+                            <span class="material-icons text-white/50">support_agent</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm">Tickets ouverts</span>
+                                <span class="font-semibold">12</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">En attente</span>
+                                <span class="font-semibold">4</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">Temps de réponse</span>
+                                <span class="font-semibold">~15min</span>
+                            </div>
+                        </div>
+                        <button class="w-full mt-4 bg-white/20 hover:bg-white/30 transition rounded-lg py-2 text-sm font-medium">
+                            Voir les tickets
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Charts
+        const ctx1 = document.getElementById('userGrowthChart').getContext('2d');
+        const userGrowthChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['1 Nov', '5 Nov', '10 Nov', '15 Nov', '20 Nov', '25 Nov', '30 Nov'],
+                datasets: [{
+                    label: 'Nouveaux utilisateurs',
+                    data: [65, 78, 90, 110, 125, 140, 165],
+                    borderColor: '#74b9ff',
+                    backgroundColor: 'rgba(116, 185, 255, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Utilisateurs actifs',
+                    data: [280, 320, 340, 380, 420, 460, 520],
+                    borderColor: '#00b894',
+                    backgroundColor: 'rgba(0, 184, 148, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const ctx2 = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                datasets: [{
+                    label: 'Premium',
+                    data: [1200, 1900, 1500, 2100, 2400, 1800, 2200],
+                    backgroundColor: '#e17055',
+                }, {
+                    label: 'Pro',
+                    data: [800, 1100, 900, 1300, 1500, 1000, 1400],
+                    backgroundColor: '#a29bfe',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Animate counters
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            const increment = target / 100;
+            let current = 0;
+            
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    counter.textContent = Math.floor(current).toLocaleString();
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.textContent = target.toLocaleString();
+                    if (counter.textContent.includes('67')) {
+                        counter.textContent = '67%';
+                    } else if (counter.textContent.includes('45')) {
+                        counter.textContent = '45,280 €';
+                    }
+                }
+            };
+            
+            updateCounter();
+        });
+
+        // Real-time updates simulation
+        setInterval(() => {
+            // Update live indicator
+            const liveIndicator = document.querySelector('.pulse');
+            liveIndicator.style.animationPlayState = 'running';
+            
+            // Simulate new activity
+            const activityFeed = document.querySelector('.max-h-96');
+            const activities = [
+                { color: 'success', text: 'Nouvelle inscription', detail: 'utilisateur' },
+                { color: 'info', text: 'Lettre générée', detail: 'pour Google' },
+                { color: 'warning', text: 'Pic de trafic', detail: '+15% utilisateurs' },
+                { color: 'purple', text: 'Upgrade Premium', detail: 'par J. Martin' }
+            ];
+            
+            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+            
+            // Add random chance for new activity
+            if (Math.random() > 0.7) {
+                const newActivity = document.createElement('div');
+                newActivity.className = 'flex items-start space-x-3 activity-item';
+                newActivity.innerHTML = `
+                    <div class="w-2 h-2 bg-${randomActivity.color} rounded-full mt-2"></div>
+                    <div class="flex-1">
+                        <p class="text-sm">
+                            ${randomActivity.text} <span class="font-medium">${randomActivity.detail}</span>
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">À l'instant</p>
+                    </div>
+                `;
+                
+                activityFeed.insertBefore(newActivity, activityFeed.firstChild);
+                
+                // Remove last activity if too many
+                if (activityFeed.children.length > 10) {
+                    activityFeed.removeChild(activityFeed.lastChild);
+                }
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

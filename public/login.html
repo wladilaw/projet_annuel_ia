@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Connexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Barlow:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Import base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2d3436;
+            --accent-color: #e17055;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --background-light: #fff5f3;
+            --background-white: #ffffff;
+            --shadow-soft: 0 2px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success-color: #00b894;
+            --error-color: #d63031;
+            --google-blue: #4285f4;
+            --github-black: #24292e;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Elements */
+        .bg-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+            animation: float-1 20s infinite ease-in-out;
+            top: -150px;
+            left: -150px;
+        }
+
+        .shape-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 33% 67% 70% 30% / 30% 40% 60% 70%;
+            animation: float-2 25s infinite ease-in-out;
+            bottom: -250px;
+            right: -250px;
+        }
+
+        .shape-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            border-radius: 44% 56% 71% 29% / 48% 25% 75% 52%;
+            animation: float-3 30s infinite ease-in-out;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes float-1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(30px, -30px) rotate(120deg) scale(1.1); }
+            66% { transform: translate(-20px, 20px) rotate(240deg) scale(0.9); }
+        }
+
+        @keyframes float-2 {
+            0%, 100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+            33% { transform: translate(-30px, -30px) rotate(240deg) scale(0.9); }
+            66% { transform: translate(20px, 20px) rotate(120deg) scale(1.1); }
+        }
+
+        @keyframes float-3 {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            33% { transform: translate(-45%, -55%) rotate(120deg) scale(1.1); }
+            66% { transform: translate(-55%, -45%) rotate(240deg) scale(0.9); }
+        }
+
+        /* Main Container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            width: 100%;
+            max-width: 1200px;
+            height: 700px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Left Panel - Form */
+        .form-panel {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            animation: slide-in-left 0.8s ease;
+        }
+
+        @keyframes slide-in-left {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .logo-section {
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 3rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            display: inline-block;
+            animation: logo-pop 0.6s ease 0.3s both;
+        }
+
+        @keyframes logo-pop {
+            0% {
+                transform: scale(0) rotate(-180deg);
+            }
+            50% {
+                transform: scale(1.1) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+            }
+        }
+
+        .form-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .form-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Tab Switcher */
+        .tab-switcher {
+            display: flex;
+            background: var(--background-light);
+            border-radius: 50px;
+            padding: 4px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-btn.active {
+            color: white;
+        }
+
+        .tab-indicator {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: calc(50% - 4px);
+            height: calc(100% - 8px);
+            background: var(--accent-color);
+            border-radius: 50px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(225, 112, 85, 0.3);
+        }
+
+        .tab-indicator.right {
+            transform: translateX(100%);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            padding-left: 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(225, 112, 85, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .form-input:focus + .input-icon {
+            color: var(--accent-color);
+        }
+
+        /* Password Toggle */
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .password-toggle:hover {
+            color: var(--accent-color);
+        }
+
+        /* Remember & Forgot */
+        .form-extras {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent-color);
+        }
+
+        .forgot-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(225, 112, 85, 0.3);
+        }
+
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .submit-btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Social Login */
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 20px;
+            position: relative;
+            color: var(--text-light);
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-btn.google:hover {
+            border-color: var(--google-blue);
+            color: var(--google-blue);
+        }
+
+        .social-btn.github:hover {
+            border-color: var(--github-black);
+            color: var(--github-black);
+        }
+
+        /* Right Panel - Illustration */
+        .illustration-panel {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #c44569 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            animation: slide-in-right 0.8s ease;
+        }
+
+        @keyframes slide-in-right {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .illustration-content {
+            text-align: center;
+            color: white;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .illustration-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: fade-in-up 0.8s ease 0.3s both;
+        }
+
+        .illustration-content p {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            animation: fade-in-up 0.8s ease 0.5s both;
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-list {
+            list-style: none;
+            text-align: left;
+            display: inline-block;
+            animation: fade-in-up 0.8s ease 0.7s both;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+
+        .feature-list .material-icons {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px;
+            border-radius: 50%;
+        }
+
+        /* Pattern Overlay */
+        .pattern-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                height: auto;
+            }
+
+            .illustration-panel {
+                display: none;
+            }
+
+            .form-panel {
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-panel {
+                padding: 30px 20px;
+            }
+
+            .form-header h1 {
+                font-size: 2rem;
+            }
+
+            .social-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Error Message */
+        .error-message {
+            background: rgba(214, 48, 49, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            animation: shake 0.5s ease;
+        }
+
+        .error-message.active {
+            display: flex;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Success State */
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .success-overlay.active {
+            display: flex;
+        }
+
+        .success-content {
+            text-align: center;
+            animation: success-pop 0.6s ease;
+        }
+
+        @keyframes success-pop {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--success-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .success-icon .material-icons {
+            font-size: 50px;
+            color: white;
+        }
+
+        /* Loading State */
+        .btn-loading {
+            color: transparent;
+            pointer-events: none;
+        }
+
+        .btn-loading::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body>
+    <!-- Background Shapes -->
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <!-- Form Panel -->
+        <div class="form-panel">
+            <div class="logo-section">
+                <a href="/" class="logo">MotivAI</a>
+            </div>
+
+            <div class="form-header">
+                <h1 id="formTitle">Bon retour !</h1>
+                <p id="formSubtitle">Connecte-toi pour accéder à tes lettres de motivation</p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="tab-switcher">
+                <button class="tab-btn active" onclick="switchTab('login')">Connexion</button>
+                <button class="tab-btn" onclick="switchTab('signup')">Inscription</button>
+                <div class="tab-indicator" id="tabIndicator"></div>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message" id="errorMessage">
+                <span class="material-icons">error</span>
+                <span id="errorText"></span>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" class="form-input" placeholder="ton@email.com" required>
+                        <span class="material-icons input-icon">email</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Mot de passe</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                        <span class="material-icons input-icon">lock</span>
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <span class="material-icons" id="passwordIcon">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Extra fields for signup -->
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <label class="form-label" for="name">Nom complet</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="name" class="form-input" placeholder="Jean Dupont">
+                        <span class="material-icons input-icon">person</span>
+                    </div>
+                </div>
+
+                <div class="form-extras">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Se souvenir de moi</label>
+                    </div>
+                    <a href="#" class="forgot-link" id="forgotLink">Mot de passe oublié ?</a>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Se connecter
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>ou continue avec</span>
+            </div>
+
+            <div class="social-buttons">
+                <a href="#" class="social-btn google" onclick="handleSocialLogin('google')">
+                    <img src="https://www.google.com/favicon.ico" alt="Google" width="20">
+                    Google
+                </a>
+                <a href="#" class="social-btn github" onclick="handleSocialLogin('github')">
+                    <img src="https://github.com/favicon.ico" alt="GitHub" width="20">
+                    GitHub
+                </a>
+            </div>
+        </div>
+
+        <!-- Illustration Panel -->
+        <div class="illustration-panel">
+            <div class="pattern-overlay"></div>
+            <div class="illustration-content">
+                <h2>Prêt à décrocher le job de tes rêves ?</h2>
+                <p>Rejoins des milliers de candidats qui ont trouvé leur emploi idéal grâce à MotivAI</p>
+                <ul class="feature-list">
+                    <li>
+                        <span class="material-icons">flash_on</span>
+                        Génération en 30 secondes
+                    </li>
+                    <li>
+                        <span class="material-icons">psychology</span>
+                        IA ultra-performante
+                    </li>
+                    <li>
+                        <span class="material-icons">verified</span>
+                        Lettres professionnelles
+                    </li>
+                    <li>
+                        <span class="material-icons">storage</span>
+                        Sauvegarde illimitée
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Overlay -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-content">
+            <div class="success-icon">
+                <span class="material-icons">check</span>
+            </div>
+            <h2>Connexion réussie !</h2>
+            <p>Redirection en cours...</p>
+        </div>
+    </div>
+
+    <script>
+        let isLoginMode = true;
+
+        // Tab switching
+        function switchTab(mode) {
+            isLoginMode = mode === 'login';
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabIndicator = document.getElementById('tabIndicator');
+            const formTitle = document.getElementById('formTitle');
+            const formSubtitle = document.getElementById('formSubtitle');
+            const nameGroup = document.getElementById('nameGroup');
+            const submitBtn = document.getElementById('submitBtn');
+            const forgotLink = document.getElementById('forgotLink');
+
+            if (isLoginMode) {
+                tabBtns[0].classList.add('active');
+                tabBtns[1].classList.remove('active');
+                tabIndicator.classList.remove('right');
+                formTitle.textContent = 'Bon retour !';
+                formSubtitle.textContent = 'Connecte-toi pour accéder à tes lettres de motivation';
+                nameGroup.style.display = 'none';
+                submitBtn.textContent = 'Se connecter';
+                forgotLink.style.display = 'block';
+            } else {
+                tabBtns[1].classList.add('active');
+                tabBtns[0].classList.remove('active');
+                tabIndicator.classList.add('right');
+                formTitle.textContent = 'Crée ton compte';
+                formSubtitle.textContent = 'Rejoins MotivAI et génère ta première lettre gratuitement';
+                nameGroup.style.display = 'block';
+                submitBtn.textContent = "S'inscrire";
+                forgotLink.style.display = 'none';
+            }
+
+            // Clear error
+            hideError();
+        }
+
+        // Password visibility toggle
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('passwordIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.textContent = 'visibility_off';
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.textContent = 'visibility';
+            }
+        }
+
+        // Form submission
+        async function handleSubmit(event) {
+            event.preventDefault();
+            hideError();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Basic validation
+            if (!email || !password) {
+                showError('Veuillez remplir tous les champs');
+                return;
+            }
+
+            if (!isLoginMode && !name) {
+                showError('Veuillez entrer votre nom');
+                return;
+            }
+
+            // Add loading state
+            submitBtn.classList.add('btn-loading');
+
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Mock authentication
+                const userData = {
+                    email,
+                    name: name || 'Utilisateur',
+                    token: 'mock-jwt-token'
+                };
+
+                // Store user data
+                localStorage.setItem('user', JSON.stringify(userData));
+
+                // Show success
+                showSuccess();
+
+                // Redirect
+                setTimeout(() => {
+                    window.location.href = '/dashboard.html';
+                }, 1500);
+
+            } catch (error) {
+                showError('Une erreur est survenue. Veuillez réessayer.');
+                submitBtn.classList.remove('btn-loading');
+            }
+        }
+
+        // Social login
+        async function handleSocialLogin(provider) {
+            console.log(`Login with ${provider}`);
+            
+            // In a real app, this would redirect to OAuth provider
+            // For demo, we'll simulate it
+            showSuccess();
+            
+            setTimeout(() => {
+                window.location.href = '/dashboard.html';
+            }, 1500);
+        }
+
+        // Error handling
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            errorText.textContent = message;
+            errorMessage.classList.add('active');
+        }
+
+        function hideError() {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.classList.remove('active');
+        }
+
+        // Success handling
+        function showSuccess() {
+            const successOverlay = document.getElementById('successOverlay');
+            successOverlay.classList.add('active');
+        }
+
+        // Forgot password
+        document.getElementById('forgotLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Fonctionnalité de récupération de mot de passe à venir !');
+        });
+
+        // Auto-focus on email field
+        window.onload = () => {
+            document.getElementById('email').focus();
+        };
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Simulation d'authentification (à remplacer par votre API)
+            if (email && password) {
+                const userData = {
+                    email: email,
+                    name: email.split('@')[0],
+                    role: 'user'
+                };
+                
+                Auth.setUser(userData);
+                Navigation.redirectTo('DASHBOARD');
+            }
+        });
+    </script>
+</body>
+</html>
+

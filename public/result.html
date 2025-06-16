@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Votre lettre de motivation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Barlow:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Import base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2d3436;
+            --accent-color: #e17055;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --background-light: #fff5f3;
+            --background-white: #ffffff;
+            --shadow-soft: 0 2px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success-color: #00b894;
+            --error-color: #d63031;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            color: var(--text-dark);
+            background: var(--background-white);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            animation: float-shape 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--gradient-1);
+            top: -100px;
+            left: -100px;
+            animation-duration: 25s;
+        }
+
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--gradient-2);
+            bottom: -100px;
+            right: -100px;
+            animation-duration: 30s;
+            animation-delay: 5s;
+        }
+
+        .shape-3 {
+            width: 350px;
+            height: 350px;
+            background: var(--gradient-3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-duration: 35s;
+            animation-delay: 10s;
+        }
+
+        @keyframes float-shape {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(-50px) rotate(90deg) scale(1.1);
+            }
+            50% {
+                transform: translateY(30px) rotate(180deg) scale(0.9);
+            }
+            75% {
+                transform: translateY(-30px) rotate(270deg) scale(1.05);
+            }
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 2rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        /* Success Animation */
+        .success-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--success-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: pop-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .success-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--success-color);
+            border-radius: 50%;
+            animation: pulse-ring 1.5s ease-out infinite;
+        }
+
+        .success-icon .material-icons {
+            font-size: 60px;
+            color: white;
+            z-index: 1;
+        }
+
+        @keyframes pop-in {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .success-message h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            animation: slide-up 0.6s ease 0.3s both;
+        }
+
+        .success-message p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            animation: slide-up 0.6s ease 0.5s both;
+        }
+
+        @keyframes slide-up {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Letter Preview Container */
+        .letter-container {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            animation: fade-in 0.8s ease 0.7s both;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .action-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(225, 112, 85, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(225, 112, 85, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-dark);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.2);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 184, 148, 0.3);
+        }
+
+        /* Letter Preview */
+        .letter-preview {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            animation: paper-slide 1s ease-out;
+        }
+
+        @keyframes paper-slide {
+            from {
+                transform: translateY(100px) rotate(-5deg);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .letter-header {
+            background: linear-gradient(135deg, var(--background-light) 0%, rgba(225, 112, 85, 0.1) 100%);
+            padding: 2rem 3rem;
+            border-bottom: 2px solid var(--background-light);
+        }
+
+        .letter-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .letter-meta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--text-dark);
+        }
+
+        .letter-date {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .letter-body {
+            padding: 3rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        .letter-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to bottom, white 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .letter-content {
+            font-family: 'Georgia', serif;
+        }
+
+        .letter-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .letter-signature {
+            margin-top: 3rem;
+            text-align: right;
+            font-style: italic;
+        }
+
+        /* Edit Mode */
+        .edit-mode .letter-content {
+            border: 2px dashed var(--accent-color);
+            padding: 1rem;
+            border-radius: 10px;
+            outline: none;
+            background: rgba(225, 112, 85, 0.05);
+        }
+
+        .edit-toolbar {
+            background: var(--text-dark);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: var(--transition);
+        }
+
+        .edit-mode .edit-toolbar {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--background-light) 0%, white 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: stat-appear 0.6s ease forwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes stat-appear {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Copy Animation */
+        .copy-success {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: var(--success-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 184, 148, 0.3);
+            z-index: 1000;
+            animation: copy-popup 1s ease;
+        }
+
+        @keyframes copy-popup {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(10deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0) rotate(180deg);
+            }
+        }
+
+        /* Share Options */
+        .share-section {
+            background: var(--background-light);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .share-btn::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            opacity: 0.3;
+            transform: scale(0);
+            transition: transform 0.5s;
+        }
+
+        .share-btn:hover::after {
+            transform: scale(1.3);
+        }
+
+        .share-btn:hover {
+            transform: translateY(-5px);
+        }
+
+        .share-linkedin {
+            background: #0077b5;
+            color: white;
+        }
+
+        .share-email {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .share-download {
+            background: var(--success-color);
+            color: white;
+        }
+
+        /* Testimonial Style Letter Display */
+        .letter-display-fancy {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .letter-display-fancy:hover {
+            transform: rotateY(2deg) rotateX(-2deg);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .success-message h1 {
+                font-size: 2rem;
+            }
+
+            .letter-body {
+                padding: 2rem 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+                padding: 0 1rem;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Premium Effects */
+        .premium-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-effect::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradient-shift 3s ease infinite;
+            z-index: -1;
+            border-radius: inherit;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Confetti Effect */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-color);
+            position: absolute;
+            animation: confetti-fall 3s linear;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Loading States */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-dark);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            header, .action-buttons, .stats-container, .share-section, .animated-bg {
+                display: none !important;
+            }
+
+            .letter-preview {
+                box-shadow: none;
+                border: none;
+            }
+
+            .letter-body {
+                padding: 2rem;
+            }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="/" class="logo">MotivAI</a>
+            <div class="nav-actions">
+                <a href="/dashboard" class="action-btn btn-secondary">
+                    <span class="material-icons">dashboard</span>
+                    Mon tableau de bord
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Success Message -->
+    <div class="success-container">
+        <div class="success-icon">
+            <span class="material-icons">check</span>
+        </div>
+        <div class="success-message">
+            <h1>Bravo ! Ta lettre est prête</h1>
+            <p>Tu peux la télécharger, la copier ou la modifier selon tes besoins</p>
+        </div>
+    </div>
+
+    <!-- Letter Container -->
+    <div class="letter-container">
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn btn-primary" onclick="copyToClipboard()">
+                <span class="material-icons">content_copy</span>
+                Copier le texte
+            </button>
+            <button class="action-btn btn-success" onclick="downloadPDF()">
+                <span class="material-icons">download</span>
+                Télécharger PDF
+            </button>
+            <button class="action-btn btn-secondary" onclick="toggleEdit()">
+                <span class="material-icons">edit</span>
+                Modifier
+            </button>
+            <button class="action-btn btn-secondary" onclick="window.print()">
+                <span class="material-icons">print</span>
+                Imprimer
+            </button>
+        </div>
+
+        <!-- Edit Toolbar -->
+        <div class="edit-toolbar" id="editToolbar">
+            <span class="material-icons">info</span>
+            <span>Clique sur le texte pour le modifier. N'oublie pas de sauvegarder tes changements !</span>
+            <button class="action-btn btn-success" onclick="saveChanges()" style="margin-left: auto;">
+                <span class="material-icons">save</span>
+                Sauvegarder
+            </button>
+        </div>
+
+        <!-- Letter Preview -->
+        <div class="letter-preview letter-display-fancy" id="letterPreview">
+            <div class="letter-header">
+                <div class="letter-meta">
+                    <h2 id="letterTitle">Lettre de motivation</h2>
+                    <span class="letter-date" id="letterDate"></span>
+                </div>
+            </div>
+            <div class="letter-body">
+                <div class="letter-content" id="letterContent" contenteditable="false">
+                    <!-- Letter content will be inserted here -->
+                    <div class="skeleton" style="height: 400px; border-radius: 10px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <span class="material-icons stat-icon">text_fields</span>
+                <div class="stat-value" id="wordCount">0</div>
+                <div class="stat-label">Mots</div>
+            </div>
+            <div class="stat-card">
+                <span class="material-icons stat-icon">timer</span>
+                <div class="stat-value" id="readTime">0</div>
+                <div class="stat-label">Min de lecture</div>
+            </div>
+            <div class="stat-card">
+                <span class="material-icons stat-icon">psychology</span>
+                <div class="stat-value" id="tone">Pro</div>
+                <div class="stat-label">Ton</div>
+            </div>
+            <div class="stat-card">
+                <span class="material-icons stat-icon">grade</span>
+                <div class="stat-value" id="quality">95%</div>
+                <div class="stat-label">Qualité</div>
+            </div>
+        </div>
+
+        <!-- Share Section -->
+        <div class="share-section">
+            <h3>Partage ton succès !</h3>
+            <p>Fier de ta lettre ? Partage MotivAI avec tes amis</p>
+            <div class="share-buttons">
+                <a href="#" class="share-btn share-linkedin tooltip" data-tooltip="Partager sur LinkedIn" onclick="shareLinkedIn()">
+                    <span class="material-icons">work</span>
+                </a>
+                <a href="#" class="share-btn share-email tooltip" data-tooltip="Envoyer par email" onclick="shareEmail()">
+                    <span class="material-icons">email</span>
+                </a>
+                <a href="#" class="share-btn share-download tooltip" data-tooltip="Télécharger" onclick="downloadPDF()">
+                    <span class="material-icons">file_download</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copy Success Notification -->
+    <div class="copy-success" id="copySuccess">
+        <span class="material-icons">check_circle</span>
+        Copié dans le presse-papier !
+    </div>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('LOGIN');
+        }
+
+        // Récupération et affichage de la lettre
+        const currentLetterData = JSON.parse(localStorage.getItem('current_letter_data'));
+        if (currentLetterData) {
+            const letterContent = document.querySelector('.letter-content');
+            if (letterContent) {
+                // Simulation de génération de lettre (à remplacer par votre API)
+                const generatedLetter = generateLetter(currentLetterData);
+                letterContent.innerHTML = generatedLetter;
+            }
+        }
+
+        // Fonction de génération de lettre (simulation)
+        function generateLetter(data) {
+            return `
+                <div class="letter">
+                    <p>Cher recruteur,</p>
+                    <p>Je vous écris concernant le poste de ${data.jobTitle} au sein de ${data.company}.</p>
+                    <p>${data.experience}</p>
+                    <p>Mes compétences incluent : ${data.skills}</p>
+                    <p>Je reste à votre disposition pour un entretien.</p>
+                    <p>Cordialement,<br>${Auth.getUser()?.name}</p>
+                </div>
+            `;
+        }
+
+        // Gestion du bouton de sauvegarde
+        const saveButton = document.querySelector('#save-letter');
+        if (saveButton) {
+            saveButton.addEventListener('click', () => {
+                const savedLetters = JSON.parse(localStorage.getItem('saved_letters') || '[]');
+                savedLetters.push({
+                    ...currentLetterData,
+                    generatedLetter: document.querySelector('.letter-content').innerHTML,
+                    timestamp: new Date().toISOString()
+                });
+                localStorage.setItem('saved_letters', JSON.stringify(savedLetters));
+                alert('Lettre sauvegardée avec succès !');
+            });
+        }
+
+        // Gestion du bouton de déconnexion
+        const logoutBtn = document.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                Auth.logout();
+            });
+        }
+
+        // Get letter data from localStorage or API
+        let letterData = null;
+        let isEditMode = false;
+
+        // Initialize
+        async function init() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const letterId = urlParams.get('id');
+            
+            // Get letter from localStorage (for demo) or API
+            const storedLetter = localStorage.getItem('generatedLetter');
+            
+            if (storedLetter) {
+                letterData = JSON.parse(storedLetter);
+                displayLetter();
+            } else if (letterId) {
+                // Fetch from API
+                await fetchLetter(letterId);
+            } else {
+                // Fallback demo content
+                letterData = {
+                    content: generateDemoLetter(),
+                    formData: {
+                        firstName: 'Jean',
+                        lastName: 'Dupont',
+                        position: 'Développeur Full Stack',
+                        company: 'TechCorp',
+                        tone: 'professional'
+                    }
+                };
+                displayLetter();
+            }
+            
+            // Add confetti effect
+            createConfetti();
+        }
+
+        // Display letter content
+        function displayLetter() {
+            const letterContent = document.getElementById('letterContent');
+            const letterTitle = document.getElementById('letterTitle');
+            const letterDate = document.getElementById('letterDate');
+            
+            // Set content
+            letterContent.innerHTML = formatLetter(letterData.content);
+            
+            // Set metadata
+            letterTitle.textContent = `Lettre de motivation - ${letterData.formData.position}`;
+            letterDate.textContent = new Date().toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            // Update stats
+            updateStats();
+        }
+
+        // Format letter with proper HTML structure
+        function formatLetter(content) {
+            // Split content into paragraphs
+            const paragraphs = content.split('\n\n').filter(p => p.trim());
+            
+            let formattedContent = '';
+            paragraphs.forEach((paragraph, index) => {
+                if (index === 0) {
+                    // Salutation
+                    formattedContent += `<p><strong>${paragraph}</strong></p>`;
+                } else if (index === paragraphs.length - 1) {
+                    // Signature
+                    formattedContent += `<div class="letter-signature">${paragraph}</div>`;
+                } else {
+                    // Body paragraphs
+                    formattedContent += `<p>${paragraph}</p>`;
+                }
+            });
+            
+            return formattedContent;
+        }
+
+        // Generate demo letter
+        function generateDemoLetter() {
+            return `Madame, Monsieur,
+
+Passionné par le développement web et fort d'une expérience de 3 ans dans la création d'applications innovantes, je suis enthousiaste à l'idée de rejoindre votre équipe en tant que Développeur Full Stack chez TechCorp.
+
+Votre entreprise, reconnue pour son excellence technologique et son approche innovante, représente pour moi l'opportunité idéale de mettre à profit mes compétences en JavaScript, React, Node.js et bases de données. J'ai notamment développé une plateforme e-commerce complète qui a permis d'augmenter les ventes de 40% pour mon précédent employeur.
+
+Ma capacité à travailler en équipe, combinée à ma rigueur et ma créativité, me permettent de mener à bien des projets complexes tout en respectant les délais. Je suis particulièrement attiré par les défis techniques et l'apprentissage continu, qualités essentielles dans un environnement en constante évolution.
+
+Je serais ravi de vous rencontrer pour discuter de la manière dont je pourrais contribuer au succès de vos projets. Je me tiens à votre disposition pour un entretien à votre convenance.
+
+Dans l'attente de votre retour, je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.
+
+Jean Dupont`;
+        }
+
+        // Update statistics
+        function updateStats() {
+            const content = document.getElementById('letterContent').textContent;
+            const words = content.trim().split(/\s+/).length;
+            const readTime = Math.ceil(words / 200); // Average reading speed
+            
+            document.getElementById('wordCount').textContent = words;
+            document.getElementById('readTime').textContent = readTime;
+            document.getElementById('tone').textContent = getToneLabel(letterData.formData.tone);
+        }
+
+        // Get tone label
+        function getToneLabel(tone) {
+            const tones = {
+                'professional': 'Pro',
+                'enthusiastic': 'Enthousiaste',
+                'formal': 'Formel',
+                'creative': 'Créatif'
+            };
+            return tones[tone] || 'Pro';
+        }
+
+        // Copy to clipboard
+        async function copyToClipboard() {
+            const letterContent = document.getElementById('letterContent').textContent;
+            
+            try {
+                await navigator.clipboard.writeText(letterContent);
+                showCopySuccess();
+            } catch (err) {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = letterContent;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showCopySuccess();
+            }
+        }
+
+        // Show copy success animation
+        function showCopySuccess() {
+            const notification = document.getElementById('copySuccess');
+            notification.style.animation = 'copy-popup 1s ease';
+            
+            setTimeout(() => {
+                notification.style.animation = '';
+            }, 1000);
+        }
+
+        // Toggle edit mode
+        function toggleEdit() {
+            isEditMode = !isEditMode;
+            const letterContent = document.getElementById('letterContent');
+            const editToolbar = document.getElementById('editToolbar');
+            const letterPreview = document.getElementById('letterPreview');
+            
+            if (isEditMode) {
+                letterContent.contentEditable = 'true';
+                letterPreview.classList.add('edit-mode');
+                letterContent.focus();
+            } else {
+                letterContent.contentEditable = 'false';
+                letterPreview.classList.remove('edit-mode');
+            }
+        }
+
+        // Save changes
+        async function saveChanges() {
+            const letterContent = document.getElementById('letterContent').innerHTML;
+            letterData.content = letterContent;
+            
+            // Save to localStorage
+            localStorage.setItem('generatedLetter', JSON.stringify(letterData));
+            
+            // Save to API (if implemented)
+            // await saveToAPI(letterData);
+            
+            toggleEdit();
+            updateStats();
+            
+            // Show success message
+            showCopySuccess();
+        }
+
+        // Download as PDF
+        async function downloadPDF() {
+            // In a real app, you would use a library like jsPDF or html2pdf
+            // For now, we'll use the browser's print functionality
+            window.print();
+            
+            // Alternative: Generate PDF on backend and download
+            // const response = await fetch('/api/generate-pdf', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(letterData)
+            // });
+            // const blob = await response.blob();
+            // const url = window.URL.createObjectURL(blob);
+            // const a = document.createElement('a');
+            // a.href = url;
+            // a.download = `lettre-motivation-${letterData.formData.position}.pdf`;
+            // a.click();
+        }
+
+        // Share functions
+        function shareLinkedIn() {
+            const url = encodeURIComponent(window.location.origin);
+            const text = encodeURIComponent("J'ai créé ma lettre de motivation parfaite avec MotivAI ! 🚀");
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${text}`, '_blank');
+        }
+
+        function shareEmail() {
+            const subject = encodeURIComponent("Découvre MotivAI - Générateur de lettres de motivation");
+            const body = encodeURIComponent("Salut,\n\nJe viens de créer ma lettre de motivation en 30 secondes avec MotivAI !\n\nC'est super simple et le résultat est vraiment professionnel.\n\nJe te recommande d'essayer : " + window.location.origin);
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#e17055', '#00b894', '#fdcb6e', '#6c5ce7', '#fd79a8'];
+            const confettiCount = 50;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+
+        // Fetch letter from API
+        async function fetchLetter(letterId) {
+            try {
+                const response = await fetch(`/api/letters/${letterId}`);
+                if (response.ok) {
+                    letterData = await response.json();
+                    displayLetter();
+                } else {
+                    // Use demo content as fallback
+                    letterData = {
+                        content: generateDemoLetter(),
+                        formData: {
+                            firstName: 'Demo',
+                            lastName: 'User',
+                            position: 'Position',
+                            company: 'Company',
+                            tone: 'professional'
+                        }
+                    };
+                    displayLetter();
+                }
+            } catch (error) {
+                console.error('Error fetching letter:', error);
+            }
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>
+

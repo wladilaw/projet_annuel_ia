@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Mon Profil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Profile header gradient */
+        .profile-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        }
+
+        /* Skill bars animation */
+        .skill-bar {
+            animation: fillBar 1.5s ease-out forwards;
+        }
+
+        @keyframes fillBar {
+            from { width: 0; }
+        }
+
+        /* Hover card effect */
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Badge shine effect */
+        .badge-shine {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge-shine::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .badge-shine:hover::after {
+            animation: shine 0.5s ease-in-out;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        /* Activity timeline */
+        .timeline-dot {
+            position: relative;
+        }
+
+        .timeline-dot::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: -1px;
+            bottom: -100%;
+            width: 2px;
+            background: #e5e7eb;
+        }
+
+        .timeline-item:last-child .timeline-dot::before {
+            display: none;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard.html" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/jobs.html" class="text-text-light hover:text-primary transition">Offres</a>
+                    <a href="/companies.html" class="text-text-light hover:text-primary transition">Entreprises</a>
+                    <a href="/cv-builder.html" class="text-text-light hover:text-primary transition">CV</a>
+                    <a href="/profile.html" class="text-primary font-semibold">Profil</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="px-4 py-2 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition">
+                        <span class="material-icons mr-2">edit</span>
+                        Modifier
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Profile Header -->
+    <div class="profile-gradient text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col md:flex-row items-center md:items-end space-y-6 md:space-y-0 md:space-x-8">
+                <!-- Profile Photo -->
+                <div class="relative">
+                    <div class="w-32 h-32 rounded-full bg-white p-1">
+                        <img src="https://placehold.co/150x150/e17055/ffffff?text=JD" alt="Profile" class="w-full h-full rounded-full object-cover">
+                    </div>
+                    <button class="absolute bottom-0 right-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center shadow-lg hover:bg-accent-dark transition">
+                        <span class="material-icons text-white text-sm">camera_alt</span>
+                    </button>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="flex-1 text-center md:text-left">
+                    <h1 class="text-3xl font-bold mb-2">Jean Dupont</h1>
+                    <p class="text-xl opacity-90 mb-4">Développeur Full Stack Senior</p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4 text-sm">
+                        <span class="flex items-center">
+                            <span class="material-icons text-sm mr-1">location_on</span>
+                            Paris, France
+                        </span>
+                        <span class="flex items-center">
+                            <span class="material-icons text-sm mr-1">work</span>
+                            Disponible immédiatement
+                        </span>
+                        <span class="flex items-center">
+                            <span class="material-icons text-sm mr-1">verified</span>
+                            Profil vérifié
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Profile Stats -->
+                <div class="flex space-x-6">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold">24</div>
+                        <div class="text-sm opacity-75">Candidatures</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold">8</div>
+                        <div class="text-sm opacity-75">Entretiens</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold">92%</div>
+                        <div class="text-sm opacity-75">Profil complet</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- About Section -->
+                <div class="bg-white rounded-xl p-6 shadow-sm hover-lift">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="material-icons text-accent mr-2">person</span>
+                        À propos
+                    </h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        Développeur passionné avec plus de 5 ans d'expérience dans la création d'applications web performantes et scalables. 
+                        J'ai travaillé sur des projets variés allant de startups innovantes à des grandes entreprises tech. 
+                        Ma spécialité est le développement full-stack avec une préférence pour React et Node.js.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium">Créatif</span>
+                        <span class="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium">Autonome</span>
+                        <span class="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium">Team player</span>
+                        <span class="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium">Agile</span>
+                    </div>
+                </div>
+
+                <!-- Experience Section -->
+                <div class="bg-white rounded-xl p-6 shadow-sm hover-lift">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="material-icons text-accent mr-2">work_history</span>
+                        Expériences
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold">
+                                G
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h3 class="font-semibold">Senior Full Stack Developer</h3>
+                                <p class="text-accent">Google • Paris</p>
+                                <p class="text-sm text-gray-500 mb-2">Jan 2022 - Présent</p>
+                                <p class="text-gray-700">
+                                    Lead developer sur le projet Cloud Platform. Architecture microservices, 
+                                    CI/CD, et mentoring d'une équipe de 5 développeurs.
+                                </p>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">React</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Node.js</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Kubernetes</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center text-white font-bold">
+                                S
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h3 class="font-semibold">Full Stack Developer</h3>
+                                <p class="text-accent">Spotify • Paris</p>
+                                <p class="text-sm text-gray-500 mb-2">Mar 2020 - Dec 2021</p>
+                                <p class="text-gray-700">
+                                    Développement de nouvelles features pour l'application web Spotify. 
+                                    Optimisation des performances et amélioration de l'UX.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="bg-white rounded-xl p-6 shadow-sm hover-lift">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="material-icons text-accent mr-2">code</span>
+                        Compétences techniques
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">JavaScript / TypeScript</span>
+                                <span class="text-sm text-gray-500">Expert</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-accent to-accent-dark h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">React / Next.js</span>
+                                <span class="text-sm text-gray-500">Expert</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Node.js / Express</span>
+                                <span class="text-sm text-gray-500">Avancé</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Python / Django</span>
+                                <span class="text-sm text-gray-500">Intermédiaire</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="skill-bar bg-gradient-to-r from-yellow-500 to-yellow-600 h-2 rounded-full" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio Section -->
+                <div class="bg-white rounded-xl p-6 shadow-sm hover-lift">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="material-icons text-accent mr-2">dashboard</span>
+                        Projets récents
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="border border-gray-200 rounded-lg overflow-hidden hover:border-accent transition group">
+                            <div class="h-40 bg-gradient-to-br from-purple-500 to-pink-500 relative">
+                                <div class="absolute inset-0 flex items-center justify-center text-white">
+                                    <span class="material-icons text-5xl opacity-50">shopping_cart</span>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold mb-1">E-commerce Platform</h3>
+                                <p class="text-sm text-gray-600 mb-2">Plateforme complète avec paiement intégré</p>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex -space-x-2">
+                                        <span class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs">JS</span>
+                                        <span class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">NG</span>
+                                    </div>
+                                    <a href="#" class="text-accent hover:text-accent-dark transition">
+                                        <span class="material-icons">launch</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg overflow-hidden hover:border-accent transition group">
+                            <div class="h-40 bg-gradient-to-br from-blue-500 to-cyan-500 relative">
+                                <div class="absolute inset-0 flex items-center justify-center text-white">
+                                    <span class="material-icons text-5xl opacity-50">analytics</span>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold mb-1">Analytics Dashboard</h3>
+                                <p class="text-sm text-gray-600 mb-2">Tableau de bord temps réel avec D3.js</p>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex -space-x-2">
+                                        <span class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs">R</span>
+                                        <span class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs">D3</span>
+                                    </div>
+                                    <a href="#" class="text-accent hover:text-accent-dark transition">
+                                        <span class="material-icons">launch</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-6">
+                <!-- Profile Completion -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-semibold mb-4">Complétude du profil</h3>
+                    <div class="relative mb-4">
+                        <div class="overflow-hidden h-4 text-xs flex rounded-full bg-gray-200">
+                            <div style="width: 92%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-accent to-accent-dark"></div>
+                        </div>
+                        <span class="absolute right-0 -top-6 text-sm font-semibold text-accent">92%</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4">Encore quelques étapes pour un profil parfait !</p>
+                    <div class="space-y-2">
+                        <div class="flex items-center text-sm">
+                            <span class="material-icons text-success mr-2 text-base">check_circle</span>
+                            Photo de profil
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="material-icons text-success mr-2 text-base">check_circle</span>
+                            Expériences professionnelles
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="material-icons text-gray-300 mr-2 text-base">radio_button_unchecked</span>
+                            Certifications
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Badges -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-semibold mb-4">Badges obtenus</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="badge-shine text-center cursor-pointer">
+                            <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg">
+                                <span class="material-icons text-white">star</span>
+                            </div>
+                            <p class="text-xs font-medium">Top Candidat</p>
+                        </div>
+                        <div class="badge-shine text-center cursor-pointer">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg">
+                                <span class="material-icons text-white">verified</span>
+                            </div>
+                            <p class="text-xs font-medium">Profil Vérifié</p>
+                        </div>
+                        <div class="badge-shine text-center cursor-pointer">
+                            <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg">
+                                <span class="material-icons text-white">speed</span>
+                            </div>
+                            <p class="text-xs font-medium">Réactif</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-semibold mb-4">Activité récente</h3>
+                    <div class="space-y-4">
+                        <div class="timeline-item flex">
+                            <div class="timeline-dot">
+                                <div class="w-2 h-2 bg-success rounded-full"></div>
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <p class="text-sm">Candidature envoyée chez <span class="font-medium">Google</span></p>
+                                <p class="text-xs text-gray-500">Il y a 2 heures</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item flex">
+                            <div class="timeline-dot">
+                                <div class="w-2 h-2 bg-info rounded-full"></div>
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <p class="text-sm">CV mis à jour</p>
+                                <p class="text-xs text-gray-500">Hier</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item flex">
+                            <div class="timeline-dot">
+                                <div class="w-2 h-2 bg-warning rounded-full"></div>
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <p class="text-sm">Nouveau match avec <span class="font-medium">Spotify</span></p>
+                                <p class="text-xs text-gray-500">Il y a 3 jours</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Quick Links -->
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl p-6 text-white">
+                    <h3 class="font-semibold mb-4">Paramètres rapides</h3>
+                    <div class="space-y-3">
+                        <a href="#" class="flex items-center justify-between hover:opacity-80 transition">
+                            <span class="flex items-center">
+                                <span class="material-icons mr-2">notifications</span>
+                                Notifications
+                            </span>
+                            <span class="material-icons">chevron_right</span>
+                        </a>
+                        <a href="#" class="flex items-center justify-between hover:opacity-80 transition">
+                            <span class="flex items-center">
+                                <span class="material-icons mr-2">privacy_tip</span>
+                                Confidentialité
+                            </span>
+                            <span class="material-icons">chevron_right</span>
+                        </a>
+                        <a href="#" class="flex items-center justify-between hover:opacity-80 transition">
+                            <span class="flex items-center">
+                                <span class="material-icons mr-2">language</span>
+                                Langue
+                            </span>
+                            <span class="material-icons">chevron_right</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Animate skill bars on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fillBar 1.5s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.skill-bar').forEach(bar => {
+            observer.observe(bar);
+        });
+
+        // Profile picture upload
+        document.querySelector('.material-icons').parentElement.addEventListener('click', function() {
+            if (this.innerHTML.includes('camera_alt')) {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        // Handle file upload
+                        console.log('Uploading profile picture...');
+                    }
+                };
+                input.click();
+            }
+        });
+
+        // Badge interactions
+        document.querySelectorAll('.badge-shine').forEach(badge => {
+            badge.addEventListener('click', function() {
+                // Show badge details
+                console.log('Badge clicked');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Créer ma lettre de motivation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Barlow:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Import styles from index.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2d3436;
+            --accent-color: #e17055;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --background-light: #fff5f3;
+            --background-white: #ffffff;
+            --shadow-soft: 0 2px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success-color: #00b894;
+            --error-color: #d63031;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-white) 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header (simplified) */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 2rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        /* Form Container */
+        .form-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .form-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .form-header p {
+            font-size: 1.125rem;
+            color: var(--text-light);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(0, 0, 0, 0.1);
+            height: 8px;
+            border-radius: 50px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent-color);
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Step Indicators */
+        .step-indicators {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .step-indicators::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: -1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            background: var(--background-white);
+            padding: 0 1rem;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .step.active .step-circle {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .step.completed .step-circle {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .step-label {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .step.active .step-label {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        /* Form Steps */
+        .form-step {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Barlow', sans-serif;
+            transition: var(--transition);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(225, 112, 85, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-hint {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        /* Form Navigation */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(225, 112, 85, 0.2);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(225, 112, 85, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid var(--text-dark);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--text-dark);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .loading-subtext {
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        /* Error State */
+        .error-message {
+            background: rgba(214, 48, 49, 0.1);
+            border: 2px solid var(--error-color);
+            color: var(--error-color);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-message.active {
+            display: flex;
+        }
+
+        /* Skills Pills */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .skill-pill {
+            background: var(--background-light);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .skill-pill:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .skill-pill.selected {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 1rem;
+            }
+
+            .form-step {
+                padding: 2rem 1.5rem;
+            }
+
+            .step-label {
+                display: none;
+            }
+
+            .form-navigation {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="/" class="logo">MotivAI</a>
+            <a href="/" class="btn-secondary btn">
+                <span class="material-icons">arrow_back</span>
+                Retour
+            </a>
+        </nav>
+    </header>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-header">
+            <h1>Créons ta lettre de motivation</h1>
+            <p>Réponds à quelques questions pour générer une lettre personnalisée</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" style="width: 25%"></div>
+        </div>
+
+        <!-- Step Indicators -->
+        <div class="step-indicators">
+            <div class="step active" data-step="1">
+                <div class="step-circle">1</div>
+                <span class="step-label">Informations personnelles</span>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-circle">2</div>
+                <span class="step-label">Poste recherché</span>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-circle">3</div>
+                <span class="step-label">Expériences</span>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-circle">4</div>
+                <span class="step-label">Motivation</span>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage">
+            <span class="material-icons">error</span>
+            <span id="errorText"></span>
+        </div>
+
+        <!-- Form Steps -->
+        <form id="letterForm">
+            <!-- Step 1: Personal Information -->
+            <div class="form-step active" data-step="1">
+                <h2>Informations personnelles</h2>
+                <div class="form-group">
+                    <label for="firstName">Prénom *</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Nom *</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                    <p class="form-hint">Nous utiliserons cet email pour t'envoyer ta lettre</p>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Téléphone</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+            </div>
+
+            <!-- Step 2: Position -->
+            <div class="form-step" data-step="2">
+                <h2>Poste recherché</h2>
+                <div class="form-group">
+                    <label for="position">Intitulé du poste *</label>
+                    <input type="text" id="position" name="position" placeholder="Ex: Développeur Full Stack" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Nom de l'entreprise</label>
+                    <input type="text" id="company" name="company" placeholder="Ex: Google">
+                    <p class="form-hint">Laisse vide pour une lettre générique</p>
+                </div>
+                <div class="form-group">
+                    <label for="sector">Secteur d'activité *</label>
+                    <select id="sector" name="sector" required>
+                        <option value="">Sélectionne un secteur</option>
+                        <option value="tech">Technologie / IT</option>
+                        <option value="marketing">Marketing / Communication</option>
+                        <option value="finance">Finance / Comptabilité</option>
+                        <option value="sales">Vente / Commerce</option>
+                        <option value="health">Santé / Médical</option>
+                        <option value="education">Éducation / Formation</option>
+                        <option value="engineering">Ingénierie</option>
+                        <option value="creative">Créatif / Design</option>
+                        <option value="other">Autre</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Step 3: Experience -->
+            <div class="form-step" data-step="3">
+                <h2>Expériences et compétences</h2>
+                <div class="form-group">
+                    <label for="experience">Années d'expérience *</label>
+                    <select id="experience" name="experience" required>
+                        <option value="">Sélectionne ton niveau</option>
+                        <option value="0">Débutant (0-1 an)</option>
+                        <option value="2">Junior (2-3 ans)</option>
+                        <option value="4">Confirmé (4-6 ans)</option>
+                        <option value="7">Senior (7+ ans)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="keyExperiences">Expériences principales</label>
+                    <textarea id="keyExperiences" name="keyExperiences" 
+                        placeholder="Décris brièvement tes expériences les plus pertinentes pour ce poste (3-4 lignes)"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="skills">Compétences clés</label>
+                    <input type="text" id="skillInput" placeholder="Tape une compétence et appuie sur Entrée">
+                    <div class="skills-container" id="skillsContainer"></div>
+                    <input type="hidden" id="skills" name="skills">
+                </div>
+                <div class="form-group">
+                    <label for="education">Formation</label>
+                    <input type="text" id="education" name="education" 
+                        placeholder="Ex: Master en Informatique, École 42">
+                </div>
+            </div>
+
+            <!-- Step 4: Motivation -->
+            <div class="form-step" data-step="4">
+                <h2>Ta motivation</h2>
+                <div class="form-group">
+                    <label for="motivation">Pourquoi ce poste t'intéresse ? *</label>
+                    <textarea id="motivation" name="motivation" required
+                        placeholder="Qu'est-ce qui te motive dans ce poste ? Quels sont tes objectifs de carrière ?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="qualities">Tes qualités principales</label>
+                    <input type="text" id="qualities" name="qualities" 
+                        placeholder="Ex: Autonome, créatif, rigoureux">
+                    <p class="form-hint">Sépare les qualités par des virgules</p>
+                </div>
+                <div class="form-group">
+                    <label for="tone">Ton de la lettre *</label>
+                    <select id="tone" name="tone" required>
+                        <option value="professional">Professionnel</option>
+                        <option value="enthusiastic">Enthousiaste</option>
+                        <option value="formal">Formel</option>
+                        <option value="creative">Créatif</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="additionalInfo">Informations supplémentaires</label>
+                    <textarea id="additionalInfo" name="additionalInfo" 
+                        placeholder="Ajoute toute information qui pourrait enrichir ta lettre"></textarea>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="form-navigation">
+                <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">
+                    <span class="material-icons">arrow_back</span>
+                    Précédent
+                </button>
+                <button type="button" class="btn btn-primary" id="nextBtn">
+                    Suivant
+                    <span class="material-icons">arrow_forward</span>
+                </button>
+                <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">
+                    <span class="material-icons">auto_awesome</span>
+                    Générer ma lettre
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Génération en cours...</p>
+            <p class="loading-subtext">Notre IA prépare ta lettre parfaite</p>
+        </div>
+    </div>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('LOGIN');
+        }
+
+        // Récupération du template sélectionné
+        const selectedTemplate = JSON.parse(localStorage.getItem('selected_template') || 'null');
+        if (selectedTemplate) {
+            // Pré-remplir le formulaire avec le template
+            const form = document.getElementById('letterForm');
+            if (form) {
+                const contentField = form.querySelector('[name="content"]');
+                if (contentField) {
+                    contentField.value = selectedTemplate.content;
+                }
+            }
+        }
+
+        // Gestion du formulaire
+        const letterForm = document.getElementById('letterForm');
+        if (letterForm) {
+            letterForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(letterForm);
+                const letterData = {
+                    jobTitle: formData.get('jobTitle'),
+                    company: formData.get('company'),
+                    experience: formData.get('experience'),
+                    skills: formData.get('skills'),
+                    tone: formData.get('tone'),
+                    content: formData.get('content'),
+                    templateId: selectedTemplate?.id,
+                    userId: Auth.getUser()?.email
+                };
+
+                try {
+                    // Simulation d'envoi à l'API (à remplacer par votre API)
+                    localStorage.setItem('current_letter_data', JSON.stringify(letterData));
+                    Navigation.redirectTo('RESULT');
+                } catch (error) {
+                    console.error('Erreur lors de la génération de la lettre:', error);
+                    // Afficher un message d'erreur à l'utilisateur
+                }
+            });
+        }
+
+        // Gestion du bouton de déconnexion
+        const logoutBtn = document.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                Auth.logout();
+            });
+        }
+
+        // Form State Management
+        let currentStep = 1;
+        const totalSteps = 4;
+        const formData = {};
+        const skills = new Set();
+
+        // DOM Elements
+        const form = document.getElementById('letterForm');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const progressBar = document.querySelector('.progress-bar');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const skillInput = document.getElementById('skillInput');
+        const skillsContainer = document.getElementById('skillsContainer');
+        const skillsHidden = document.getElementById('skills');
+
+        // Step Navigation
+        function updateStep(step) {
+            // Update form steps
+            document.querySelectorAll('.form-step').forEach(el => {
+                el.classList.remove('active');
+                if (parseInt(el.dataset.step) === step) {
+                    el.classList.add('active');
+                }
+            });
+
+            // Update indicators
+            document.querySelectorAll('.step').forEach(el => {
+                const stepNum = parseInt(el.dataset.step);
+                el.classList.remove('active', 'completed');
+                if (stepNum === step) {
+                    el.classList.add('active');
+                } else if (stepNum < step) {
+                    el.classList.add('completed');
+                }
+            });
+
+            // Update progress bar
+            const progress = (step / totalSteps) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Update navigation buttons
+            prevBtn.style.display = step === 1 ? 'none' : 'flex';
+            if (step === totalSteps) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'flex';
+            } else {
+                nextBtn.style.display = 'flex';
+                submitBtn.style.display = 'none';
+            }
+
+            // Clear error message
+            hideError();
+        }
+
+        // Validate current step
+        function validateStep(step) {
+            const currentFormStep = document.querySelector(`.form-step[data-step="${step}"]`);
+            const requiredFields = currentFormStep.querySelectorAll('[required]');
+            
+            for (let field of requiredFields) {
+                if (!field.value.trim()) {
+                    showError(`Veuillez remplir le champ "${field.previousElementSibling.textContent.replace(' *', '')}"`);
+                    field.focus();
+                    return false;
+                }
+            }
+
+            // Email validation
+            if (step === 1) {
+                const email = document.getElementById('email').value;
+                if (!isValidEmail(email)) {
+                    showError('Veuillez entrer une adresse email valide');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Email validation
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // Error handling
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function hideError() {
+            errorMessage.classList.remove('active');
+        }
+
+        // Skills management
+        skillInput?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const skill = skillInput.value.trim();
+                if (skill && !skills.has(skill)) {
+                    skills.add(skill);
+                    updateSkillsDisplay();
+                    skillInput.value = '';
+                }
+            }
+        });
+
+        function updateSkillsDisplay() {
+            skillsContainer.innerHTML = '';
+            skills.forEach(skill => {
+                const pill = document.createElement('div');
+                pill.className = 'skill-pill selected';
+                pill.innerHTML = `
+                    ${skill}
+                    <span class="material-icons" style="font-size: 16px; cursor: pointer;" onclick="removeSkill('${skill}')">close</span>
+                `;
+                skillsContainer.appendChild(pill);
+            });
+            skillsHidden.value = Array.from(skills).join(',');
+        }
+
+        function removeSkill(skill) {
+            skills.delete(skill);
+            updateSkillsDisplay();
+        }
+
+        // Navigation buttons
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStep(currentStep);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (validateStep(currentStep)) {
+                saveStepData(currentStep);
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateStep(currentStep);
+                }
+            }
+        });
+
+        // Save form data for current step
+        function saveStepData(step) {
+            const currentFormStep = document.querySelector(`.form-step[data-step="${step}"]`);
+            const inputs = currentFormStep.querySelectorAll('input, textarea, select');
+            
+            inputs.forEach(input => {
+                if (input.name && input.name !== 'skills') {
+                    formData[input.name] = input.value;
+                }
+            });
+
+            // Save skills separately
+            if (step === 3) {
+                formData.skills = Array.from(skills);
+            }
+        }
+
+        // Initialize
+        updateStep(currentStep);
+    </script>
+</body>
+</html>
+

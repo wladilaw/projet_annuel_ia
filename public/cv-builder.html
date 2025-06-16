@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Créateur de CV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* CV Preview Styles */
+        .cv-preview {
+            background: white;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+            min-height: 842px;
+            width: 595px;
+            transform-origin: top left;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 1280px) {
+            .cv-preview {
+                transform: scale(0.8);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cv-preview {
+                transform: scale(0.6);
+                margin-right: -40%;
+            }
+        }
+
+        /* Template hover effects */
+        .template-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .template-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Sortable animation */
+        .sortable-ghost {
+            opacity: 0.4;
+        }
+
+        .sortable-drag {
+            cursor: move !important;
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Progress ring */
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        /* Photo upload area */
+        .photo-upload:hover {
+            border-color: #e17055;
+            background-color: #fff5f3;
+        }
+
+        /* Animated gradient */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-gradient {
+            background: linear-gradient(270deg, #e17055, #c44569, #8b5cf6, #06b6d4);
+            background-size: 800% 800%;
+            animation: gradient 15s ease infinite;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard.html" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/jobs.html" class="text-text-light hover:text-primary transition">Offres</a>
+                    <a href="/companies.html" class="text-text-light hover:text-primary transition">Entreprises</a>
+                    <a href="/cv-builder.html" class="text-primary font-semibold">CV</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="px-4 py-2 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition flex items-center">
+                        <span class="material-icons mr-2">save</span>
+                        Sauvegarder
+                    </button>
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Sidebar - Editor -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- CV Completion Progress -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <span class="material-icons text-accent mr-2">insights</span>
+                        Complétude du CV
+                    </h3>
+                    <div class="flex items-center justify-center">
+                        <div class="relative w-32 h-32">
+                            <svg class="progress-ring w-32 h-32">
+                                <circle cx="64" cy="64" r="56" stroke="#e5e7eb" stroke-width="8" fill="none"/>
+                                <circle class="progress-ring-circle" cx="64" cy="64" r="56" stroke="#00b894" stroke-width="8" fill="none"
+                                        stroke-dasharray="351.86" stroke-dashoffset="88" stroke-linecap="round"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-2xl font-bold text-success">75%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 space-y-2">
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="flex items-center">
+                                <span class="material-icons text-success text-base mr-1">check_circle</span>
+                                Informations personnelles
+                            </span>
+                            <span class="text-success font-medium">100%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="flex items-center">
+                                <span class="material-icons text-success text-base mr-1">check_circle</span>
+                                Expériences
+                            </span>
+                            <span class="text-success font-medium">100%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="flex items-center">
+                                <span class="material-icons text-warning text-base mr-1">radio_button_checked</span>
+                                Compétences
+                            </span>
+                            <span class="text-warning font-medium">50%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="flex items-center">
+                                <span class="material-icons text-gray-300 text-base mr-1">radio_button_unchecked</span>
+                                Langues
+                            </span>
+                            <span class="text-gray-400 font-medium">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4">Actions rapides</h3>
+                    <div class="space-y-3">
+                        <button class="w-full px-4 py-3 bg-gradient-to-r from-accent to-accent-dark text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                            <span class="material-icons mr-2">auto_awesome</span>
+                            Améliorer avec l'IA
+                        </button>
+                        <button class="w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition flex items-center justify-center">
+                            <span class="material-icons mr-2">content_copy</span>
+                            Dupliquer le CV
+                        </button>
+                        <button class="w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition flex items-center justify-center">
+                            <span class="material-icons mr-2">color_lens</span>
+                            Changer le thème
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Templates -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-4">Modèles</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="template-card cursor-pointer rounded-lg overflow-hidden border-2 border-accent">
+                            <img src="https://placehold.co/200x280/e17055/ffffff?text=Moderne" alt="CV Moderne" class="w-full h-32 object-cover">
+                            <div class="p-2 text-center">
+                                <p class="text-sm font-medium">Moderne</p>
+                            </div>
+                        </div>
+                        <div class="template-card cursor-pointer rounded-lg overflow-hidden border-2 border-transparent hover:border-accent">
+                            <img src="https://placehold.co/200x280/2d3436/ffffff?text=Classique" alt="CV Classique" class="w-full h-32 object-cover">
+                            <div class="p-2 text-center">
+                                <p class="text-sm font-medium">Classique</p>
+                            </div>
+                        </div>
+                        <div class="template-card cursor-pointer rounded-lg overflow-hidden border-2 border-transparent hover:border-accent">
+                            <img src="https://placehold.co/200x280/00b894/ffffff?text=Créatif" alt="CV Créatif" class="w-full h-32 object-cover">
+                            <div class="p-2 text-center">
+                                <p class="text-sm font-medium">Créatif</p>
+                            </div>
+                        </div>
+                        <div class="template-card cursor-pointer rounded-lg overflow-hidden border-2 border-transparent hover:border-accent">
+                            <img src="https://placehold.co/200x280/6c5ce7/ffffff?text=Minimal" alt="CV Minimal" class="w-full h-32 object-cover">
+                            <div class="p-2 text-center">
+                                <p class="text-sm font-medium">Minimal</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle - CV Editor -->
+            <div class="lg:col-span-1 bg-white rounded-xl shadow-sm p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-primary">Éditeur de CV</h2>
+                    <div class="flex items-center space-x-2">
+                        <button class="p-2 text-gray-500 hover:text-accent transition">
+                            <span class="material-icons">undo</span>
+                        </button>
+                        <button class="p-2 text-gray-500 hover:text-accent transition">
+                            <span class="material-icons">redo</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sections -->
+                <div class="space-y-6">
+                    <!-- Personal Info -->
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-accent transition-colors">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold flex items-center">
+                                <span class="material-icons text-accent mr-2">person</span>
+                                Informations personnelles
+                            </h3>
+                            <button class="text-gray-400 hover:text-accent transition">
+                                <span class="material-icons">edit</span>
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="photo-upload w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer transition-all">
+                                <span class="material-icons text-gray-400">add_a_photo</span>
+                            </div>
+                            <div class="flex-1 space-y-3">
+                                <input type="text" placeholder="Prénom Nom" value="Jean Dupont" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                                <input type="text" placeholder="Titre professionnel" value="Développeur Full Stack" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 mt-4">
+                            <input type="email" placeholder="Email" value="jean.dupont@email.com" class="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            <input type="tel" placeholder="Téléphone" value="06 12 34 56 78" class="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            <input type="text" placeholder="Ville" value="Paris" class="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            <input type="url" placeholder="LinkedIn" value="linkedin.com/in/jeandupont" class="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-accent transition-colors">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold flex items-center">
+                                <span class="material-icons text-accent mr-2">description</span>
+                                Résumé professionnel
+                            </h3>
+                            <button class="px-3 py-1 bg-accent/10 text-accent rounded-lg text-sm font-medium hover:bg-accent/20 transition">
+                                <span class="material-icons text-sm mr-1">auto_awesome</span>
+                                Optimiser
+                            </button>
+                        </div>
+                        <textarea rows="4" placeholder="Décrivez-vous en quelques phrases..." class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-accent resize-none">Développeur passionné avec 5 ans d'expérience dans la création d'applications web innovantes. Expert en React, Node.js et architectures cloud. Je recherche des défis techniques stimulants dans une équipe collaborative.</textarea>
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-accent transition-colors">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold flex items-center">
+                                <span class="material-icons text-accent mr-2">work</span>
+                                Expériences professionnelles
+                            </h3>
+                            <button class="text-accent hover:text-accent-dark transition">
+                                <span class="material-icons">add_circle</span>
+                            </button>
+                        </div>
+
+                        <div class="space-y-4" id="experienceList">
+                            <div class="bg-gray-50 rounded-lg p-4 cursor-move">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <div class="font-semibold">Lead Developer</div>
+                                        <div class="text-accent">TechCorp</div>
+                                        <div class="text-sm text-gray-500">Jan 2022 - Présent • Paris</div>
+                                        <ul class="mt-2 text-sm space-y-1">
+                                            <li class="flex items-start">
+                                                <span class="text-gray-400 mr-2">•</span>
+                                                Direction d'une équipe de 5 développeurs
+                                            </li>
+                                            <li class="flex items-start">
+                                                <span class="text-gray-400 mr-2">•</span>
+                                                Architecture microservices avec Kubernetes
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <button class="text-gray-400 hover:text-error transition">
+                                        <span class="material-icons text-sm">close</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-accent transition-colors">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold flex items-center">
+                                <span class="material-icons text-accent mr-2">psychology</span>
+                                Compétences
+                            </h3>
+                            <button class="px-3 py-1 bg-accent/10 text-accent rounded-lg text-sm font-medium hover:bg-accent/20 transition">
+                                <span class="material-icons text-sm mr-1">add</span>
+                                Ajouter
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div>
+                                <div class="text-sm font-medium mb-2">Langages & Frameworks</div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">JavaScript</span>
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">React</span>
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Node.js</span>
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">TypeScript</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium mb-2">Outils & Technologies</div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Docker</span>
+                                    <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Git</span>
+                                    <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">AWS</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right - Live Preview -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-24">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold">Aperçu en temps réel</h3>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition flex items-center">
+                                <span class="material-icons mr-2">download</span>
+                                PDF
+                            </button>
+                            <button class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition flex items-center">
+                                <span class="material-icons mr-2">share</span>
+                                Partager
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <div class="cv-preview p-12">
+                            <!-- CV Preview Header -->
+                            <div class="flex items-start justify-between mb-8">
+                                <div>
+                                    <h1 class="text-3xl font-bold text-gray-900">Jean Dupont</h1>
+                                    <p class="text-xl text-accent mt-1">Développeur Full Stack</p>
+                                </div>
+                                <div class="text-right text-sm text-gray-600 space-y-1">
+                                    <p>📧 jean.dupont@email.com</p>
+                                    <p>📱 06 12 34 56 78</p>
+                                    <p>📍 Paris</p>
+                                    <p>💼 linkedin.com/in/jeandupont</p>
+                                </div>
+                            </div>
+
+                            <!-- Summary -->
+                            <div class="mb-6">
+                                <div class="border-b-2 border-accent pb-2 mb-3">
+                                    <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide">Résumé</h2>
+                                </div>
+                                <p class="text-gray-700">
+                                    Développeur passionné avec 5 ans d'expérience dans la création d'applications web innovantes. 
+                                    Expert en React, Node.js et architectures cloud. Je recherche des défis techniques stimulants 
+                                    dans une équipe collaborative.
+                                </p>
+                            </div>
+
+                            <!-- Experience -->
+                            <div class="mb-6">
+                                <div class="border-b-2 border-accent pb-2 mb-3">
+                                    <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide">Expériences</h2>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="flex justify-between items-baseline">
+                                        <h3 class="font-bold">Lead Developer</h3>
+                                        <span class="text-sm text-gray-600">Jan 2022 - Présent</span>
+                                    </div>
+                                    <p class="text-accent font-medium">TechCorp • Paris</p>
+                                    <ul class="mt-2 text-sm space-y-1">
+                                        <li>• Direction d'une équipe de 5 développeurs</li>
+                                        <li>• Architecture microservices avec Kubernetes</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Skills -->
+                            <div>
+                                <div class="border-b-2 border-accent pb-2 mb-3">
+                                    <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide">Compétences</h2>
+                                </div>
+                                <div class="space-y-2">
+                                    <div>
+                                        <span class="font-medium">Langages:</span>
+                                        <span class="text-gray-700"> JavaScript, React, Node.js, TypeScript</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-medium">Outils:</span>
+                                        <span class="text-gray-700"> Docker, Git, AWS</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant Popup -->
+        <div class="fixed bottom-6 right-6 z-40">
+            <button class="w-14 h-14 bg-gradient-to-r from-accent to-accent-dark rounded-full text-white shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 flex items-center justify-center animated-gradient">
+                <span class="material-icons">auto_awesome</span>
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('LOGIN');
+        }
+
+        // Gestion du formulaire de CV
+        const cvForm = document.getElementById('cvForm');
+        if (cvForm) {
+            // Charger les données existantes
+            const savedCV = JSON.parse(localStorage.getItem('user_cv') || '{}');
+            Object.keys(savedCV).forEach(key => {
+                const input = cvForm.querySelector(`[name="${key}"]`);
+                if (input) input.value = savedCV[key];
+            });
+
+            // Gestion de la soumission
+            cvForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(cvForm);
+                const cvData = {};
+                formData.forEach((value, key) => {
+                    cvData[key] = value;
+                });
+
+                // Sauvegarder les données du CV
+                localStorage.setItem('user_cv', JSON.stringify(cvData));
+                alert('CV sauvegardé avec succès !');
+            });
+        }
+
+        // Gestion des sections dynamiques
+        function addSection(sectionType) {
+            const sectionsContainer = document.querySelector(`#${sectionType}-sections`);
+            if (sectionsContainer) {
+                const sectionId = Date.now();
+                const sectionHtml = `
+                    <div class="section" id="${sectionType}-${sectionId}">
+                        <div class="section-header">
+                            <h3>${sectionType.charAt(0).toUpperCase() + sectionType.slice(1)}</h3>
+                            <button onclick="removeSection('${sectionType}-${sectionId}')" class="btn-remove">Supprimer</button>
+                        </div>
+                        <div class="section-content">
+                            ${getSectionFields(sectionType)}
+                        </div>
+                    </div>
+                `;
+                sectionsContainer.insertAdjacentHTML('beforeend', sectionHtml);
+            }
+        }
+
+        function removeSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.remove();
+            }
+        }
+
+        function getSectionFields(sectionType) {
+            const fields = {
+                experience: `
+                    <input type="text" name="company" placeholder="Entreprise" required>
+                    <input type="text" name="position" placeholder="Poste" required>
+                    <input type="text" name="period" placeholder="Période" required>
+                    <textarea name="description" placeholder="Description" required></textarea>
+                `,
+                education: `
+                    <input type="text" name="school" placeholder="École/Université" required>
+                    <input type="text" name="degree" placeholder="Diplôme" required>
+                    <input type="text" name="period" placeholder="Période" required>
+                `,
+                skills: `
+                    <input type="text" name="skill" placeholder="Compétence" required>
+                    <select name="level" required>
+                        <option value="beginner">Débutant</option>
+                        <option value="intermediate">Intermédiaire</option>
+                        <option value="advanced">Avancé</option>
+                        <option value="expert">Expert</option>
+                    </select>
+                `
+            };
+            return fields[sectionType] || '';
+        }
+
+        // Gestion du bouton de déconnexion
+        const logoutBtn = document.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                Auth.logout();
+            });
+        }
+
+        // Template selection
+        document.querySelectorAll('.template-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove active state from all
+                document.querySelectorAll('.template-card').forEach(c => {
+                    c.classList.remove('border-accent');
+                    c.classList.add('border-transparent');
+                });
+                
+                // Add active state to clicked
+                this.classList.remove('border-transparent');
+                this.classList.add('border-accent');
+            });
+        });
+
+        // Progress calculation
+        function updateProgress() {
+            const sections = {
+                personal: 100,
+                experience: 100,
+                skills: 50,
+                languages: 0
+            };
+            
+            const total = Object.values(sections).reduce((a, b) => a + b, 0) / Object.keys(sections).length;
+            const circumference = 2 * Math.PI * 56;
+            const offset = circumference - (total / 100) * circumference;
+            
+            document.querySelector('.progress-ring-circle').style.strokeDashoffset = offset;
+            document.querySelector('.progress-ring').nextElementSibling.querySelector('span').textContent = Math.round(total) + '%';
+        }
+
+        updateProgress();
+
+        // Live preview update
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                // Update preview in real-time
+                // This would be more complex in a real app
+                console.log('Updating preview...');
+            });
+        });
+
+        // Photo upload
+        document.querySelector('.photo-upload').addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // Update photo preview
+                        console.log('Photo uploaded');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        });
+
+        // Add new experience
+        document.querySelector('.material-icons').parentElement.addEventListener('click', function() {
+            if (this.textContent.includes('add_circle')) {
+                // Add new experience block
+                console.log('Adding new experience');
+            }
+        });
+    </script>
+</body>
+</html>

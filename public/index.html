@@ -1,0 +1,771 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Générateur de Lettres de Motivation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Barlow:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2d3436;
+            --accent-color: #e17055;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --background-light: #fff5f3;
+            --background-white: #ffffff;
+            --shadow-soft: 0 2px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--background-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography Styles */
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            color: var(--text-dark);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1.2rem;
+        }
+
+        h3 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .lead {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 2rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(225, 112, 85, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(225, 112, 85, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 2rem 80px;
+            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-white) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(225, 112, 85, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            margin-bottom: 2rem;
+        }
+
+        .accent-text {
+            color: var(--accent-color);
+            font-style: italic;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .secondary-button {
+            padding: 0.75rem 2rem;
+            border: 2px solid var(--text-dark);
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .secondary-button:hover {
+            background-color: var(--text-dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .hero-visual {
+            position: relative;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .letter-preview {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            transform: rotate(-3deg);
+            max-width: 400px;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .letter-preview:hover {
+            transform: rotate(-1deg) scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .letter-preview h4 {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .letter-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 100px 2rem;
+            background-color: var(--background-white);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .step-card {
+            background: var(--background-light);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 2rem;
+        }
+
+        .step-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 2rem;
+            background: linear-gradient(to bottom, var(--background-white), var(--background-light));
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-icon-wrapper {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            background: var(--background-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+        }
+
+        .feature-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-content p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: white;
+            padding: 60px 2rem 30px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h4 {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-button {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .steps-grid,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInLeft 0.6s ease forwards;
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            animation: slideInRight 0.6s ease forwards;
+        }
+
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="/" class="logo">MotivAI</a>
+            <ul class="nav-links">
+                <li><a href="#how-it-works">Comment ça marche</a></li>
+                <li><a href="#features">Avantages</a></li>
+                <li><a href="#pricing">Tarifs</a></li>
+                <li><a href="/login">Connexion</a></li>
+                <li><a href="/form" class="cta-button">
+                    <span class="material-icons">edit_note</span>
+                    Commencer
+                </a></li>
+            </ul>
+            <button class="mobile-menu-button">
+                <span class="material-icons">menu</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content slide-in-left">
+                <h1>
+                    Crée ta lettre de motivation 
+                    <span class="accent-text">parfaite</span> 
+                    en 30 secondes
+                </h1>
+                <p class="lead">
+                    L'intelligence artificielle au service de ta recherche d'emploi. 
+                    Génère des lettres personnalisées et professionnelles qui captent 
+                    l'attention des recruteurs.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/form" class="cta-button">
+                        <span class="material-icons">rocket_launch</span>
+                        Créer ma lettre maintenant
+                    </a>
+                    <a href="#how-it-works" class="secondary-button">
+                        <span class="material-icons">play_circle</span>
+                        Voir la démo
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual slide-in-right">
+                <div class="letter-preview">
+                    <h4>Aperçu d'une lettre générée</h4>
+                    <p class="letter-text">
+                        "Madame, Monsieur,<br><br>
+                        Passionné par le développement web et fort d'une expérience 
+                        de 3 ans dans la création d'applications innovantes, 
+                        je suis enthousiaste à l'idée de rejoindre votre équipe..."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <h2>Comment ça fonctionne ?</h2>
+                <p class="lead">Trois étapes simples pour une lettre de motivation parfaite</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card fade-in">
+                    <div class="step-number">1</div>
+                    <span class="material-icons step-icon">person_add</span>
+                    <h3>Remplis ton profil</h3>
+                    <p>Entre tes informations personnelles, ton expérience et tes compétences en quelques clics.</p>
+                </div>
+                <div class="step-card fade-in" style="animation-delay: 0.2s">
+                    <div class="step-number">2</div>
+                    <span class="material-icons step-icon">auto_awesome</span>
+                    <h3>L'IA personnalise</h3>
+                    <p>Notre intelligence artificielle analyse tes données et crée une lettre unique et adaptée.</p>
+                </div>
+                <div class="step-card fade-in" style="animation-delay: 0.4s">
+                    <div class="step-number">3</div>
+                    <span class="material-icons step-icon">download</span>
+                    <h3>Télécharge et envoie</h3>
+                    <p>Récupère ta lettre en PDF ou copie le texte directement. C'est prêt à envoyer !</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <h2>Pourquoi choisir MotivAI ?</h2>
+                <p class="lead">Des avantages pensés pour maximiser tes chances de succès</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon-wrapper">
+                        <span class="material-icons">speed</span>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Rapide et efficace</h3>
+                        <p>Génère une lettre complète en moins de 30 secondes, plus besoin de passer des heures à rédiger.</p>
+                    </div>
+                </div>
+                <div class="feature-card fade-in" style="animation-delay: 0.1s">
+                    <div class="feature-icon-wrapper">
+                        <span class="material-icons">psychology</span>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Intelligence artificielle avancée</h3>
+                        <p>Notre IA analyse les meilleures pratiques et adapte le contenu à chaque offre d'emploi.</p>
+                    </div>
+                </div>
+                <div class="feature-card fade-in" style="animation-delay: 0.2s">
+                    <div class="feature-icon-wrapper">
+                        <span class="material-icons">verified</span>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Qualité professionnelle</h3>
+                        <p>Des lettres rédigées selon les standards du recrutement, sans fautes et bien structurées.</p>
+                    </div>
+                </div>
+                <div class="feature-card fade-in" style="animation-delay: 0.3s">
+                    <div class="feature-icon-wrapper">
+                        <span class="material-icons">storage</span>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Historique sauvegardé</h3>
+                        <p>Retrouve toutes tes lettres générées dans ton espace personnel, modifie-les à volonté.</p>
+                    </div>
+                </div>
+                <div class="feature-card fade-in" style="animation-delay: 0.4s">
+                    <div class="feature-icon-wrapper">
+                        <span class="material-icons">lock</span>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Données sécurisées</h3>
+                        <p>Tes informations sont protégées et ne sont jamais partagées avec des tiers.</p>
+                    </div>
+                </div>
+                <div class="feature-card fade-in" style="animation-delay: 0.5s">
+                    <div class="feature-icon-wrapper">
+                        <span class="material-icons">support_agent</span>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Support réactif</h3>
+                        <p>Une équipe disponible pour t'aider et répondre à toutes tes questions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>MotivAI</h4>
+                <p style="color: rgba(255, 255, 255, 0.7);">
+                    L'outil intelligent pour créer des lettres de motivation qui font la différence.
+                </p>
+            </div>
+            <div class="footer-column">
+                <h4>Produit</h4>
+                <ul>
+                    <li><a href="/features">Fonctionnalités</a></li>
+                    <li><a href="/pricing">Tarifs</a></li>
+                    <li><a href="/examples">Exemples</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Entreprise</h4>
+                <ul>
+                    <li><a href="/about">À propos</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/careers">Carrières</a></li>
+                    <li><a href="/press">Presse</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Légal</h4>
+                <ul>
+                    <li><a href="/privacy">Confidentialité</a></li>
+                    <li><a href="/terms">Conditions d'utilisation</a></li>
+                    <li><a href="/cookies">Cookies</a></li>
+                    <li><a href="/gdpr">RGPD</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 MotivAI. Tous droits réservés. Fait avec passion en France.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+
+        // Header scroll effect
+        let lastScroll = 0;
+        const header = document.querySelector('header');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = '0 1px 0 rgba(0, 0, 0, 0.1)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+    </script>
+</body>
+</html>
+
