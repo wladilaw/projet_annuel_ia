@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Coach IA Personnel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .chat-message {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .typing-indicator {
+            animation: pulse 1.5s infinite;
+        }
+
+        .ai-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/jobs" class="text-text-light hover:text-primary transition">Offres</a>
+                    <a href="/companies" class="text-text-light hover:text-primary transition">Entreprises</a>
+                    <a href="/ai-coach" class="text-primary font-semibold">Coach IA</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Sidebar - Coach Profile & Stats -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Coach Profile -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="text-center">
+                        <div class="w-24 h-24 ai-avatar rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="material-icons text-4xl text-white">psychology</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-primary">Coach IA Sarah</h3>
+                        <p class="text-text-light">Votre mentor carrière personnel</p>
+                        
+                        <!-- Status -->
+                        <div class="flex items-center justify-center mt-4">
+                            <div class="w-3 h-3 bg-success rounded-full mr-2 animate-pulse"></div>
+                            <span class="text-sm text-success font-medium">En ligne</span>
+                        </div>
+                    </div>
+
+                    <!-- Coach Stats -->
+                    <div class="mt-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Sessions complétées</span>
+                            <span class="font-semibold">24</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Objectifs atteints</span>
+                            <span class="font-semibold">18/20</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Satisfaction</span>
+                            <div class="flex items-center">
+                                <span class="text-yellow-400 mr-1">★★★★★</span>
+                                <span class="text-sm">4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Tracker -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h4 class="font-semibold mb-4">Progression carrière</h4>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span>Profil LinkedIn</span>
+                                <span class="text-success">100%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-success h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span>Compétences techniques</span>
+                                <span class="text-warning">75%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-warning h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span>Réseau professionnel</span>
+                                <span class="text-info">60%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-info h-2 rounded-full" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h4 class="font-semibold mb-4">Actions rapides</h4>
+                    <div class="space-y-3">
+                        <button class="w-full px-4 py-3 bg-accent text-white rounded-lg hover:bg-accent-dark transition flex items-center">
+                            <span class="material-icons mr-2">assessment</span>
+                            Évaluation compétences
+                        </button>
+                        <button class="w-full px-4 py-3 bg-info text-white rounded-lg hover:bg-blue-600 transition flex items-center">
+                            <span class="material-icons mr-2">timeline</span>
+                            Plan de carrière
+                        </button>
+                        <button class="w-full px-4 py-3 bg-success text-white rounded-lg hover:bg-green-600 transition flex items-center">
+                            <span class="material-icons mr-2">school</span>
+                            Formations recommandées
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Chat Area -->
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-xl shadow-sm h-[700px] flex flex-col">
+                    <!-- Chat Header -->
+                    <div class="p-6 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-2xl font-bold text-primary">Session de coaching</h2>
+                                <p class="text-text-light">Discutez avec votre coach IA pour booster votre carrière</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="p-2 text-gray-400 hover:text-accent transition">
+                                    <span class="material-icons">videocam</span>
+                                </button>
+                                <button class="p-2 text-gray-400 hover:text-accent transition">
+                                    <span class="material-icons">call</span>
+                                </button>
+                                <button class="p-2 text-gray-400 hover:text-accent transition">
+                                    <span class="material-icons">more_vert</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages -->
+                    <div class="flex-1 overflow-y-auto p-6 space-y-4" id="chatMessages">
+                        <!-- Welcome Message -->
+                        <div class="chat-message flex items-start space-x-3">
+                            <div class="w-10 h-10 ai-avatar rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="material-icons text-white">psychology</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-gray-100 rounded-lg p-4 max-w-md">
+                                    <p class="text-gray-800">
+                                        Bonjour Jean ! 👋 Je suis Sarah, votre coach IA personnel. 
+                                        Je suis là pour vous aider à atteindre vos objectifs de carrière. 
+                                        Comment puis-je vous aider aujourd'hui ?
+                                    </p>
+                                </div>
+                                <span class="text-xs text-gray-500 mt-1 block">Il y a quelques instants</span>
+                            </div>
+                        </div>
+
+                        <!-- Suggested Actions -->
+                        <div class="chat-message">
+                            <div class="flex flex-wrap gap-2 ml-13">
+                                <button class="px-4 py-2 bg-accent/10 text-accent rounded-full text-sm hover:bg-accent/20 transition" onclick="sendSuggestedMessage('Je veux améliorer mon CV')">
+                                    💼 Améliorer mon CV
+                                </button>
+                                <button class="px-4 py-2 bg-info/10 text-info rounded-full text-sm hover:bg-info/20 transition" onclick="sendSuggestedMessage('Comment négocier mon salaire ?')">
+                                    💰 Négocier mon salaire
+                                </button>
+                                <button class="px-4 py-2 bg-success/10 text-success rounded-full text-sm hover:bg-success/20 transition" onclick="sendSuggestedMessage('Préparer un entretien')">
+                                    🎯 Préparer un entretien
+                                </button>
+                                <button class="px-4 py-2 bg-purple-100 text-purple-600 rounded-full text-sm hover:bg-purple-200 transition" onclick="sendSuggestedMessage('Changer de carrière')">
+                                    🚀 Changer de carrière
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="p-6 border-t border-gray-100">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 relative">
+                                <input 
+                                    type="text" 
+                                    id="chatInput"
+                                    placeholder="Tapez votre message..."
+                                    class="w-full px-4 py-3 pr-12 border border-gray-200 rounded-full focus:outline-none focus:border-accent"
+                                    onkeypress="handleKeyPress(event)"
+                                >
+                                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-accent transition">
+                                    <span class="material-icons">attach_file</span>
+                                </button>
+                            </div>
+                            <button 
+                                onclick="sendMessage()"
+                                class="w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center hover:bg-accent-dark transition"
+                            >
+                                <span class="material-icons">send</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Voice Input -->
+                        <div class="flex items-center justify-center mt-3">
+                            <button class="flex items-center space-x-2 text-text-light hover:text-accent transition text-sm">
+                                <span class="material-icons text-base">mic</span>
+                                <span>Maintenir pour parler</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coaching Modules -->
+        <div class="mt-12">
+            <h3 class="text-2xl font-bold text-primary mb-6">Modules de coaching disponibles</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Career Planning -->
+                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-4">
+                        <span class="material-icons text-white">timeline</span>
+                    </div>
+                    <h4 class="text-lg font-semibold mb-2">Planification de carrière</h4>
+                    <p class="text-text-light text-sm mb-4">Définissez vos objectifs et créez un plan d'action personnalisé</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-success bg-success/10 px-2 py-1 rounded-full">Recommandé</span>
+                        <span class="text-xs text-text-light">45 min</span>
+                    </div>
+                </div>
+
+                <!-- Interview Prep -->
+                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mb-4">
+                        <span class="material-icons text-white">quiz</span>
+                    </div>
+                    <h4 class="text-lg font-semibold mb-2">Préparation entretiens</h4>
+                    <p class="text-text-light text-sm mb-4">Entraînez-vous avec des simulations d'entretiens réalistes</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-warning bg-warning/10 px-2 py-1 rounded-full">Populaire</span>
+                        <span class="text-xs text-text-light">30 min</span>
+                    </div>
+                </div>
+
+                <!-- Skill Development -->
+                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-4">
+                        <span class="material-icons text-white">school</span>
+                    </div>
+                    <h4 class="text-lg font-semibold mb-2">Développement compétences</h4>
+                    <p class="text-text-light text-sm mb-4">Identifiez les compétences à développer pour votre secteur</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-info bg-info/10 px-2 py-1 rounded-full">Nouveau</span>
+                        <span class="text-xs text-text-light">60 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('/login');
+        }
+
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+
+        // Réponses IA simulées
+        const aiResponses = {
+            'améliorer cv': {
+                text: "Excellente question ! Pour améliorer votre CV, je recommande de :\n\n1. **Quantifier vos réalisations** - Utilisez des chiffres concrets\n2. **Adapter le contenu** - Personnalisez pour chaque poste\n3. **Optimiser les mots-clés** - Incluez les termes du secteur\n4. **Soigner la présentation** - Design moderne et lisible\n\nVoulez-vous que nous travaillions sur une section spécifique ?",
+                suggestions: ['Revoir mes expériences', 'Optimiser mes compétences', 'Améliorer le design']
+            },
+            'négocier salaire': {
+                text: "La négociation salariale est cruciale ! Voici ma stratégie en 4 étapes :\n\n1. **Recherchez le marché** - Connaissez les salaires du secteur\n2. **Préparez vos arguments** - Listez vos réalisations\n3. **Choisissez le bon moment** - Après une réussite ou lors de l'évaluation\n4. **Négociez l'ensemble** - Pas seulement le salaire de base\n\nQuel est votre secteur d'activité ?",
+                suggestions: ['Rechercher salaires marché', 'Préparer mes arguments', 'Timing de négociation']
+            },
+            'entretien': {
+                text: "Parfait ! La préparation d'entretien est ma spécialité 🎯\n\nVoici mon plan d'action :\n\n1. **Recherche entreprise** - Mission, valeurs, actualités\n2. **Questions fréquentes** - Préparez vos réponses STAR\n3. **Questions à poser** - Montrez votre intérêt\n4. **Simulation pratique** - Entraînement en conditions réelles\n\nPour quel type de poste préparez-vous l'entretien ?",
+                suggestions: ['Simulation entretien', 'Questions difficiles', 'Présentation personnelle']
+            },
+            'carrière': {
+                text: "Changer de carrière est un grand pas ! 🚀 Félicitations pour cette réflexion.\n\nMa méthode en 5 phases :\n\n1. **Bilan de compétences** - Identifiez vos forces\n2. **Exploration secteurs** - Découvrez les opportunités\n3. **Plan de transition** - Étapes concrètes\n4. **Formation/Reconversion** - Combler les gaps\n5. **Réseau & Opportunités** - Activez vos contacts\n\nVers quel secteur souhaitez-vous vous orienter ?",
+                suggestions: ['Bilan compétences', 'Explorer secteurs', 'Plan transition']
+            }
+        };
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendSuggestedMessage(message) {
+            chatInput.value = message;
+            sendMessage();
+        }
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Ajouter le message utilisateur
+            addUserMessage(message);
+            chatInput.value = '';
+
+            // Simuler la réflexion de l'IA
+            showTypingIndicator();
+
+            // Réponse de l'IA après un délai
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = generateAIResponse(message);
+                addAIMessage(response.text, response.suggestions);
+            }, 1500 + Math.random() * 1000);
+        }
+
+        function addUserMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message flex items-start space-x-3 justify-end';
+            messageDiv.innerHTML = `
+                <div class="flex-1 flex justify-end">
+                    <div class="bg-accent text-white rounded-lg p-4 max-w-md">
+                        <p>${message}</p>
+                    </div>
+                </div>
+                <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center flex-shrink-0 text-white font-semibold">
+                    JD
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addAIMessage(message, suggestions = []) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message flex items-start space-x-3';
+            
+            let suggestionsHTML = '';
+            if (suggestions.length > 0) {
+                suggestionsHTML = `
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        ${suggestions.map(suggestion => 
+                            `<button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition" onclick="sendSuggestedMessage('${suggestion}')">
+                                ${suggestion}
+                            </button>`
+                        ).join('')}
+                    </div>
+                `;
+            }
+
+            messageDiv.innerHTML = `
+                <div class="w-10 h-10 ai-avatar rounded-full flex items-center justify-center flex-shrink-0">
+                    <span class="material-icons text-white">psychology</span>
+                </div>
+                <div class="flex-1">
+                    <div class="bg-gray-100 rounded-lg p-4 max-w-md">
+                        <p class="text-gray-800 whitespace-pre-line">${message}</p>
+                        ${suggestionsHTML}
+                    </div>
+                    <span class="text-xs text-gray-500 mt-1 block">À l'instant</span>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+
+            // Analytics
+            Analytics.trackEvent('ai_coach_interaction', {
+                message_length: message.length,
+                suggestions_provided: suggestions.length
+            });
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'chat-message flex items-start space-x-3';
+            typingDiv.innerHTML = `
+                <div class="w-10 h-10 ai-avatar rounded-full flex items-center justify-center flex-shrink-0">
+                    <span class="material-icons text-white">psychology</span>
+                </div>
+                <div class="flex-1">
+                    <div class="bg-gray-100 rounded-lg p-4 max-w-md">
+                        <div class="typing-indicator flex space-x-1">
+                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function generateAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            for (const [key, response] of Object.entries(aiResponses)) {
+                if (lowerMessage.includes(key)) {
+                    return response;
+                }
+            }
+
+            // Réponse par défaut
+            return {
+                text: "C'est une excellente question ! 🤔 Je vais analyser votre situation et vous proposer une stratégie personnalisée.\n\nPour mieux vous aider, pouvez-vous me donner plus de contexte sur votre situation actuelle ?",
+                suggestions: ['Parler de mon expérience', 'Mes objectifs de carrière', 'Mes défis actuels']
+            };
+        }
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Focus sur l'input
+            chatInput.focus();
+            
+            // Simuler l'arrivée de messages de bienvenue
+            setTimeout(() => {
+                addAIMessage(
+                    "J'ai analysé votre profil et je vois que vous êtes développeur Full Stack avec 3 ans d'expérience. Impressionnant ! 💪\n\nJe remarque que vous pourriez bénéficier d'une optimisation de votre présence LinkedIn et d'une stratégie de networking plus active.\n\nPar quoi souhaitez-vous commencer ?",
+                    ['Optimiser LinkedIn', 'Stratégie networking', 'Évolution salariale']
+                );
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

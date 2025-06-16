@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Networking IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .network-node {
+            transition: all 0.3s ease;
+        }
+
+        .network-node:hover {
+            transform: scale(1.05);
+        }
+
+        .connection-line {
+            stroke: #e17055;
+            stroke-width: 2;
+            opacity: 0.6;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .contact-card {
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .match-score {
+            background: linear-gradient(135deg, #00b894, #00a085);
+        }
+
+        .ai-suggestion {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/ai-coach" class="text-text-light hover:text-primary transition">Coach IA</a>
+                    <a href="/networking" class="text-primary font-semibold">Networking</a>
+                    <a href="/market-insights" class="text-text-light hover:text-primary transition">Marché</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-text-light hover:text-primary transition">
+                        <span class="material-icons">notifications</span>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full"></span>
+                    </button>
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-display font-bold text-primary mb-4">
+                Networking IA Intelligent
+            </h1>
+            <p class="text-xl text-text-light max-w-3xl mx-auto">
+                Développez votre réseau professionnel avec notre IA qui identifie les bonnes personnes, 
+                génère des messages personnalisés et optimise vos interactions.
+            </p>
+        </div>
+
+        <!-- Network Overview -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+            <!-- Network Stats -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Your Network -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">📊 Votre réseau</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Connexions totales</span>
+                            <span class="font-semibold">247</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Connexions actives</span>
+                            <span class="font-semibold text-success">89</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Nouvelles cette semaine</span>
+                            <span class="font-semibold text-info">12</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Score d'influence</span>
+                            <span class="font-semibold text-accent">7.8/10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network Health -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">💪 Santé du réseau</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Diversité sectorielle</span>
+                                <span class="text-success">Excellente</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-success h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Engagement</span>
+                                <span class="text-warning">Moyen</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-warning h-2 rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Croissance</span>
+                                <span class="text-info">Bonne</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-info h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">⚡ Actions rapides</h3>
+                    <div class="space-y-3">
+                        <button class="w-full px-4 py-3 bg-accent text-white rounded-lg hover:bg-accent-dark transition flex items-center">
+                            <span class="material-icons mr-2">person_add</span>
+                            Trouver des contacts
+                        </button>
+                        <button class="w-full px-4 py-3 bg-info text-white rounded-lg hover:bg-blue-600 transition flex items-center">
+                            <span class="material-icons mr-2">message</span>
+                            Messages suggérés
+                        </button>
+                        <button class="w-full px-4 py-3 bg-success text-white rounded-lg hover:bg-green-600 transition flex items-center">
+                            <span class="material-icons mr-2">event</span>
+                            Événements networking
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="lg:col-span-3 space-y-8">
+                <!-- AI Suggestions -->
+                <div class="ai-suggestion rounded-xl p-8 text-white">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold">🤖 Suggestions IA du jour</h3>
+                        <div class="floating-icon">
+                            <span class="material-icons text-3xl">auto_awesome</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white/10 backdrop-blur rounded-lg p-6">
+                            <h4 class="font-semibold mb-2">💼 Opportunité de carrière</h4>
+                            <p class="text-white/90 text-sm mb-4">
+                                Marie Dubois (ex-Google) recrute un Tech Lead. 
+                                Vous avez 3 connexions communes.
+                            </p>
+                            <button class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm transition">
+                                Voir le profil
+                            </button>
+                        </div>
+                        
+                        <div class="bg-white/10 backdrop-blur rounded-lg p-6">
+                            <h4 class="font-semibold mb-2">🎯 Contact stratégique</h4>
+                            <p class="text-white/90 text-sm mb-4">
+                                Pierre Martin (CTO chez Spotify) a liké votre dernier post. 
+                                C'est le moment de le contacter !
+                            </p>
+                            <button class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm transition">
+                                Envoyer un message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommended Connections -->
+                <div class="bg-white rounded-xl p-8 shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-primary">🎯 Connexions recommandées</h3>
+                        <button class="text-accent hover:text-accent-dark transition">
+                            <span class="material-icons">refresh</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Contact 1 -->
+                        <div class="contact-card border border-gray-200 rounded-xl p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <img src="https://placehold.co/60x60/667eea/ffffff?text=ML" alt="Marie Laurent" class="w-15 h-15 rounded-full">
+                                <div class="match-score text-white text-xs px-2 py-1 rounded-full">
+                                    95% match
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-semibold text-primary mb-1">Marie Laurent</h4>
+                            <p class="text-sm text-text-light mb-2">Senior Product Manager @ Airbnb</p>
+                            <p class="text-xs text-text-light mb-4">Ex-Google, Ex-Uber • Paris</p>
+                            
+                            <div class="flex flex-wrap gap-1 mb-4">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full">Product</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Tech</span>
+                                <span class="px-2 py-1 bg-purple-100 text-purple-600 text-xs rounded-full">AI</span>
+                            </div>
+                            
+                            <div class="text-xs text-text-light mb-4">
+                                <span class="material-icons text-base mr-1">people</span>
+                                3 connexions communes
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button class="flex-1 bg-accent text-white py-2 rounded-lg text-sm hover:bg-accent-dark transition">
+                                    Se connecter
+                                </button>
+                                <button class="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                                    <span class="material-icons text-sm">message</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Contact 2 -->
+                        <div class="contact-card border border-gray-200 rounded-xl p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <img src="https://placehold.co/60x60/f093fb/ffffff?text=PD" alt="Pierre Dubois" class="w-15 h-15 rounded-full">
+                                <div class="match-score text-white text-xs px-2 py-1 rounded-full">
+                                    88% match
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-semibold text-primary mb-1">Pierre Dubois</h4>
+                            <p class="text-sm text-text-light mb-2">Engineering Manager @ Spotify</p>
+                            <p class="text-xs text-text-light mb-4">Ex-Netflix, Ex-Amazon • Remote</p>
+                            
+                            <div class="flex flex-wrap gap-1 mb-4">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full">Engineering</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Leadership</span>
+                            </div>
+                            
+                            <div class="text-xs text-text-light mb-4">
+                                <span class="material-icons text-base mr-1">people</span>
+                                7 connexions communes
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button class="flex-1 bg-accent text-white py-2 rounded-lg text-sm hover:bg-accent-dark transition">
+                                    Se connecter
+                                </button>
+                                <button class="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                                    <span class="material-icons text-sm">message</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Contact 3 -->
+                        <div class="contact-card border border-gray-200 rounded-xl p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <img src="https://placehold.co/60x60/4facfe/ffffff?text=SB" alt="Sophie Bernard" class="w-15 h-15 rounded-full">
+                                <div class="match-score text-white text-xs px-2 py-1 rounded-full">
+                                    82% match
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-semibold text-primary mb-1">Sophie Bernard</h4>
+                            <p class="text-sm text-text-light mb-2">VP Engineering @ Stripe</p>
+                            <p class="text-xs text-text-light mb-4">Ex-Facebook, Ex-Twitter • London</p>
+                            
+                            <div class="flex flex-wrap gap-1 mb-4">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full">Fintech</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Scale</span>
+                            </div>
+                            
+                            <div class="text-xs text-text-light mb-4">
+                                <span class="material-icons text-base mr-1">people</span>
+                                1 connexion commune
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button class="flex-1 bg-accent text-white py-2 rounded-lg text-sm hover:bg-accent-dark transition">
+                                    Se connecter
+                                </button>
+                                <button class="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                                    <span class="material-icons text-sm">message</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message Templates -->
+                <div class="bg-white rounded-xl p-8 shadow-sm">
+                    <h3 class="text-2xl font-bold text-primary mb-6">💬 Messages générés par l'IA</h3>
+                    
+                    <div class="space-y-6">
+                        <!-- Template 1 -->
+                        <div class="border border-gray-200 rounded-lg p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="font-semibold text-primary">Message pour Marie Laurent</h4>
+                                    <p class="text-sm text-text-light">Demande de connexion personnalisée</p>
+                                </div>
+                                <span class="px-3 py-1 bg-success/10 text-success text-xs rounded-full">Recommandé</span>
+                            </div>
+                            
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <p class="text-sm text-text-dark">
+                                    Bonjour Marie,<br><br>
+                                    J'ai remarqué votre parcours impressionnant de Google à Airbnb, particulièrement votre travail sur l'IA appliquée au product management. 
+                                    En tant que développeur full stack passionné par l'intersection entre tech et produit, j'aimerais échanger sur votre expérience de transition vers le PM.<br><br>
+                                    Seriez-vous disponible pour un café virtuel ?<br><br>
+                                    Cordialement,<br>
+                                    Jean
+                                </p>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-4 text-sm text-text-light">
+                                    <span>✅ Personnalisé</span>
+                                    <span>✅ Professionnel</span>
+                                    <span>✅ Call-to-action clair</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                                        Modifier
+                                    </button>
+                                    <button class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition">
+                                        Envoyer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Template 2 -->
+                        <div class="border border-gray-200 rounded-lg p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="font-semibold text-primary">Follow-up avec Pierre Dubois</h4>
+                                    <p class="text-sm text-text-light">Relance après interaction LinkedIn</p>
+                                </div>
+                                <span class="px-3 py-1 bg-info/10 text-info text-xs rounded-full">Opportunité</span>
+                            </div>
+                            
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <p class="text-sm text-text-dark">
+                                    Bonjour Pierre,<br><br>
+                                    Merci d'avoir liké mon post sur l'architecture microservices ! 
+                                    J'ai vu que vous recrutez un Tech Lead chez Spotify. Avec mon expérience de 3 ans en full stack et ma passion pour la musique tech, 
+                                    ce poste m'intéresse énormément.<br><br>
+                                    Pourriez-vous me parler des défis techniques de l'équipe ?<br><br>
+                                    Bien à vous,<br>
+                                    Jean
+                                </p>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-4 text-sm text-text-light">
+                                    <span>✅ Contextuel</span>
+                                    <span>✅ Opportunité job</span>
+                                    <span>✅ Question engageante</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                                        Modifier
+                                    </button>
+                                    <button class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition">
+                                        Envoyer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Networking Events -->
+                <div class="bg-white rounded-xl p-8 shadow-sm">
+                    <h3 class="text-2xl font-bold text-primary mb-6">📅 Événements networking recommandés</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Event 1 -->
+                        <div class="border border-gray-200 rounded-lg p-6 hover:border-accent transition">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                                    <span class="material-icons text-white">event</span>
+                                </div>
+                                <span class="px-2 py-1 bg-success/10 text-success text-xs rounded-full">Gratuit</span>
+                            </div>
+                            
+                            <h4 class="font-semibold text-primary mb-2">Tech Leaders Meetup Paris</h4>
+                            <p class="text-sm text-text-light mb-4">
+                                Rencontrez des leaders tech de startups et scale-ups parisiennes. 
+                                Networking, talks et retours d'expérience.
+                            </p>
+                            
+                            <div class="space-y-2 text-sm text-text-light mb-4">
+                                <div class="flex items-center">
+                                    <span class="material-icons text-base mr-2">schedule</span>
+                                    Jeudi 15 Février, 19h-22h
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="material-icons text-base mr-2">location_on</span>
+                                    Station F, Paris 13e
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="material-icons text-base mr-2">people</span>
+                                    150 participants attendus
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-accent text-white py-2 rounded-lg hover:bg-accent-dark transition">
+                                S'inscrire
+                            </button>
+                        </div>
+
+                        <!-- Event 2 -->
+                        <div class="border border-gray-200 rounded-lg p-6 hover:border-accent transition">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                    <span class="material-icons text-white">computer</span>
+                                </div>
+                                <span class="px-2 py-1 bg-warning/10 text-warning text-xs rounded-full">Premium</span>
+                            </div>
+                            
+                            <h4 class="font-semibold text-primary mb-2">AI & Product Conference</h4>
+                            <p class="text-sm text-text-light mb-4">
+                                Conférence sur l'IA appliquée au product management. 
+                                Speakers de Google, Meta, OpenAI.
+                            </p>
+                            
+                            <div class="space-y-2 text-sm text-text-light mb-4">
+                                <div class="flex items-center">
+                                    <span class="material-icons text-base mr-2">schedule</span>
+                                    Samedi 17 Février, 9h-18h
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="material-icons text-base mr-2">location_on</span>
+                                    Palais des Congrès, Paris
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="material-icons text-base mr-2">people</span>
+                                    500+ participants
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-accent text-white py-2 rounded-lg hover:bg-accent-dark transition">
+                                Réserver (89€)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('/login');
+        }
+
+        // Gestion des connexions
+        function connectWithPerson(personName) {
+            Notifications.info(`Demande de connexion envoyée à ${personName} 📤`);
+            
+            setTimeout(() => {
+                Notifications.success(`${personName} a accepté votre demande ! 🎉`);
+                Analytics.trackEvent('networking_connection_made', {
+                    contact_name: personName,
+                    source: 'ai_recommendation'
+                });
+            }, 2000);
+        }
+
+        // Gestion des messages
+        function sendMessage(template, recipient) {
+            Notifications.info('Envoi du message en cours... 📨');
+            
+            setTimeout(() => {
+                Notifications.success('Message envoyé avec succès !');
+                Analytics.trackEvent('networking_message_sent', {
+                    recipient: recipient,
+                    template_type: template,
+                    ai_generated: true
+                });
+            }, 1500);
+        }
+
+        // Gestion des événements
+        function registerForEvent(eventName) {
+            Notifications.info(`Inscription à "${eventName}" en cours... 🎫`);
+            
+            setTimeout(() => {
+                Notifications.success('Inscription confirmée ! Vous recevrez un email de confirmation.');
+                Analytics.trackEvent('networking_event_registered', {
+                    event_name: eventName
+                });
+            }, 1000);
+        }
+
+        // Ajouter les event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Boutons de connexion
+            document.querySelectorAll('button').forEach(button => {
+                if (button.textContent.includes('Se connecter')) {
+                    button.addEventListener('click', function() {
+                        const card = this.closest('.contact-card');
+                        const name = card.querySelector('h4').textContent;
+                        connectWithPerson(name);
+                    });
+                }
+                
+                if (button.textContent.includes('Envoyer') && button.closest('.border')) {
+                    button.addEventListener('click', function() {
+                        const messageCard = this.closest('.border');
+                        const recipient = messageCard.querySelector('h4').textContent.split(' ').slice(-2).join(' ');
+                        sendMessage('ai_generated', recipient);
+                    });
+                }
+                
+                if (button.textContent.includes('inscrire') || button.textContent.includes('Réserver')) {
+                    button.addEventListener('click', function() {
+                        const eventCard = this.closest('.border');
+                        const eventName = eventCard.querySelector('h4').textContent;
+                        registerForEvent(eventName);
+                    });
+                }
+            });
+
+            // Animation des cartes au scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observer toutes les cartes
+            document.querySelectorAll('.contact-card, .border').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.5s ease';
+                observer.observe(card);
+            });
+        });
+
+        // Simulation de notifications en temps réel
+        setTimeout(() => {
+            Notifications.info('💡 Marie Laurent a consulté votre profil !');
+        }, 5000);
+
+        setTimeout(() => {
+            Notifications.success('🎯 Nouveau match trouvé : Thomas Dubois (CTO @ Blablacar)');
+        }, 10000);
+    </script>
+</body>
+</html>

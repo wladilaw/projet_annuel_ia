@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Insights Marché IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .insight-card {
+            transition: all 0.3s ease;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .trend-up {
+            color: #00b894;
+        }
+
+        .trend-down {
+            color: #d63031;
+        }
+
+        .trend-stable {
+            color: #fdcb6e;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .heatmap-cell {
+            transition: all 0.2s ease;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .ai-prediction {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .market-alert {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .data-point {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/salary-analyzer" class="text-text-light hover:text-primary transition">Salaires</a>
+                    <a href="/market-insights" class="text-primary font-semibold">Marché</a>
+                    <a href="/networking" class="text-text-light hover:text-primary transition">Networking</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-text-light hover:text-primary transition">
+                        <span class="material-icons">notifications</span>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full market-alert"></span>
+                    </button>
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-display font-bold text-primary mb-4">
+                Insights Marché IA
+            </h1>
+            <p class="text-xl text-text-light max-w-3xl mx-auto">
+                Analysez les tendances du marché de l'emploi en temps réel avec notre IA qui traite 
+                des millions de données pour vous donner un avantage concurrentiel.
+            </p>
+        </div>
+
+        <!-- Market Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Market Health -->
+            <div class="insight-card bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                        <span class="material-icons text-white">trending_up</span>
+                    </div>
+                    <span class="text-success font-semibold">+8.5%</span>
+                </div>
+                <h3 class="text-2xl font-bold text-primary data-point">Excellent</h3>
+                <p class="text-text-light">Santé du marché Tech</p>
+                <div class="mt-4 text-xs text-text-light">
+                    <span class="material-icons text-sm mr-1">info</span>
+                    Basé sur 50K+ offres analysées
+                </div>
+            </div>
+
+            <!-- Job Openings -->
+            <div class="insight-card bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                        <span class="material-icons text-white">work</span>
+                    </div>
+                    <span class="text-info font-semibold">+12%</span>
+                </div>
+                <h3 class="text-2xl font-bold text-primary data-point">24,567</h3>
+                <p class="text-text-light">Postes ouverts</p>
+                <div class="mt-4 text-xs text-text-light">
+                    <span class="material-icons text-sm mr-1">schedule</span>
+                    Mis à jour il y a 2h
+                </div>
+            </div>
+
+            <!-- Average Salary -->
+            <div class="insight-card bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="material-icons text-white">euro</span>
+                    </div>
+                    <span class="text-success font-semibold">+6.2%</span>
+                </div>
+                <h3 class="text-2xl font-bold text-primary data-point">58,400€</h3>
+                <p class="text-text-light">Salaire médian</p>
+                <div class="mt-4 text-xs text-text-light">
+                    <span class="material-icons text-sm mr-1">trending_up</span>
+                    Évolution annuelle
+                </div>
+            </div>
+
+            <!-- Competition Level -->
+            <div class="insight-card bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                        <span class="material-icons text-white">groups</span>
+                    </div>
+                    <span class="text-warning font-semibold">Modérée</span>
+                </div>
+                <h3 class="text-2xl font-bold text-primary data-point">3.2</h3>
+                <p class="text-text-light">Candidats par poste</p>
+                <div class="mt-4 text-xs text-text-light">
+                    <span class="material-icons text-sm mr-1">psychology</span>
+                    Analysé par IA
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Predictions -->
+        <div class="ai-prediction rounded-xl p-8 text-white mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-3xl font-bold">🔮 Prédictions IA pour 2024</h2>
+                <div class="text-right">
+                    <div class="text-sm opacity-75">Fiabilité</div>
+                    <div class="text-2xl font-bold">94%</div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white/10 backdrop-blur rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-3">📈 Secteurs en croissance</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span>IA & Machine Learning</span>
+                            <span class="text-green-300">+45%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Cybersécurité</span>
+                            <span class="text-green-300">+32%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Cloud Computing</span>
+                            <span class="text-green-300">+28%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white/10 backdrop-blur rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-3">🔥 Compétences hot</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span>Python</span>
+                            <span class="text-yellow-300">🔥 Très demandé</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Kubernetes</span>
+                            <span class="text-yellow-300">🔥 En hausse</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>React Native</span>
+                            <span class="text-yellow-300">🔥 Émergent</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white/10 backdrop-blur rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-3">💰 Évolution salaires</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span>DevOps Engineer</span>
+                            <span class="text-green-300">+15%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Data Scientist</span>
+                            <span class="text-green-300">+12%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Product Manager</span>
+                            <span class="text-green-300">+10%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Trends -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <!-- Salary Trends Chart -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <h3 class="text-xl font-semibold text-primary mb-4">📊 Évolution des salaires par secteur</h3>
+                <div class="chart-container">
+                    <canvas id="salaryTrendsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Skills Demand Chart -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <h3 class="text-xl font-semibold text-primary mb-4">🎯 Demande par compétence</h3>
+                <div class="chart-container">
+                    <canvas id="skillsDemandChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Geographic Insights -->
+        <div class="bg-white rounded-xl p-8 shadow-sm mb-12">
+            <h3 class="text-2xl font-bold text-primary mb-6">🗺️ Insights géographiques</h3>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Top Cities -->
+                <div>
+                    <h4 class="text-lg font-semibold text-primary mb-4">🏙️ Villes les plus dynamiques</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+                                    1
+                                </div>
+                                <div>
+                                    <div class="font-medium">Paris</div>
+                                    <div class="text-sm text-text-light">8,542 postes</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-semibold text-success">+18%</div>
+                                <div class="text-xs text-text-light">vs 2023</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+                                    2
+                                </div>
+                                <div>
+                                    <div class="font-medium">Lyon</div>
+                                    <div class="text-sm text-text-light">2,134 postes</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-semibold text-success">+22%</div>
+                                <div class="text-xs text-text-light">vs 2023</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-gradient-to-br from-orange-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+                                    3
+                                </div>
+                                <div>
+                                    <div class="font-medium">Toulouse</div>
+                                    <div class="text-sm text-text-light">1,876 postes</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-semibold text-success">+15%</div>
+                                <div class="text-xs text-text-light">vs 2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Remote Work Trends -->
+                <div>
+                    <h4 class="text-lg font-semibold text-primary mb-4">🏠 Télétravail</h4>
+                    <div class="space-y-4">
+                        <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
+                            <div class="text-3xl font-bold text-blue-600 mb-2">68%</div>
+                            <div class="text-sm text-text-light">Postes avec télétravail</div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm">Full remote</span>
+                                <div class="flex items-center">
+                                    <div class="w-20 h-2 bg-gray-200 rounded-full mr-2">
+                                        <div class="w-3/5 h-2 bg-blue-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm font-medium">24%</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm">Hybride</span>
+                                <div class="flex items-center">
+                                    <div class="w-20 h-2 bg-gray-200 rounded-full mr-2">
+                                        <div class="w-4/5 h-2 bg-green-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm font-medium">44%</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm">Présentiel</span>
+                                <div class="flex items-center">
+                                    <div class="w-20 h-2 bg-gray-200 rounded-full mr-2">
+                                        <div class="w-1/3 h-2 bg-orange-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm font-medium">32%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salary by Region -->
+                <div>
+                    <h4 class="text-lg font-semibold text-primary mb-4">💰 Salaires par région</h4>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm font-medium">Île-de-France</span>
+                            <span class="font-semibold">65,200€</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm font-medium">Auvergne-Rhône-Alpes</span>
+                            <span class="font-semibold">52,800€</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm font-medium">Occitanie</span>
+                            <span class="font-semibold">48,600€</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm font-medium">Nouvelle-Aquitaine</span>
+                            <span class="font-semibold">46,200€</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Insights -->
+        <div class="bg-white rounded-xl p-8 shadow-sm mb-12">
+            <h3 class="text-2xl font-bold text-primary mb-6">🏢 Insights entreprises</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Top Hiring Companies -->
+                <div>
+                    <h4 class="text-lg font-semibold text-primary mb-4">🔥 Entreprises qui recrutent le plus</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                            <div class="flex items-center">
+                                <img src="https://logo.clearbit.com/google.com" alt="Google" class="w-8 h-8 rounded mr-3">
+                                <span class="font-medium">Google</span>
+                            </div>
+                            <span class="text-sm text-success">+156 postes</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                            <div class="flex items-center">
+                                <img src="https://logo.clearbit.com/microsoft.com" alt="Microsoft" class="w-8 h-8 rounded mr-3">
+                                <span class="font-medium">Microsoft</span>
+                            </div>
+                            <span class="text-sm text-success">+124 postes</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                            <div class="flex items-center">
+                                <img src="https://logo.clearbit.com/amazon.com" alt="Amazon" class="w-8 h-8 rounded mr-3">
+                                <span class="font-medium">Amazon</span>
+                            </div>
+                            <span class="text-sm text-success">+98 postes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Startup vs Corporate -->
+                <div>
+                    <h4 class="text-lg font-semibold text-primary mb-4">🚀 Startups vs Grandes entreprises</h4>
+                    <div class="space-y-4">
+                        <div class="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
+                            <div class="text-2xl font-bold text-purple-600 mb-1">42%</div>
+                            <div class="text-sm text-text-light">Postes en startup</div>
+                        </div>
+                        <div class="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
+                            <div class="text-2xl font-bold text-blue-600 mb-1">58%</div>
+                            <div class="text-sm text-text-light">Grandes entreprises</div>
+                        </div>
+                        <div class="text-xs text-text-light text-center">
+                            Les startups offrent en moyenne 15% de plus en equity
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefits Trends -->
+                <div>
+                    <h4 class="text-lg font-semibold text-primary mb-4">🎁 Avantages les plus proposés</h4>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Télétravail</span>
+                            <div class="flex items-center">
+                                <div class="w-16 h-2 bg-gray-200 rounded-full mr-2">
+                                    <div class="w-full h-2 bg-green-500 rounded-full"></div>
+                                </div>
+                                <span class="text-sm font-medium">89%</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Mutuelle</span>
+                            <div class="flex items-center">
+                                <div class="w-16 h-2 bg-gray-200 rounded-full mr-2">
+                                    <div class="w-5/6 h-2 bg-blue-500 rounded-full"></div>
+                                </div>
+                                <span class="text-sm font-medium">76%</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Formation</span>
+                            <div class="flex items-center">
+                                <div class="w-16 h-2 bg-gray-200 rounded-full mr-2">
+                                    <div class="w-3/4 h-2 bg-purple-500 rounded-full"></div>
+                                </div>
+                                <span class="text-sm font-medium">68%</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Stock options</span>
+                            <div class="flex items-center">
+                                <div class="w-16 h-2 bg-gray-200 rounded-full mr-2">
+                                    <div class="w-1/3 h-2 bg-orange-500 rounded-full"></div>
+                                </div>
+                                <span class="text-sm font-medium">34%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personalized Insights -->
+        <div class="bg-white rounded-xl p-8 shadow-sm">
+            <h3 class="text-2xl font-bold text-primary mb-6">🎯 Insights personnalisés pour vous</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Your Market Position -->
+                <div>
+                    <h4 class="text-lg font-semibold text-primary mb-4">📍 Votre position sur le marché</h4>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-success/10 border border-success/20 rounded-lg">
+                            <h5 class="font-medium text-success mb-2">Position forte</h5>
+                            <p class="text-sm text-text-light">
+                                Vos compétences React + Node.js sont très demandées. 
+                                Vous êtes dans le top 15% des candidats.
+                            </p>
+                        </div>
+                        
+                        <div class="p-4 bg-info/10 border border-info/20 rounded-lg">
+                            <h5 class="font-medium text-info mb-2">Opportunités</h5>
+                            <p class="text-sm text-text-light">
+                                156 nouvelles offres correspondent à votre profil cette semaine. 
+                                +23% par rapport à la semaine dernière.
+                            </p>
+                        </div>
+                        
+                        <div class="p-4 bg-warning/10 border border-warning/20 rounded-lg">
+                            <h5 class="font-medium text-warning mb-2">Recommandation</h5>
+                            <p class="text-sm text-text-light">
+                                Ajoutez TypeScript à vos compétences pour augmenter 
+                                vos opportunités de 40%.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Alerts -->
+                <div>
+                    <h4 class="text-lg font-semibold text-primary mb-4">🚨 Alertes marché</h4>
+                    <div class="space-y-4">
+                        <div class="p-4 border-l-4 border-accent bg-accent/5 rounded-r-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-accent">Nouvelle tendance détectée</h5>
+                                <span class="text-xs text-text-light">Il y a 2h</span>
+                            </div>
+                            <p class="text-sm text-text-light">
+                                Les offres mentionnant "IA" ont augmenté de 45% ce mois-ci. 
+                                C'est le moment d'ajouter cette compétence !
+                            </p>
+                        </div>
+                        
+                        <div class="p-4 border-l-4 border-success bg-success/5 rounded-r-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-success">Salaires en hausse</h5>
+                                <span class="text-xs text-text-light">Hier</span>
+                            </div>
+                            <p class="text-sm text-text-light">
+                                Les salaires pour votre profil ont augmenté de 8% 
+                                dans la région parisienne.
+                            </p>
+                        </div>
+                        
+                        <div class="p-4 border-l-4 border-info bg-info/5 rounded-r-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-info">Entreprise recommandée</h5>
+                                <span class="text-xs text-text-light">Il y a 1 jour</span>
+                            </div>
+                            <p class="text-sm text-text-light">
+                                Spotify recrute activement des profils comme le vôtre. 
+                                Taux d'acceptation: 78%.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap gap-4 mt-8 justify-center">
+                <button onclick="setupAlerts()" 
+                        class="px-6 py-3 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition">
+                    <span class="material-icons mr-2">notifications_active</span>
+                    Configurer les alertes
+                </button>
+                <button onclick="exportReport()" 
+                        class="px-6 py-3 bg-info text-white rounded-lg font-medium hover:bg-blue-600 transition">
+                    <span class="material-icons mr-2">download</span>
+                    Exporter le rapport
+                </button>
+                <button onclick="shareInsights()" 
+                        class="px-6 py-3 border border-gray-200 text-text-dark rounded-lg hover:bg-gray-50 transition">
+                    <span class="material-icons mr-2">share</span>
+                    Partager les insights
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('/login');
+        }
+
+        // Créer les graphiques
+        function createSalaryTrendsChart() {
+            const ctx = document.getElementById('salaryTrendsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Frontend',
+                        data: [52000, 53200, 54100, 55300, 56200, 57800],
+                        borderColor: '#e17055',
+                        backgroundColor: 'rgba(225, 112, 85, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Backend',
+                        data: [55000, 56100, 57200, 58500, 59800, 61200],
+                        borderColor: '#74b9ff',
+                        backgroundColor: 'rgba(116, 185, 255, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Full Stack',
+                        data: [58000, 59300, 60500, 62100, 63400, 65000],
+                        borderColor: '#00b894',
+                        backgroundColor: 'rgba(0, 184, 148, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString() + '€';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createSkillsDemandChart() {
+            const ctx = document.getElementById('skillsDemandChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['React', 'Vue.js', 'Angular', 'Node.js', 'Python', 'Autres'],
+                    datasets: [{
+                        data: [35, 20, 15, 18, 8, 4],
+                        backgroundColor: [
+                            '#e17055',
+                            '#74b9ff',
+                            '#00b894',
+                            '#fdcb6e',
+                            '#a29bfe',
+                            '#fd79a8'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fonctions d'action
+        function setupAlerts() {
+            Notifications.info('Configuration des alertes marché... ⚙️');
+            
+            setTimeout(() => {
+                Notifications.success('Alertes configurées ! Vous recevrez des notifications personnalisées.');
+                Analytics.trackEvent('market_alerts_configured');
+            }, 1500);
+        }
+
+        function exportReport() {
+            Notifications.info('Génération du rapport en cours... 📊');
+            
+            setTimeout(() => {
+                Notifications.success('Rapport exporté avec succès !');
+                Analytics.trackEvent('market_report_exported');
+            }, 2000);
+        }
+
+        function shareInsights() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Insights Marché MotivAI',
+                    text: 'Découvrez les dernières tendances du marché tech avec MotivAI',
+                    url: window.location.href
+                });
+            } else {
+                Notifications.info('Lien copié dans le presse-papier !');
+            }
+            Analytics.trackEvent('market_insights_shared');
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Créer les graphiques
+            createSalaryTrendsChart();
+            createSkillsDemandChart();
+            
+            // Animation des données au scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('data-point');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.insight-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            // Simulation de mises à jour en temps réel
+            setInterval(() => {
+                const alerts = document.querySelectorAll('.market-alert');
+                alerts.forEach(alert => {
+                    alert.style.animation = 'none';
+                    setTimeout(() => {
+                        alert.style.animation = 'pulse 2s infinite';
+                    }, 100);
+                });
+            }, 30000);
+        });
+
+        // Simulation de nouvelles données
+        setTimeout(() => {
+            Notifications.info('📈 Nouvelle tendance détectée : Les offres "Remote First" ont augmenté de 23% !');
+        }, 10000);
+
+        setTimeout(() => {
+            Notifications.success('💰 Alerte salaire : Augmentation moyenne de 5% pour les développeurs React dans votre région !');
+        }, 20000);
+    </script>
+</body>
+</html>

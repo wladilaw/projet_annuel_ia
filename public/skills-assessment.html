@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Évaluation de Compétences IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .skill-card {
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-circle {
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle-bg {
+            stroke: #e5e7eb;
+        }
+
+        .progress-circle-fill {
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease-in-out;
+        }
+
+        .quiz-question {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .answer-option {
+            transition: all 0.2s ease;
+        }
+
+        .answer-option:hover {
+            background-color: #f3f4f6;
+            transform: translateX(4px);
+        }
+
+        .answer-option.selected {
+            background-color: #e17055;
+            color: white;
+        }
+
+        .radar-chart {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/career-path" class="text-text-light hover:text-primary transition">Carrière</a>
+                    <a href="/skills-assessment" class="text-primary font-semibold">Compétences</a>
+                    <a href="/ai-coach" class="text-text-light hover:text-primary transition">Coach IA</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-display font-bold text-primary mb-4">
+                Évaluation de Compétences IA
+            </h1>
+            <p class="text-xl text-text-light max-w-3xl mx-auto">
+                Découvrez vos forces, identifiez vos axes d'amélioration et obtenez un plan personnalisé 
+                pour développer les compétences les plus demandées sur le marché.
+            </p>
+        </div>
+
+        <!-- Assessment Overview -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12" id="overviewSection">
+            <!-- Current Skills Overview -->
+            <div class="lg:col-span-3 bg-white rounded-xl p-8 shadow-sm">
+                <h2 class="text-2xl font-bold text-primary mb-6">📊 Votre profil de compétences actuel</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Technical Skills -->
+                    <div class="skill-card text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
+                        <div class="relative w-24 h-24 mx-auto mb-4">
+                            <svg class="progress-circle w-24 h-24">
+                                <circle class="progress-circle-bg" cx="48" cy="48" r="40" stroke-width="8" fill="none"/>
+                                <circle class="progress-circle-fill" cx="48" cy="48" r="40" stroke-width="8" fill="none" 
+                                        stroke="#3b82f6" stroke-dasharray="251.2" stroke-dashoffset="75.36"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-xl font-bold text-blue-600">70%</span>
+                            </div>
+                        </div>
+                        <h3 class="font-semibold text-primary mb-2">Compétences Techniques</h3>
+                        <p class="text-sm text-text-light">JavaScript, React, Node.js</p>
+                    </div>
+
+                    <!-- Soft Skills -->
+                    <div class="skill-card text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
+                        <div class="relative w-24 h-24 mx-auto mb-4">
+                            <svg class="progress-circle w-24 h-24">
+                                <circle class="progress-circle-bg" cx="48" cy="48" r="40" stroke-width="8" fill="none"/>
+                                <circle class="progress-circle-fill" cx="48" cy="48" r="40" stroke-width="8" fill="none" 
+                                        stroke="#10b981" stroke-dasharray="251.2" stroke-dashoffset="87.92"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-xl font-bold text-green-600">65%</span>
+                            </div>
+                        </div>
+                        <h3 class="font-semibold text-primary mb-2">Soft Skills</h3>
+                        <p class="text-sm text-text-light">Communication, Leadership</p>
+                    </div>
+
+                    <!-- Industry Knowledge -->
+                    <div class="skill-card text-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
+                        <div class="relative w-24 h-24 mx-auto mb-4">
+                            <svg class="progress-circle w-24 h-24">
+                                <circle class="progress-circle-bg" cx="48" cy="48" r="40" stroke-width="8" fill="none"/>
+                                <circle class="progress-circle-fill" cx="48" cy="48" r="40" stroke-width="8" fill="none" 
+                                        stroke="#8b5cf6" stroke-dasharray="251.2" stroke-dashoffset="125.6"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-xl font-bold text-purple-600">50%</span>
+                            </div>
+                        </div>
+                        <h3 class="font-semibold text-primary mb-2">Connaissances Secteur</h3>
+                        <p class="text-sm text-text-light">Fintech, E-commerce</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="mt-8 flex flex-wrap gap-4 justify-center">
+                    <button onclick="startAssessment('technical')" 
+                            class="px-6 py-3 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition flex items-center">
+                        <span class="material-icons mr-2">quiz</span>
+                        Évaluation technique
+                    </button>
+                    <button onclick="startAssessment('soft-skills')" 
+                            class="px-6 py-3 bg-info text-white rounded-lg font-medium hover:bg-blue-600 transition flex items-center">
+                        <span class="material-icons mr-2">psychology</span>
+                        Évaluation soft skills
+                    </button>
+                    <button onclick="startAssessment('comprehensive')" 
+                            class="px-6 py-3 bg-success text-white rounded-lg font-medium hover:bg-green-600 transition flex items-center">
+                        <span class="material-icons mr-2">assessment</span>
+                        Évaluation complète
+                    </button>
+                </div>
+            </div>
+
+            <!-- Assessment Stats -->
+            <div class="space-y-6">
+                <!-- Progress Tracker -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">📈 Vos progrès</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Évaluations complétées</span>
+                            <span class="font-semibold">8</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Score moyen</span>
+                            <span class="font-semibold text-success">7.2/10</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Amélioration</span>
+                            <span class="font-semibold text-info">+15%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Rang percentile</span>
+                            <span class="font-semibold text-accent">Top 25%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommended Skills -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">🎯 Compétences recommandées</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm font-medium">TypeScript</span>
+                            <span class="text-xs text-success bg-success/10 px-2 py-1 rounded-full">+20% salaire</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm font-medium">AWS</span>
+                            <span class="text-xs text-info bg-info/10 px-2 py-1 rounded-full">Très demandé</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm font-medium">Leadership</span>
+                            <span class="text-xs text-warning bg-warning/10 px-2 py-1 rounded-full">Évolution</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Assessment -->
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+                    <h3 class="font-semibold mb-2">🚀 Prochaine étape</h3>
+                    <p class="text-purple-100 text-sm mb-4">
+                        Évaluez vos compétences en architecture système pour débloquer de nouvelles opportunités.
+                    </p>
+                    <button class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm transition">
+                        Commencer l'évaluation
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assessment Interface (Hidden by default) -->
+        <div id="assessmentSection" class="hidden">
+            <div class="bg-white rounded-xl p-8 shadow-sm">
+                <!-- Assessment Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-primary" id="assessmentTitle">Évaluation Technique</h2>
+                        <p class="text-text-light" id="assessmentDescription">Testez vos connaissances en développement web</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm text-text-light">Question <span id="currentQuestion">1</span> sur <span id="totalQuestions">10</span></div>
+                        <div class="w-32 h-2 bg-gray-200 rounded-full mt-2">
+                            <div class="h-2 bg-accent rounded-full transition-all duration-300" id="progressBar" style="width: 10%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question -->
+                <div class="quiz-question mb-8" id="questionContainer">
+                    <h3 class="text-xl font-semibold text-primary mb-6" id="questionText">
+                        Quelle est la différence principale entre let et var en JavaScript ?
+                    </h3>
+                    
+                    <div class="space-y-3" id="answersContainer">
+                        <div class="answer-option p-4 border border-gray-200 rounded-lg cursor-pointer" data-answer="a">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 border-2 border-gray-300 rounded-full mr-4 flex items-center justify-center">
+                                    <div class="w-3 h-3 bg-accent rounded-full hidden"></div>
+                                </div>
+                                <span>let a une portée de bloc, var a une portée de fonction</span>
+                            </div>
+                        </div>
+                        <div class="answer-option p-4 border border-gray-200 rounded-lg cursor-pointer" data-answer="b">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 border-2 border-gray-300 rounded-full mr-4 flex items-center justify-center">
+                                    <div class="w-3 h-3 bg-accent rounded-full hidden"></div>
+                                </div>
+                                <span>Il n'y a aucune différence</span>
+                            </div>
+                        </div>
+                        <div class="answer-option p-4 border border-gray-200 rounded-lg cursor-pointer" data-answer="c">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 border-2 border-gray-300 rounded-full mr-4 flex items-center justify-center">
+                                    <div class="w-3 h-3 bg-accent rounded-full hidden"></div>
+                                </div>
+                                <span>var est plus récent que let</span>
+                            </div>
+                        </div>
+                        <div class="answer-option p-4 border border-gray-200 rounded-lg cursor-pointer" data-answer="d">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 border-2 border-gray-300 rounded-full mr-4 flex items-center justify-center">
+                                    <div class="w-3 h-3 bg-accent rounded-full hidden"></div>
+                                </div>
+                                <span>let ne peut pas être redéclaré dans le même scope</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex justify-between items-center">
+                    <button onclick="previousQuestion()" 
+                            class="px-6 py-3 border border-gray-200 text-text-dark rounded-lg hover:bg-gray-50 transition" 
+                            id="prevButton" disabled>
+                        <span class="material-icons mr-2">arrow_back</span>
+                        Précédent
+                    </button>
+                    
+                    <div class="flex space-x-4">
+                        <button onclick="skipQuestion()" 
+                                class="px-6 py-3 text-text-light hover:text-accent transition">
+                            Passer
+                        </button>
+                        <button onclick="nextQuestion()" 
+                                class="px-6 py-3 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition" 
+                                id="nextButton">
+                            Suivant
+                            <span class="material-icons ml-2">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section (Hidden by default) -->
+        <div id="resultsSection" class="hidden">
+            <div class="bg-white rounded-xl p-8 shadow-sm mb-8">
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-success rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="material-icons text-3xl text-white">check</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-primary mb-2">Évaluation terminée !</h2>
+                    <p class="text-text-light">Voici votre analyse détaillée et vos recommandations personnalisées</p>
+                </div>
+
+                <!-- Score Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="text-center p-6 bg-gray-50 rounded-xl">
+                        <div class="text-3xl font-bold text-accent mb-2">8.2</div>
+                        <div class="text-sm text-text-light">Score global</div>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-xl">
+                        <div class="text-3xl font-bold text-success mb-2">9.1</div>
+                        <div class="text-sm text-text-light">Compétences techniques</div>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-xl">
+                        <div class="text-3xl font-bold text-info mb-2">7.5</div>
+                        <div class="text-sm text-text-light">Architecture</div>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-xl">
+                        <div class="text-3xl font-bold text-warning mb-2">7.8</div>
+                        <div class="text-sm text-text-light">Bonnes pratiques</div>
+                    </div>
+                </div>
+
+                <!-- Detailed Analysis -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Radar Chart -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary mb-4">📊 Profil de compétences</h3>
+                        <div class="radar-chart">
+                            <canvas id="skillsRadarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary mb-4">🎯 Recommandations</h3>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-success/10 border border-success/20 rounded-lg">
+                                <h4 class="font-medium text-success mb-2">Points forts</h4>
+                                <ul class="text-sm text-text-light space-y-1">
+                                    <li>• Excellente maîtrise de JavaScript ES6+</li>
+                                    <li>• Bonne compréhension des frameworks React</li>
+                                    <li>• Solides bases en développement backend</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="p-4 bg-warning/10 border border-warning/20 rounded-lg">
+                                <h4 class="font-medium text-warning mb-2">Axes d'amélioration</h4>
+                                <ul class="text-sm text-text-light space-y-1">
+                                    <li>• Approfondir les concepts d'architecture système</li>
+                                    <li>• Renforcer les connaissances en sécurité web</li>
+                                    <li>• Développer les compétences DevOps</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="p-4 bg-info/10 border border-info/20 rounded-lg">
+                                <h4 class="font-medium text-info mb-2">Prochaines étapes</h4>
+                                <ul class="text-sm text-text-light space-y-1">
+                                    <li>• Formation AWS Solutions Architect</li>
+                                    <li>• Certification en sécurité applicative</li>
+                                    <li>• Projet personnel avec microservices</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-4 mt-8 justify-center">
+                    <button onclick="downloadReport()" 
+                            class="px-6 py-3 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition">
+                        <span class="material-icons mr-2">download</span>
+                        Télécharger le rapport
+                    </button>
+                    <button onclick="createLearningPlan()" 
+                            class="px-6 py-3 bg-success text-white rounded-lg font-medium hover:bg-green-600 transition">
+                        <span class="material-icons mr-2">school</span>
+                        Plan d'apprentissage
+                    </button>
+                    <button onclick="shareResults()" 
+                            class="px-6 py-3 bg-info text-white rounded-lg font-medium hover:bg-blue-600 transition">
+                        <span class="material-icons mr-2">share</span>
+                        Partager les résultats
+                    </button>
+                    <button onclick="restartAssessment()" 
+                            class="px-6 py-3 border border-gray-200 text-text-dark rounded-lg hover:bg-gray-50 transition">
+                        <span class="material-icons mr-2">refresh</span>
+                        Nouvelle évaluation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('/login');
+        }
+
+        let currentQuestionIndex = 0;
+        let selectedAnswers = {};
+        let assessmentType = '';
+        
+        const questions = {
+            technical: [
+                {
+                    question: "Quelle est la différence principale entre let et var en JavaScript ?",
+                    answers: [
+                        "let a une portée de bloc, var a une portée de fonction",
+                        "Il n'y a aucune différence",
+                        "var est plus récent que let",
+                        "let ne peut pas être redéclaré dans le même scope"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "Qu'est-ce que le Virtual DOM dans React ?",
+                    answers: [
+                        "Une copie du DOM réel stockée en mémoire",
+                        "Un DOM virtuel qui n'existe pas",
+                        "Une méthode pour créer des composants",
+                        "Un outil de débogage"
+                    ],
+                    correct: 0
+                },
+                {
+                    question: "Quelle méthode HTTP est idempotente ?",
+                    answers: [
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE"
+                    ],
+                    correct: 1
+                }
+            ]
+        };
+
+        function startAssessment(type) {
+            assessmentType = type;
+            currentQuestionIndex = 0;
+            selectedAnswers = {};
+            
+            // Masquer la vue d'ensemble et afficher l'évaluation
+            document.getElementById('overviewSection').classList.add('hidden');
+            document.getElementById('assessmentSection').classList.remove('hidden');
+            
+            // Mettre à jour le titre
+            const titles = {
+                'technical': 'Évaluation Technique',
+                'soft-skills': 'Évaluation Soft Skills',
+                'comprehensive': 'Évaluation Complète'
+            };
+            
+            document.getElementById('assessmentTitle').textContent = titles[type];
+            document.getElementById('totalQuestions').textContent = questions.technical.length;
+            
+            loadQuestion();
+            
+            Analytics.trackEvent('skills_assessment_started', {
+                assessment_type: type
+            });
+        }
+
+        function loadQuestion() {
+            const question = questions.technical[currentQuestionIndex];
+            if (!question) return;
+            
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            
+            const progress = ((currentQuestionIndex + 1) / questions.technical.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Charger les réponses
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'answer-option p-4 border border-gray-200 rounded-lg cursor-pointer';
+                answerDiv.dataset.answer = index;
+                answerDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 border-2 border-gray-300 rounded-full mr-4 flex items-center justify-center">
+                            <div class="w-3 h-3 bg-accent rounded-full hidden"></div>
+                        </div>
+                        <span>${answer}</span>
+                    </div>
+                `;
+                
+                answerDiv.addEventListener('click', () => selectAnswer(index));
+                answersContainer.appendChild(answerDiv);
+            });
+            
+            // Mettre à jour les boutons
+            document.getElementById('prevButton').disabled = currentQuestionIndex === 0;
+            document.getElementById('nextButton').textContent = 
+                currentQuestionIndex === questions.technical.length - 1 ? 'Terminer' : 'Suivant';
+        }
+
+        function selectAnswer(answerIndex) {
+            // Désélectionner toutes les réponses
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.classList.remove('selected');
+                option.querySelector('.w-3').classList.add('hidden');
+            });
+            
+            // Sélectionner la réponse choisie
+            const selectedOption = document.querySelector(`[data-answer="${answerIndex}"]`);
+            selectedOption.classList.add('selected');
+            selectedOption.querySelector('.w-3').classList.remove('hidden');
+            
+            selectedAnswers[currentQuestionIndex] = answerIndex;
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.technical.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                finishAssessment();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function skipQuestion() {
+            nextQuestion();
+        }
+
+        function finishAssessment() {
+            // Calculer le score
+            let correctAnswers = 0;
+            questions.technical.forEach((question, index) => {
+                if (selectedAnswers[index] === question.correct) {
+                    correctAnswers++;
+                }
+            });
+            
+            const score = (correctAnswers / questions.technical.length) * 10;
+            
+            // Masquer l'évaluation et afficher les résultats
+            document.getElementById('assessmentSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+            
+            // Créer le graphique radar
+            createRadarChart();
+            
+            Analytics.trackEvent('skills_assessment_completed', {
+                assessment_type: assessmentType,
+                score: score,
+                correct_answers: correctAnswers,
+                total_questions: questions.technical.length
+            });
+
+            Notifications.success('Évaluation terminée ! Consultez vos résultats ci-dessous.');
+        }
+
+        function createRadarChart() {
+            const ctx = document.getElementById('skillsRadarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['JavaScript', 'React', 'Node.js', 'Architecture', 'Sécurité', 'DevOps'],
+                    datasets: [{
+                        label: 'Votre niveau',
+                        data: [9.1, 8.5, 7.8, 7.5, 6.2, 6.8],
+                        borderColor: '#e17055',
+                        backgroundColor: 'rgba(225, 112, 85, 0.2)',
+                        pointBackgroundColor: '#e17055',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }, {
+                        label: 'Niveau requis (Senior)',
+                        data: [8.5, 8.0, 8.0, 8.5, 8.0, 7.5],
+                        borderColor: '#74b9ff',
+                        backgroundColor: 'rgba(116, 185, 255, 0.1)',
+                        pointBackgroundColor: '#74b9ff',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                stepSize: 2
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function downloadReport() {
+            Notifications.success('Rapport de compétences téléchargé !');
+            Analytics.trackEvent('skills_report_downloaded');
+        }
+
+        function createLearningPlan() {
+            Navigation.redirectTo('/career-path');
+        }
+
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Mes résultats d\'évaluation MotivAI',
+                    text: 'Je viens de terminer mon évaluation de compétences avec MotivAI !',
+                    url: window.location.href
+                });
+            } else {
+                Notifications.info('Lien copié dans le presse-papier !');
+            }
+        }
+
+        function restartAssessment() {
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('overviewSection').classList.remove('hidden');
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animation des cercles de progression
+            const circles = document.querySelectorAll('.progress-circle-fill');
+            circles.forEach(circle => {
+                const circumference = 2 * Math.PI * 40;
+                circle.style.strokeDasharray = circumference;
+                circle.style.strokeDashoffset = circumference;
+                
+                setTimeout(() => {
+                    const offset = circle.getAttribute('stroke-dashoffset');
+                    circle.style.strokeDashoffset = offset;
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

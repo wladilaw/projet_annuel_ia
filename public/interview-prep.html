@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Préparation Entretiens IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .video-container {
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .recording-indicator {
+            animation: pulse 1.5s infinite;
+        }
+
+        .question-card {
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+
+        .feedback-item {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/ai-coach" class="text-text-light hover:text-primary transition">Coach IA</a>
+                    <a href="/interview-prep" class="text-primary font-semibold">Entretiens</a>
+                    <a href="/career-path" class="text-text-light hover:text-primary transition">Carrière</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-display font-bold text-primary mb-4">
+                Préparation d'entretiens avec l'IA
+            </h1>
+            <p class="text-xl text-text-light max-w-3xl mx-auto">
+                Entraînez-vous avec notre IA avancée qui simule de vrais entretiens d'embauche. 
+                Recevez des feedbacks personnalisés pour maximiser vos chances de succès.
+            </p>
+        </div>
+
+        <!-- Interview Setup -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12" id="setupSection">
+            <!-- Configuration -->
+            <div class="lg:col-span-2 bg-white rounded-xl p-8 shadow-sm">
+                <h2 class="text-2xl font-bold text-primary mb-6">Configuration de l'entretien</h2>
+                
+                <div class="space-y-6">
+                    <!-- Job Position -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Poste visé</label>
+                        <input type="text" id="jobPosition" placeholder="Ex: Développeur Full Stack Senior" 
+                               class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                    </div>
+
+                    <!-- Company -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Entreprise (optionnel)</label>
+                        <input type="text" id="company" placeholder="Ex: Google, Microsoft..." 
+                               class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                    </div>
+
+                    <!-- Interview Type -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Type d'entretien</label>
+                        <select id="interviewType" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            <option value="behavioral">Entretien comportemental</option>
+                            <option value="technical">Entretien technique</option>
+                            <option value="case-study">Étude de cas</option>
+                            <option value="mixed">Entretien mixte</option>
+                        </select>
+                    </div>
+
+                    <!-- Experience Level -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Niveau d'expérience</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-accent transition">
+                                <input type="radio" name="experience" value="junior" class="mr-2">
+                                <span class="text-sm">Junior (0-2 ans)</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-accent transition">
+                                <input type="radio" name="experience" value="mid" class="mr-2" checked>
+                                <span class="text-sm">Mid (3-5 ans)</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-accent transition">
+                                <input type="radio" name="experience" value="senior" class="mr-2">
+                                <span class="text-sm">Senior (5+ ans)</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-accent transition">
+                                <input type="radio" name="experience" value="lead" class="mr-2">
+                                <span class="text-sm">Lead/Manager</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Duration -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Durée de l'entretien</label>
+                        <select id="duration" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            <option value="15">15 minutes (Express)</option>
+                            <option value="30" selected>30 minutes (Standard)</option>
+                            <option value="45">45 minutes (Approfondi)</option>
+                            <option value="60">60 minutes (Complet)</option>
+                        </select>
+                    </div>
+
+                    <!-- Start Button -->
+                    <button onclick="startInterview()" 
+                            class="w-full bg-accent text-white py-4 rounded-lg font-semibold hover:bg-accent-dark transition flex items-center justify-center">
+                        <span class="material-icons mr-2">play_arrow</span>
+                        Commencer l'entretien
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tips & Stats -->
+            <div class="space-y-6">
+                <!-- Quick Tips -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">💡 Conseils rapides</h3>
+                    <ul class="space-y-3 text-sm text-text-light">
+                        <li class="flex items-start">
+                            <span class="material-icons text-success text-base mr-2 mt-0.5">check_circle</span>
+                            Testez votre micro et caméra avant de commencer
+                        </li>
+                        <li class="flex items-start">
+                            <span class="material-icons text-success text-base mr-2 mt-0.5">check_circle</span>
+                            Préparez des exemples concrets de vos réalisations
+                        </li>
+                        <li class="flex items-start">
+                            <span class="material-icons text-success text-base mr-2 mt-0.5">check_circle</span>
+                            Gardez votre CV et la description du poste à portée
+                        </li>
+                        <li class="flex items-start">
+                            <span class="material-icons text-success text-base mr-2 mt-0.5">check_circle</span>
+                            Restez naturel et authentique
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Your Stats -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">📊 Vos statistiques</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Entretiens complétés</span>
+                            <span class="font-semibold">12</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Score moyen</span>
+                            <span class="font-semibold text-success">8.4/10</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Temps de réponse moyen</span>
+                            <span class="font-semibold">12s</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Domaine favori</span>
+                            <span class="font-semibold">Technique</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Sessions -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">🕒 Sessions récentes</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="text-sm font-medium">Développeur React</p>
+                                <p class="text-xs text-text-light">Il y a 2 jours</p>
+                            </div>
+                            <span class="text-success font-semibold">9.2</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="text-sm font-medium">Product Manager</p>
+                                <p class="text-xs text-text-light">Il y a 1 semaine</p>
+                            </div>
+                            <span class="text-warning font-semibold">7.8</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interview Interface (Hidden by default) -->
+        <div id="interviewSection" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Video & Question -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Video Container -->
+                    <div class="video-container aspect-video">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center text-white">
+                                <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="material-icons text-4xl">videocam</span>
+                                </div>
+                                <p class="text-lg font-medium">Votre caméra apparaîtra ici</p>
+                                <p class="text-sm opacity-75">Cliquez sur "Autoriser" quand votre navigateur le demande</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Recording Indicator -->
+                        <div class="absolute top-4 left-4 flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-red-500 rounded-full recording-indicator"></div>
+                            <span class="text-white text-sm font-medium">REC</span>
+                        </div>
+
+                        <!-- Timer -->
+                        <div class="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm font-medium">
+                            <span id="timer">00:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Current Question -->
+                    <div class="bg-white rounded-xl p-8 shadow-sm">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-semibold text-primary">Question <span id="questionNumber">1</span>/10</h3>
+                            <div class="flex items-center space-x-4">
+                                <button onclick="skipQuestion()" class="text-text-light hover:text-accent transition">
+                                    <span class="material-icons">skip_next</span>
+                                </button>
+                                <button onclick="pauseInterview()" class="text-text-light hover:text-accent transition">
+                                    <span class="material-icons">pause</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <p class="text-lg text-text-dark leading-relaxed" id="currentQuestion">
+                                Pouvez-vous vous présenter en quelques mots et nous expliquer pourquoi vous êtes intéressé par ce poste ?
+                            </p>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="mb-6">
+                            <div class="flex justify-between text-sm text-text-light mb-2">
+                                <span>Progression</span>
+                                <span id="progressText">10%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="progress-bar bg-accent h-2 rounded-full" style="width: 10%" id="progressBar"></div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex space-x-4">
+                            <button onclick="nextQuestion()" 
+                                    class="flex-1 bg-accent text-white py-3 rounded-lg font-medium hover:bg-accent-dark transition">
+                                Question suivante
+                            </button>
+                            <button onclick="endInterview()" 
+                                    class="px-6 py-3 border border-gray-200 text-text-dark rounded-lg hover:bg-gray-50 transition">
+                                Terminer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interview Panel -->
+                <div class="space-y-6">
+                    <!-- AI Interviewer -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                                <span class="material-icons text-white">person</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Sarah Chen</h4>
+                                <p class="text-sm text-text-light">Responsable Technique</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-text-light">
+                            Je vais vous poser une série de questions pour évaluer vos compétences et votre adéquation avec le poste. 
+                            Prenez votre temps pour répondre.
+                        </p>
+                    </div>
+
+                    <!-- Live Feedback -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <h4 class="font-semibold text-primary mb-4">📈 Feedback en temps réel</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Clarté de la voix</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 h-2 bg-gray-200 rounded-full">
+                                        <div class="w-12 h-2 bg-success rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm text-success">Bon</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Contact visuel</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 h-2 bg-gray-200 rounded-full">
+                                        <div class="w-10 h-2 bg-warning rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm text-warning">Moyen</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Rythme de parole</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 h-2 bg-gray-200 rounded-full">
+                                        <div class="w-14 h-2 bg-success rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm text-success">Excellent</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <h4 class="font-semibold text-primary mb-4">📝 Vos notes</h4>
+                        <textarea placeholder="Notez vos idées, points clés à mentionner..." 
+                                  class="w-full h-32 p-3 border border-gray-200 rounded-lg resize-none focus:outline-none focus:border-accent"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section (Hidden by default) -->
+        <div id="resultsSection" class="hidden">
+            <div class="bg-white rounded-xl p-8 shadow-sm">
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-success rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="material-icons text-3xl text-white">check</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-primary mb-2">Entretien terminé !</h2>
+                    <p class="text-text-light">Voici votre analyse détaillée et vos axes d'amélioration</p>
+                </div>
+
+                <!-- Score Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="text-center p-6 bg-gray-50 rounded-xl">
+                        <div class="text-3xl font-bold text-success mb-2">8.7</div>
+                        <div class="text-sm text-text-light">Score global</div>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-xl">
+                        <div class="text-3xl font-bold text-info mb-2">9.2</div>
+                        <div class="text-sm text-text-light">Communication</div>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-xl">
+                        <div class="text-3xl font-bold text-warning mb-2">7.8</div>
+                        <div class="text-sm text-text-light">Technique</div>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-xl">
+                        <div class="text-3xl font-bold text-accent mb-2">9.0</div>
+                        <div class="text-sm text-text-light">Motivation</div>
+                    </div>
+                </div>
+
+                <!-- Detailed Feedback -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Strengths -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary mb-4">✅ Points forts</h3>
+                        <div class="space-y-3">
+                            <div class="feedback-item p-4 bg-success/10 border border-success/20 rounded-lg">
+                                <h4 class="font-medium text-success mb-1">Excellente communication</h4>
+                                <p class="text-sm text-text-light">Vos réponses étaient claires, structurées et bien articulées.</p>
+                            </div>
+                            <div class="feedback-item p-4 bg-success/10 border border-success/20 rounded-lg">
+                                <h4 class="font-medium text-success mb-1">Exemples concrets</h4>
+                                <p class="text-sm text-text-light">Vous avez fourni des exemples précis de vos réalisations.</p>
+                            </div>
+                            <div class="feedback-item p-4 bg-success/10 border border-success/20 rounded-lg">
+                                <h4 class="font-medium text-success mb-1">Motivation évidente</h4>
+                                <p class="text-sm text-text-light">Votre enthousiasme pour le poste était palpable.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Areas for Improvement -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary mb-4">🎯 Axes d'amélioration</h3>
+                        <div class="space-y-3">
+                            <div class="feedback-item p-4 bg-warning/10 border border-warning/20 rounded-lg">
+                                <h4 class="font-medium text-warning mb-1">Questions techniques</h4>
+                                <p class="text-sm text-text-light">Approfondissez vos connaissances sur les architectures microservices.</p>
+                            </div>
+                            <div class="feedback-item p-4 bg-info/10 border border-info/20 rounded-lg">
+                                <h4 class="font-medium text-info mb-1">Questions sur l'entreprise</h4>
+                                <p class="text-sm text-text-light">Préparez plus de questions spécifiques sur l'entreprise et l'équipe.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-4 mt-8 justify-center">
+                    <button onclick="downloadReport()" 
+                            class="px-6 py-3 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition">
+                        <span class="material-icons mr-2">download</span>
+                        Télécharger le rapport
+                    </button>
+                    <button onclick="scheduleCoaching()" 
+                            class="px-6 py-3 bg-info text-white rounded-lg font-medium hover:bg-blue-600 transition">
+                        <span class="material-icons mr-2">event</span>
+                        Programmer un coaching
+                    </button>
+                    <button onclick="restartInterview()" 
+                            class="px-6 py-3 border border-gray-200 text-text-dark rounded-lg hover:bg-gray-50 transition">
+                        <span class="material-icons mr-2">refresh</span>
+                        Nouvel entretien
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('/login');
+        }
+
+        let currentQuestionIndex = 0;
+        let interviewTimer = null;
+        let startTime = null;
+        
+        const questions = {
+            behavioral: [
+                "Pouvez-vous vous présenter en quelques mots et nous expliquer pourquoi vous êtes intéressé par ce poste ?",
+                "Décrivez-moi une situation où vous avez dû résoudre un problème complexe. Comment avez-vous procédé ?",
+                "Parlez-moi d'un moment où vous avez dû travailler en équipe sur un projet difficile.",
+                "Comment gérez-vous le stress et les deadlines serrées ?",
+                "Décrivez une situation où vous avez pris l'initiative sur un projet.",
+                "Quels sont vos points forts et vos axes d'amélioration ?",
+                "Où vous voyez-vous dans 5 ans ?",
+                "Pourquoi voulez-vous quitter votre poste actuel ?",
+                "Qu'est-ce qui vous motive le plus dans votre travail ?",
+                "Avez-vous des questions sur l'entreprise ou le poste ?"
+            ],
+            technical: [
+                "Expliquez-moi la différence entre une API REST et GraphQL.",
+                "Comment optimiseriez-vous les performances d'une application web ?",
+                "Décrivez votre approche pour déboguer un problème en production.",
+                "Quels sont les principes SOLID et pourquoi sont-ils importants ?",
+                "Comment gérez-vous la sécurité dans vos applications ?",
+                "Expliquez le concept de CI/CD et son importance.",
+                "Quelle est votre approche pour les tests automatisés ?",
+                "Comment structureriez-vous une base de données pour un e-commerce ?",
+                "Décrivez votre expérience avec les architectures microservices.",
+                "Quelles technologies aimeriez-vous apprendre ou approfondir ?"
+            ]
+        };
+
+        function startInterview() {
+            const jobPosition = document.getElementById('jobPosition').value;
+            const company = document.getElementById('company').value;
+            const interviewType = document.getElementById('interviewType').value;
+            
+            if (!jobPosition.trim()) {
+                Notifications.warning('Veuillez renseigner le poste visé');
+                return;
+            }
+
+            // Masquer la section setup et afficher l'interview
+            document.getElementById('setupSection').classList.add('hidden');
+            document.getElementById('interviewSection').classList.remove('hidden');
+            
+            // Initialiser l'entretien
+            currentQuestionIndex = 0;
+            startTime = Date.now();
+            updateQuestion();
+            startTimer();
+            
+            // Analytics
+            Analytics.trackEvent('interview_started', {
+                job_position: jobPosition,
+                company: company,
+                interview_type: interviewType
+            });
+
+            Notifications.success('Entretien démarré ! Bonne chance 🍀');
+        }
+
+        function updateQuestion() {
+            const interviewType = document.getElementById('interviewType').value;
+            const questionsList = questions[interviewType] || questions.behavioral;
+            
+            if (currentQuestionIndex < questionsList.length) {
+                document.getElementById('currentQuestion').textContent = questionsList[currentQuestionIndex];
+                document.getElementById('questionNumber').textContent = currentQuestionIndex + 1;
+                
+                const progress = ((currentQuestionIndex + 1) / questionsList.length) * 100;
+                document.getElementById('progressBar').style.width = progress + '%';
+                document.getElementById('progressText').textContent = Math.round(progress) + '%';
+            }
+        }
+
+        function nextQuestion() {
+            const interviewType = document.getElementById('interviewType').value;
+            const questionsList = questions[interviewType] || questions.behavioral;
+            
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex >= questionsList.length) {
+                endInterview();
+            } else {
+                updateQuestion();
+            }
+        }
+
+        function skipQuestion() {
+            nextQuestion();
+        }
+
+        function pauseInterview() {
+            if (interviewTimer) {
+                clearInterval(interviewTimer);
+                interviewTimer = null;
+                Notifications.info('Entretien mis en pause');
+            } else {
+                startTimer();
+                Notifications.info('Entretien repris');
+            }
+        }
+
+        function endInterview() {
+            if (interviewTimer) {
+                clearInterval(interviewTimer);
+            }
+            
+            // Masquer l'interview et afficher les résultats
+            document.getElementById('interviewSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+            
+            // Analytics
+            const duration = Math.round((Date.now() - startTime) / 1000);
+            Analytics.trackEvent('interview_completed', {
+                duration: duration,
+                questions_answered: currentQuestionIndex + 1
+            });
+
+            Notifications.success('Entretien terminé ! Consultez vos résultats ci-dessous.');
+        }
+
+        function startTimer() {
+            let seconds = 0;
+            interviewTimer = setInterval(() => {
+                seconds++;
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                document.getElementById('timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function downloadReport() {
+            // Simuler le téléchargement d'un rapport
+            Notifications.success('Rapport téléchargé avec succès !');
+            Analytics.trackEvent('interview_report_downloaded');
+        }
+
+        function scheduleCoaching() {
+            // Rediriger vers le coach IA
+            Navigation.redirectTo('/ai-coach');
+        }
+
+        function restartInterview() {
+            // Réinitialiser et retourner à la configuration
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('setupSection').classList.remove('hidden');
+            currentQuestionIndex = 0;
+            if (interviewTimer) {
+                clearInterval(interviewTimer);
+                interviewTimer = null;
+            }
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Vérifier les permissions caméra/micro
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                    .then(stream => {
+                        // Permissions accordées
+                        stream.getTracks().forEach(track => track.stop());
+                    })
+                    .catch(err => {
+                        Notifications.warning('Veuillez autoriser l\'accès à votre caméra et microphone pour une expérience optimale');
+                    });
+            }
+        });
+    </script>
+</body>
+</html>

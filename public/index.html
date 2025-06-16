@@ -1,714 +1,741 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MotivAI - Générateur de Lettres de Motivation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Barlow:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>MotivAI - Révolutionnez votre recherche d'emploi avec l'IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                        'scale-in': 'scaleIn 0.5s ease-out',
+                        'gradient': 'gradient 15s ease infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        slideUp: {
+                            from: { transform: 'translateY(30px)', opacity: '0' },
+                            to: { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeIn: {
+                            from: { opacity: '0' },
+                            to: { opacity: '1' },
+                        },
+                        scaleIn: {
+                            from: { transform: 'scale(0.9)', opacity: '0' },
+                            to: { transform: 'scale(1)', opacity: '1' },
+                        },
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
     <style>
-        /* Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .gradient-text {
+            background: linear-gradient(135deg, #e17055 0%, #c44569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        :root {
-            --primary-color: #2d3436;
-            --accent-color: #e17055;
-            --text-dark: #2d3436;
-            --text-light: #636e72;
-            --background-light: #fff5f3;
-            --background-white: #ffffff;
-            --shadow-soft: 0 2px 20px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
-            --border-radius: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .animated-gradient {
+            background: linear-gradient(270deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 800% 800%;
+            animation: gradient 15s ease infinite;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Barlow', sans-serif;
-            color: var(--text-dark);
-            background-color: var(--background-white);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Typography Styles */
-        h1, h2, h3, h4 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 900;
-            color: var(--text-dark);
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            margin-bottom: 1.5rem;
-        }
-
-        h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 1.2rem;
-        }
-
-        h3 {
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        p {
-            font-size: 1.125rem;
-            line-height: 1.8;
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-        }
-
-        .lead {
-            font-size: 1.25rem;
-            line-height: 1.7;
-            font-weight: 400;
-            color: var(--text-light);
-        }
-
-        /* Header Styles */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+        .glass {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            z-index: 1000;
-            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
+            -webkit-backdrop-filter: blur(10px);
         }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
+        .feature-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
         }
 
-        .logo {
-            font-family: 'Abril Fatface', cursive;
-            font-size: 2rem;
-            color: var(--accent-color);
-            text-decoration: none;
-            letter-spacing: -0.02em;
+        .hero-bg {
+            background: radial-gradient(ellipse at center, rgba(225, 112, 85, 0.1) 0%, transparent 70%);
         }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 3rem;
-            align-items: center;
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
         }
 
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            font-size: 1rem;
-            transition: var(--transition);
-            position: relative;
+        .floating-element:nth-child(2) {
+            animation-delay: 2s;
         }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent-color);
-            transition: width 0.3s ease;
+        .floating-element:nth-child(3) {
+            animation-delay: 4s;
         }
 
-        .nav-links a:hover::after {
-            width: 100%;
+        .testimonial-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-counter {
+            animation: countUp 2s ease-out;
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .cta-button {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 15px rgba(225, 112, 85, 0.2);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(225, 112, 85, 0.3);
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 120px 2rem 80px;
-            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-white) 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
+        .cta-button::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(225, 112, 85, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 20s ease-in-out infinite;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        .cta-button:hover::before {
+            left: 100%;
         }
 
-        .hero-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            position: relative;
-            z-index: 1;
+        .pricing-card {
+            transition: all 0.3s ease;
         }
 
-        .hero-content h1 {
-            margin-bottom: 2rem;
+        .pricing-card:hover {
+            transform: scale(1.05);
         }
 
-        .accent-text {
-            color: var(--accent-color);
-            font-style: italic;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1.5rem;
-            margin-top: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .secondary-button {
-            padding: 0.75rem 2rem;
-            border: 2px solid var(--text-dark);
-            color: var(--text-dark);
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .secondary-button:hover {
-            background-color: var(--text-dark);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .hero-visual {
-            position: relative;
-            height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .letter-preview {
-            background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow-soft);
-            transform: rotate(-3deg);
-            max-width: 400px;
-            position: relative;
-            transition: var(--transition);
-        }
-
-        .letter-preview:hover {
-            transform: rotate(-1deg) scale(1.05);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .letter-preview h4 {
-            font-family: 'Barlow', sans-serif;
-            font-size: 1rem;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-        }
-
-        .letter-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            color: var(--text-dark);
-            line-height: 1.8;
-        }
-
-        /* How It Works Section */
-        .how-it-works {
-            padding: 100px 2rem;
-            background-color: var(--background-white);
-        }
-
-        .section-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
-        }
-
-        .step-card {
-            background: var(--background-light);
-            padding: 3rem 2rem;
-            border-radius: 20px;
-            text-align: center;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .step-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .step-number {
-            display: inline-block;
-            width: 60px;
-            height: 60px;
-            background: var(--accent-color);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0 auto 2rem;
-        }
-
-        .step-icon {
-            font-size: 3rem;
-            color: var(--accent-color);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 100px 2rem;
-            background: linear-gradient(to bottom, var(--background-white), var(--background-light));
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2.5rem;
-            margin-top: 4rem;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: var(--shadow-soft);
-            transition: var(--transition);
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .feature-icon-wrapper {
-            flex-shrink: 0;
-            width: 60px;
-            height: 60px;
-            background: var(--background-light);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent-color);
-        }
-
-        .feature-content h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .feature-content p {
-            font-size: 1rem;
-            margin-bottom: 0;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--text-dark);
-            color: white;
-            padding: 60px 2rem 30px;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer-column h4 {
-            font-family: 'Barlow', sans-serif;
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            color: white;
-        }
-
-        .footer-column ul {
-            list-style: none;
-        }
-
-        .footer-column a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.75rem;
-            transition: var(--transition);
-        }
-
-        .footer-column a:hover {
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 2rem;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        /* Mobile Menu Button */
-        .mobile-menu-button {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-button {
-                display: block;
-            }
-
-            .hero-container {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .hero-visual {
-                display: none;
-            }
-
-            .hero-buttons {
-                justify-content: center;
-            }
-
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            h2 {
-                font-size: 2rem;
-            }
-
-            .steps-grid,
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .slide-in-left {
-            opacity: 0;
-            transform: translateX(-50px);
-            animation: slideInLeft 0.6s ease forwards;
-        }
-
-        @keyframes slideInLeft {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .slide-in-right {
-            opacity: 0;
-            transform: translateX(50px);
-            animation: slideInRight 0.6s ease forwards;
-        }
-
-        @keyframes slideInRight {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .pricing-card.featured {
+            transform: scale(1.1);
+            border: 2px solid #e17055;
         }
     </style>
+    <script src="config.js"></script>
 </head>
-<body>
+<body class="bg-white">
     <!-- Header -->
-    <header>
-        <nav>
-            <a href="/" class="logo">MotivAI</a>
-            <ul class="nav-links">
-                <li><a href="#how-it-works">Comment ça marche</a></li>
-                <li><a href="#features">Avantages</a></li>
-                <li><a href="#pricing">Tarifs</a></li>
-                <li><a href="/login">Connexion</a></li>
-                <li><a href="/form" class="cta-button">
-                    <span class="material-icons">edit_note</span>
-                    Commencer
-                </a></li>
-            </ul>
-            <button class="mobile-menu-button">
-                <span class="material-icons">menu</span>
-            </button>
+    <header class="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-100">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <!-- Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-text-light hover:text-primary transition">Fonctionnalités</a>
+                    <a href="#pricing" class="text-text-light hover:text-primary transition">Tarifs</a>
+                    <a href="#testimonials" class="text-text-light hover:text-primary transition">Témoignages</a>
+                    <a href="/login" class="text-text-light hover:text-primary transition">Connexion</a>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="flex items-center space-x-4">
+                    <a href="/login" class="cta-button bg-accent text-white px-6 py-3 rounded-full font-semibold hover:bg-accent-dark transition flex items-center">
+                        <span class="material-icons mr-2">rocket_launch</span>
+                        Commencer gratuitement
+                    </a>
+                    
+                    <!-- Mobile menu -->
+                    <button class="md:hidden p-2 text-text-light hover:text-primary transition">
+                        <span class="material-icons">menu</span>
+                    </button>
+                </div>
+            </div>
         </nav>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-content slide-in-left">
-                <h1>
-                    Crée ta lettre de motivation 
-                    <span class="accent-text">parfaite</span> 
-                    en 30 secondes
-                </h1>
-                <p class="lead">
-                    L'intelligence artificielle au service de ta recherche d'emploi. 
-                    Génère des lettres personnalisées et professionnelles qui captent 
-                    l'attention des recruteurs.
-                </p>
-                <div class="hero-buttons">
-                    <a href="/form" class="cta-button">
-                        <span class="material-icons">rocket_launch</span>
-                        Créer ma lettre maintenant
-                    </a>
-                    <a href="#how-it-works" class="secondary-button">
-                        <span class="material-icons">play_circle</span>
-                        Voir la démo
-                    </a>
-                </div>
-            </div>
-            <div class="hero-visual slide-in-right">
-                <div class="letter-preview">
-                    <h4>Aperçu d'une lettre générée</h4>
-                    <p class="letter-text">
-                        "Madame, Monsieur,<br><br>
-                        Passionné par le développement web et fort d'une expérience 
-                        de 3 ans dans la création d'applications innovantes, 
-                        je suis enthousiaste à l'idée de rejoindre votre équipe..."
+    <section class="relative min-h-screen flex items-center justify-center hero-bg pt-16">
+        <!-- Floating Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="floating-element absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-accent/20 to-accent-dark/20 rounded-full"></div>
+            <div class="floating-element absolute top-40 right-20 w-32 h-32 bg-gradient-to-br from-info/20 to-blue-600/20 rounded-full"></div>
+            <div class="floating-element absolute bottom-40 left-20 w-24 h-24 bg-gradient-to-br from-success/20 to-green-600/20 rounded-full"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Hero Content -->
+                <div class="text-center lg:text-left animate-slide-up">
+                    <h1 class="text-5xl lg:text-7xl font-display font-bold text-primary mb-6 leading-tight">
+                        Révolutionnez votre 
+                        <span class="gradient-text">carrière</span> 
+                        avec l'IA
+                    </h1>
+                    <p class="text-xl text-text-light mb-8 leading-relaxed">
+                        MotivAI combine intelligence artificielle et expertise RH pour vous offrir 
+                        un accompagnement personnalisé : lettres de motivation, préparation d'entretiens, 
+                        analyse de marché et coaching carrière.
                     </p>
+                    
+                    <!-- Hero CTA -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+                        <a href="/login" class="cta-button bg-accent text-white px-8 py-4 rounded-full font-semibold hover:bg-accent-dark transition flex items-center justify-center text-lg">
+                            <span class="material-icons mr-2">auto_awesome</span>
+                            Essayer gratuitement
+                        </a>
+                        <a href="#demo" class="border-2 border-primary text-primary px-8 py-4 rounded-full font-semibold hover:bg-primary hover:text-white transition flex items-center justify-center text-lg">
+                            <span class="material-icons mr-2">play_circle</span>
+                            Voir la démo
+                        </a>
+                    </div>
+
+                    <!-- Social Proof -->
+                    <div class="flex items-center justify-center lg:justify-start space-x-6 text-sm text-text-light">
+                        <div class="flex items-center">
+                            <span class="material-icons text-warning mr-1">star</span>
+                            <span class="font-semibold">4.9/5</span>
+                            <span class="ml-1">(2,847 avis)</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="material-icons text-success mr-1">verified</span>
+                            <span>+50K utilisateurs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Visual -->
+                <div class="relative animate-fade-in">
+                    <div class="relative z-10">
+                        <!-- Main Dashboard Preview -->
+                        <div class="bg-white rounded-2xl shadow-2xl p-6 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="h-4 bg-gradient-to-r from-accent to-accent-dark rounded w-3/4"></div>
+                                <div class="h-3 bg-gray-200 rounded w-full"></div>
+                                <div class="h-3 bg-gray-200 rounded w-5/6"></div>
+                                <div class="grid grid-cols-3 gap-3 mt-6">
+                                    <div class="h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg"></div>
+                                    <div class="h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-lg"></div>
+                                    <div class="h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Cards -->
+                        <div class="absolute -top-6 -right-6 bg-white rounded-xl shadow-lg p-4 transform -rotate-12 hover:rotate-0 transition-transform duration-500">
+                            <div class="flex items-center space-x-2">
+                                <span class="material-icons text-success">check_circle</span>
+                                <span class="text-sm font-medium">Lettre générée !</span>
+                            </div>
+                        </div>
+
+                        <div class="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-lg p-4 transform rotate-12 hover:rotate-0 transition-transform duration-500">
+                            <div class="flex items-center space-x-2">
+                                <span class="material-icons text-info">psychology</span>
+                                <span class="text-sm font-medium">Coach IA actif</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Background Glow -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-accent/20 to-accent-dark/20 rounded-3xl blur-3xl -z-10"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="section-container">
-            <div class="section-header fade-in">
-                <h2>Comment ça fonctionne ?</h2>
-                <p class="lead">Trois étapes simples pour une lettre de motivation parfaite</p>
-            </div>
-            <div class="steps-grid">
-                <div class="step-card fade-in">
-                    <div class="step-number">1</div>
-                    <span class="material-icons step-icon">person_add</span>
-                    <h3>Remplis ton profil</h3>
-                    <p>Entre tes informations personnelles, ton expérience et tes compétences en quelques clics.</p>
+    <!-- Stats Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary stats-counter">50K+</div>
+                    <div class="text-text-light mt-2">Utilisateurs actifs</div>
                 </div>
-                <div class="step-card fade-in" style="animation-delay: 0.2s">
-                    <div class="step-number">2</div>
-                    <span class="material-icons step-icon">auto_awesome</span>
-                    <h3>L'IA personnalise</h3>
-                    <p>Notre intelligence artificielle analyse tes données et crée une lettre unique et adaptée.</p>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary stats-counter">2.4M</div>
+                    <div class="text-text-light mt-2">Lettres générées</div>
                 </div>
-                <div class="step-card fade-in" style="animation-delay: 0.4s">
-                    <div class="step-number">3</div>
-                    <span class="material-icons step-icon">download</span>
-                    <h3>Télécharge et envoie</h3>
-                    <p>Récupère ta lettre en PDF ou copie le texte directement. C'est prêt à envoyer !</p>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary stats-counter">89%</div>
+                    <div class="text-text-light mt-2">Taux de réussite</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-primary stats-counter">4.9★</div>
+                    <div class="text-text-light mt-2">Note moyenne</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="section-container">
-            <div class="section-header fade-in">
-                <h2>Pourquoi choisir MotivAI ?</h2>
-                <p class="lead">Des avantages pensés pour maximiser tes chances de succès</p>
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-display font-bold text-primary mb-4">
+                    Une suite complète pour votre carrière
+                </h2>
+                <p class="text-xl text-text-light max-w-3xl mx-auto">
+                    Découvrez nos fonctionnalités révolutionnaires qui transforment votre recherche d'emploi
+                </p>
             </div>
-            <div class="feature-grid">
-                <div class="feature-card fade-in">
-                    <div class="feature-icon-wrapper">
-                        <span class="material-icons">speed</span>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- AI Coach -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                        <span class="material-icons text-3xl text-white">psychology</span>
                     </div>
-                    <div class="feature-content">
-                        <h3>Rapide et efficace</h3>
-                        <p>Génère une lettre complète en moins de 30 secondes, plus besoin de passer des heures à rédiger.</p>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Coach IA Personnel</h3>
+                    <p class="text-text-light mb-6">
+                        Un mentor IA disponible 24/7 qui analyse votre profil et vous guide 
+                        vers vos objectifs de carrière avec des conseils personnalisés.
+                    </p>
+                    <a href="/ai-coach" class="text-accent font-semibold hover:text-accent-dark transition">
+                        Découvrir →
+                    </a>
+                </div>
+
+                <!-- Interview Prep -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                        <span class="material-icons text-3xl text-white">quiz</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Préparation Entretiens</h3>
+                    <p class="text-text-light mb-6">
+                        Entraînez-vous avec des simulations d'entretiens réalistes. 
+                        L'IA analyse vos réponses et vous donne des feedbacks précis.
+                    </p>
+                    <a href="/interview-prep" class="text-accent font-semibold hover:text-accent-dark transition">
+                        S'entraîner →
+                    </a>
+                </div>
+
+                <!-- Salary Analyzer -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6">
+                        <span class="material-icons text-3xl text-white">analytics</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Analyseur de Salaire</h3>
+                    <p class="text-text-light mb-6">
+                        Découvrez votre valeur sur le marché avec une analyse en temps réel 
+                        basée sur des millions de données salariales.
+                    </p>
+                    <a href="/salary-analyzer" class="text-accent font-semibold hover:text-accent-dark transition">
+                        Analyser →
+                    </a>
+                </div>
+
+                <!-- Career Path -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6">
+                        <span class="material-icons text-3xl text-white">timeline</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Planificateur de Carrière</h3>
+                    <p class="text-text-light mb-6">
+                        Visualisez votre évolution professionnelle avec un plan personnalisé 
+                        et des étapes concrètes pour atteindre vos objectifs.
+                    </p>
+                    <a href="/career-path" class="text-accent font-semibold hover:text-accent-dark transition">
+                        Planifier →
+                    </a>
+                </div>
+
+                <!-- Networking AI -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+                    <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center mb-6">
+                        <span class="material-icons text-3xl text-white">people</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Networking IA</h3>
+                    <p class="text-text-light mb-6">
+                        Développez votre réseau professionnel avec des recommandations 
+                        intelligentes et des messages personnalisés générés par l'IA.
+                    </p>
+                    <a href="/networking" class="text-accent font-semibold hover:text-accent-dark transition">
+                        Networker →
+                    </a>
+                </div>
+
+                <!-- Market Insights -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mb-6">
+                        <span class="material-icons text-3xl text-white">insights</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Insights Marché</h3>
+                    <p class="text-text-light mb-6">
+                        Restez informé des tendances du marché de l'emploi avec des analyses 
+                        en temps réel et des prédictions basées sur l'IA.
+                    </p>
+                    <a href="/market-insights" class="text-accent font-semibold hover:text-accent-dark transition">
+                        Explorer →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-display font-bold text-primary mb-4">
+                    Comment ça fonctionne ?
+                </h2>
+                <p class="text-xl text-text-light">
+                    Trois étapes simples pour transformer votre carrière
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl font-bold text-white">1</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Créez votre profil</h3>
+                    <p class="text-text-light">
+                        Renseignez vos informations, expériences et objectifs. 
+                        Notre IA analyse votre profil pour vous proposer un accompagnement personnalisé.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl font-bold text-white">2</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Utilisez nos outils IA</h3>
+                    <p class="text-text-light">
+                        Générez des lettres de motivation, préparez vos entretiens, 
+                        analysez le marché et développez votre réseau avec nos outils intelligents.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl font-bold text-white">3</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Décrochez votre job</h3>
+                    <p class="text-text-light">
+                        Suivez vos progrès, recevez des conseils personnalisés 
+                        et maximisez vos chances de décrocher le poste de vos rêves.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-display font-bold text-primary mb-4">
+                    Choisissez votre plan
+                </h2>
+                <p class="text-xl text-text-light">
+                    Des tarifs transparents pour tous les profils
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Free Plan -->
+                <div class="pricing-card bg-white rounded-2xl p-8 border-2 border-gray-200">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Gratuit</h3>
+                        <div class="text-4xl font-bold text-primary mb-4">0€</div>
+                        <p class="text-text-light">Pour commencer</p>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            3 lettres de motivation / mois
+                        </li>
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            Templates de base
+                        </li>
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            Support email
+                        </li>
+                        <li class="flex items-center">
+                            <span class="material-icons text-gray-300 mr-3">close</span>
+                            Coach IA
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 border-2 border-accent text-accent rounded-full font-semibold hover:bg-accent hover:text-white transition">
+                        Commencer gratuitement
+                    </button>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="pricing-card featured bg-white rounded-2xl p-8 border-2 border-accent relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-accent text-white px-4 py-2 rounded-full text-sm font-semibold">
+                            Le plus populaire
+                        </span>
+                    </div>
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Premium</h3>
+                        <div class="text-4xl font-bold text-primary mb-4">9.99€</div>
+                        <p class="text-text-light">Par mois</p>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            Lettres illimitées
+                        </li>
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            Coach IA personnel
+                        </li>
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            Préparation entretiens
+                        </li>
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            Analyse de salaire
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 bg-accent text-white rounded-full font-semibold hover:bg-accent-dark transition">
+                        Choisir Premium
+                    </button>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="pricing-card bg-white rounded-2xl p-8 border-2 border-gray-200">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Pro</h3>
+                        <div class="text-4xl font-bold text-primary mb-4">19.99€</div>
+                        <p class="text-text-light">Par mois</p>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            Tout Premium +
+                        </li>
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            Networking IA avancé
+                        </li>
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            Insights marché premium
+                        </li>
+                        <li class="flex items-center">
+                            <span class="material-icons text-success mr-3">check</span>
+                            Support prioritaire
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 border-2 border-accent text-accent rounded-full font-semibold hover:bg-accent hover:text-white transition">
+                        Choisir Pro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 animated-gradient">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-display font-bold text-white mb-4">
+                    Ils ont transformé leur carrière
+                </h2>
+                <p class="text-xl text-white/80">
+                    Découvrez les témoignages de nos utilisateurs
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="testimonial-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <img src="https://placehold.co/60x60/667eea/ffffff?text=ML" alt="Marie Laurent" class="w-15 h-15 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-primary">Marie Laurent</h4>
+                            <p class="text-text-light">Product Manager @ Airbnb</p>
+                        </div>
+                    </div>
+                    <p class="text-text-dark mb-4">
+                        "MotivAI m'a aidée à décrocher mon poste de rêve chez Airbnb. 
+                        Le coach IA m'a préparée parfaitement pour les entretiens !"
+                    </p>
+                    <div class="flex text-yellow-400">
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
                     </div>
                 </div>
-                <div class="feature-card fade-in" style="animation-delay: 0.1s">
-                    <div class="feature-icon-wrapper">
-                        <span class="material-icons">psychology</span>
+
+                <div class="testimonial-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <img src="https://placehold.co/60x60/f093fb/ffffff?text=PD" alt="Pierre Dubois" class="w-15 h-15 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-primary">Pierre Dubois</h4>
+                            <p class="text-text-light">Tech Lead @ Spotify</p>
+                        </div>
                     </div>
-                    <div class="feature-content">
-                        <h3>Intelligence artificielle avancée</h3>
-                        <p>Notre IA analyse les meilleures pratiques et adapte le contenu à chaque offre d'emploi.</p>
-                    </div>
-                </div>
-                <div class="feature-card fade-in" style="animation-delay: 0.2s">
-                    <div class="feature-icon-wrapper">
-                        <span class="material-icons">verified</span>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Qualité professionnelle</h3>
-                        <p>Des lettres rédigées selon les standards du recrutement, sans fautes et bien structurées.</p>
-                    </div>
-                </div>
-                <div class="feature-card fade-in" style="animation-delay: 0.3s">
-                    <div class="feature-icon-wrapper">
-                        <span class="material-icons">storage</span>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Historique sauvegardé</h3>
-                        <p>Retrouve toutes tes lettres générées dans ton espace personnel, modifie-les à volonté.</p>
+                    <p class="text-text-dark mb-4">
+                        "L'analyseur de salaire m'a permis de négocier une augmentation de 25%. 
+                        Les insights marché sont incroyablement précis !"
+                    </p>
+                    <div class="flex text-yellow-400">
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
                     </div>
                 </div>
-                <div class="feature-card fade-in" style="animation-delay: 0.4s">
-                    <div class="feature-icon-wrapper">
-                        <span class="material-icons">lock</span>
+
+                <div class="testimonial-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <img src="https://placehold.co/60x60/4facfe/ffffff?text=SB" alt="Sophie Bernard" class="w-15 h-15 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-primary">Sophie Bernard</h4>
+                            <p class="text-text-light">Data Scientist @ Google</p>
+                        </div>
                     </div>
-                    <div class="feature-content">
-                        <h3>Données sécurisées</h3>
-                        <p>Tes informations sont protégées et ne sont jamais partagées avec des tiers.</p>
-                    </div>
-                </div>
-                <div class="feature-card fade-in" style="animation-delay: 0.5s">
-                    <div class="feature-icon-wrapper">
-                        <span class="material-icons">support_agent</span>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Support réactif</h3>
-                        <p>Une équipe disponible pour t'aider et répondre à toutes tes questions.</p>
+                    <p class="text-text-dark mb-4">
+                        "Le networking IA m'a connectée avec les bonnes personnes. 
+                        J'ai trouvé mon poste actuel grâce à une recommandation MotivAI !"
+                    </p>
+                    <div class="flex text-yellow-400">
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-column">
-                <h4>MotivAI</h4>
-                <p style="color: rgba(255, 255, 255, 0.7);">
-                    L'outil intelligent pour créer des lettres de motivation qui font la différence.
-                </p>
-            </div>
-            <div class="footer-column">
-                <h4>Produit</h4>
-                <ul>
-                    <li><a href="/features">Fonctionnalités</a></li>
-                    <li><a href="/pricing">Tarifs</a></li>
-                    <li><a href="/examples">Exemples</a></li>
-                    <li><a href="/blog">Blog</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Entreprise</h4>
-                <ul>
-                    <li><a href="/about">À propos</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                    <li><a href="/careers">Carrières</a></li>
-                    <li><a href="/press">Presse</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Légal</h4>
-                <ul>
-                    <li><a href="/privacy">Confidentialité</a></li>
-                    <li><a href="/terms">Conditions d'utilisation</a></li>
-                    <li><a href="/cookies">Cookies</a></li>
-                    <li><a href="/gdpr">RGPD</a></li>
-                </ul>
+    <!-- CTA Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-display font-bold text-primary mb-6">
+                Prêt à révolutionner votre carrière ?
+            </h2>
+            <p class="text-xl text-text-light mb-8">
+                Rejoignez plus de 50 000 professionnels qui ont déjà transformé leur recherche d'emploi avec MotivAI
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/login" class="cta-button bg-accent text-white px-8 py-4 rounded-full font-semibold hover:bg-accent-dark transition flex items-center justify-center text-lg">
+                    <span class="material-icons mr-2">rocket_launch</span>
+                    Commencer gratuitement
+                </a>
+                <a href="#features" class="border-2 border-primary text-primary px-8 py-4 rounded-full font-semibold hover:bg-primary hover:text-white transition flex items-center justify-center text-lg">
+                    <span class="material-icons mr-2">info</span>
+                    En savoir plus
+                </a>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>© 2025 MotivAI. Tous droits réservés. Fait avec passion en France.</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-brand text-3xl text-accent mb-4">MotivAI</h3>
+                    <p class="text-gray-300 mb-4">
+                        L'intelligence artificielle au service de votre carrière. 
+                        Transformez votre recherche d'emploi avec nos outils révolutionnaires.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition">
+                            <span class="material-icons">facebook</span>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition">
+                            <span class="material-icons">twitter</span>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition">
+                            <span class="material-icons">linkedin</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Produit</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/ai-coach" class="text-gray-300 hover:text-white transition">Coach IA</a></li>
+                        <li><a href="/interview-prep" class="text-gray-300 hover:text-white transition">Préparation entretiens</a></li>
+                        <li><a href="/salary-analyzer" class="text-gray-300 hover:text-white transition">Analyseur salaire</a></li>
+                        <li><a href="/networking" class="text-gray-300 hover:text-white transition">Networking IA</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Entreprise</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">À propos</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Blog</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Carrières</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Centre d'aide</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Documentation</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Statut</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">API</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-300">© 2024 MotivAI. Tous droits réservés.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-300 hover:text-white transition">Confidentialité</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition">Conditions</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition">Cookies</a>
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -717,55 +744,111 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
-        });
-
-        // Mobile menu toggle
-        const mobileMenuButton = document.querySelector('.mobile-menu-button');
-        const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuButton.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
 
         // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
+            rootMargin: '0px 0px -50px 0px'
         };
 
-        const observer = new IntersectionObserver(entries => {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
+                    entry.target.classList.add('animate-slide-up');
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
-            el.style.animationPlayState = 'paused';
+        // Observe elements for animation
+        document.querySelectorAll('.feature-card, .testimonial-card, .pricing-card').forEach(el => {
             observer.observe(el);
         });
 
-        // Header scroll effect
-        let lastScroll = 0;
-        const header = document.querySelector('header');
-        
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 100) {
-                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.boxShadow = '0 1px 0 rgba(0, 0, 0, 0.1)';
+        // Counter animation
+        const animateCounters = () => {
+            const counters = document.querySelectorAll('.stats-counter');
+            counters.forEach(counter => {
+                const target = counter.textContent;
+                const numericValue = parseInt(target.replace(/[^\d]/g, ''));
+                let current = 0;
+                const increment = numericValue / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= numericValue) {
+                        current = numericValue;
+                        clearInterval(timer);
+                    }
+                    
+                    if (target.includes('K')) {
+                        counter.textContent = Math.floor(current / 1000) + 'K+';
+                    } else if (target.includes('M')) {
+                        counter.textContent = (current / 1000000).toFixed(1) + 'M';
+                    } else if (target.includes('%')) {
+                        counter.textContent = Math.floor(current) + '%';
+                    } else if (target.includes('★')) {
+                        counter.textContent = (current / 10).toFixed(1) + '★';
+                    } else {
+                        counter.textContent = Math.floor(current);
+                    }
+                }, 50);
+            });
+        };
+
+        // Trigger counter animation when stats section is visible
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsSection = document.querySelector('.stats-counter').closest('section');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.md\\:hidden button');
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                // Add mobile menu functionality here
+                console.log('Mobile menu clicked');
+            });
+        }
+
+        // Track analytics events
+        document.addEventListener('DOMContentLoaded', () => {
+            // Track page view
+            if (typeof Analytics !== 'undefined') {
+                Analytics.trackEvent('page_view', {
+                    page: 'homepage',
+                    timestamp: new Date().toISOString()
+                });
             }
-            
-            lastScroll = currentScroll;
+
+            // Track CTA clicks
+            document.querySelectorAll('.cta-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (typeof Analytics !== 'undefined') {
+                        Analytics.trackEvent('cta_clicked', {
+                            button_text: button.textContent.trim(),
+                            location: 'homepage'
+                        });
+                    }
+                });
+            });
         });
     </script>
 </body>
 </html>
-

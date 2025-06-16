@@ -1,15 +1,46 @@
 {
-    "rewrites": [
-      { "source": "/login", "destination": "/login.html" },
-      { "source": "/dashboard", "destination": "/dashboard.html" },
-      { "source": "/jobs", "destination": "/jobs.html" },
-      { "source": "/companies", "destination": "/companies.html" },
-      { "source": "/form", "destination": "/form.html" },
-      { "source": "/result", "destination": "/result.html" },
-      { "source": "/cv-builder", "destination": "/cv-builder.html" },
-      { "source": "/profile", "destination": "/profile.html" },
-      { "source": "/admin-dashboard", "destination": "/admin-dashboard.html" },
-      { "source": "/", "destination": "/index.html" }
-    ]
-  }
-  
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/register", "destination": "/login.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/jobs", "destination": "/jobs.html" },
+    { "source": "/jobs/:id", "destination": "/job-detail.html" },
+    { "source": "/companies", "destination": "/companies.html" },
+    { "source": "/companies/:id", "destination": "/company-detail.html" },
+    { "source": "/form", "destination": "/form.html" },
+    { "source": "/result", "destination": "/result.html" },
+    { "source": "/result/:id", "destination": "/result.html" },
+    { "source": "/cv-builder", "destination": "/cv-builder.html" },
+    { "source": "/profile", "destination": "/profile.html" },
+    { "source": "/templates", "destination": "/templates.html" },
+    { "source": "/admin", "destination": "/admin-dashboard.html" },
+    { "source": "/ai-coach", "destination": "/ai-coach.html" },
+    { "source": "/interview-prep", "destination": "/interview-prep.html" },
+    { "source": "/salary-analyzer", "destination": "/salary-analyzer.html" },
+    { "source": "/career-path", "destination": "/career-path.html" },
+    { "source": "/networking", "destination": "/networking.html" },
+    { "source": "/skills-assessment", "destination": "/skills-assessment.html" },
+    { "source": "/market-insights", "destination": "/market-insights.html" },
+    { "source": "/api/:path*", "destination": "/api/:path*" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Planificateur de Carrière IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .career-path {
+            position: relative;
+        }
+
+        .career-step {
+            transition: all 0.3s ease;
+        }
+
+        .career-step:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .path-connector {
+            position: absolute;
+            top: 50%;
+            right: -20px;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(to right, #e17055, #c44569);
+            transform: translateY(-50%);
+        }
+
+        .path-connector::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #c44569;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        .skill-progress {
+            transition: width 1s ease-in-out;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #e17055, #c44569);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 1rem;
+            width: 14px;
+            height: 14px;
+            background: #e17055;
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-item:last-child::before {
+            background: linear-gradient(to bottom, #e17055, transparent);
+        }
+
+        .roadmap-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/ai-coach" class="text-text-light hover:text-primary transition">Coach IA</a>
+                    <a href="/career-path" class="text-primary font-semibold">Carrière</a>
+                    <a href="/skills-assessment" class="text-text-light hover:text-primary transition">Compétences</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-display font-bold text-primary mb-4">
+                Planificateur de Carrière IA
+            </h1>
+            <p class="text-xl text-text-light max-w-3xl mx-auto">
+                Découvrez votre chemin de carrière idéal avec notre IA qui analyse le marché, 
+                vos compétences et vos aspirations pour créer un plan personnalisé.
+            </p>
+        </div>
+
+        <!-- Current Status -->
+        <div class="bg-white rounded-xl p-8 shadow-sm mb-12">
+            <h2 class="text-2xl font-bold text-primary mb-6">📍 Votre situation actuelle</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Current Role -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="material-icons text-3xl text-white">work</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary mb-2">Poste actuel</h3>
+                    <p class="text-text-light">Développeur Full Stack</p>
+                    <p class="text-sm text-text-light">3 ans d'expérience</p>
+                </div>
+
+                <!-- Skills Level -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="material-icons text-3xl text-white">psychology</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary mb-2">Niveau de compétences</h3>
+                    <p class="text-text-light">Intermédiaire+</p>
+                    <p class="text-sm text-text-light">Score: 7.8/10</p>
+                </div>
+
+                <!-- Career Goal -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="material-icons text-3xl text-white">flag</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary mb-2">Objectif carrière</h3>
+                    <p class="text-text-light">Tech Lea</p>
+                    <p class="text-sm text-text-light">Dans 2-3 ans</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Career Path Visualization -->
+        <div class="bg-white rounded-xl p-8 shadow-sm mb-12">
+            <h2 class="text-2xl font-bold text-primary mb-8">🛤️ Votre chemin de carrière recommandé</h2>
+            
+            <div class="career-path grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Current Position -->
+                <div class="career-step bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 relative">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="material-icons">person</span>
+                        </div>
+                        <h3 class="font-semibold mb-2">Développeur Full Stack</h3>
+                        <p class="text-sm opacity-90">Position actuelle</p>
+                        <div class="mt-4">
+                            <div class="text-2xl font-bold">52K€</div>
+                            <div class="text-xs opacity-75">Salaire moyen</div>
+                        </div>
+                    </div>
+                    <div class="path-connector hidden md:block"></div>
+                </div>
+
+                <!-- Next Step -->
+                <div class="career-step bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 relative">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="material-icons">trending_up</span>
+                        </div>
+                        <h3 class="font-semibold mb-2">Senior Developer</h3>
+                        <p class="text-sm opacity-90">Dans 12-18 mois</p>
+                        <div class="mt-4">
+                            <div class="text-2xl font-bold">68K€</div>
+                            <div class="text-xs opacity-75">+31% d'augmentation</div>
+                        </div>
+                    </div>
+                    <div class="path-connector hidden md:block"></div>
+                </div>
+
+                <!-- Medium Term -->
+                <div class="career-step bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 relative">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="material-icons">groups</span>
+                        </div>
+                        <h3 class="font-semibold mb-2">Tech Lead</h3>
+                        <p class="text-sm opacity-90">Dans 2-3 ans</p>
+                        <div class="mt-4">
+                            <div class="text-2xl font-bold">85K€</div>
+                            <div class="text-xs opacity-75">+25% d'augmentation</div>
+                        </div>
+                    </div>
+                    <div class="path-connector hidden md:block"></div>
+                </div>
+
+                <!-- Long Term -->
+                <div class="career-step bg-gradient-to-br from-orange-500 to-red-500 text-white rounded-xl p-6">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="material-icons">emoji_events</span>
+                        </div>
+                        <h3 class="font-semibold mb-2">Engineering Manager</h3>
+                        <p class="text-sm opacity-90">Dans 4-5 ans</p>
+                        <div class="mt-4">
+                            <div class="text-2xl font-bold">110K€</div>
+                            <div class="text-xs opacity-75">+29% d'augmentation</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Development Plan -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <!-- Skills to Develop -->
+            <div class="bg-white rounded-xl p-8 shadow-sm">
+                <h3 class="text-xl font-bold text-primary mb-6">🎯 Compétences à développer</h3>
+                
+                <div class="space-y-6">
+                    <!-- Leadership -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-medium">Leadership & Management</span>
+                            <span class="text-sm text-text-light">Priorité: Haute</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                            <div class="skill-progress bg-gradient-to-r from-red-500 to-red-600 h-3 rounded-full" style="width: 25%"></div>
+                        </div>
+                        <p class="text-sm text-text-light">Essentiel pour évoluer vers Tech Lead</p>
+                    </div>
+
+                    <!-- System Design -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-medium">Architecture & System Design</span>
+                            <span class="text-sm text-text-light">Priorité: Haute</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                            <div class="skill-progress bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded-full" style="width: 60%"></div>
+                        </div>
+                        <p class="text-sm text-text-light">Approfondissez les microservices et le cloud</p>
+                    </div>
+
+                    <!-- DevOps -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-medium">DevOps & Infrastructure</span>
+                            <span class="text-sm text-text-light">Priorité: Moyenne</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                            <div class="skill-progress bg-gradient-to-r from-yellow-500 to-yellow-600 h-3 rounded-full" style="width: 40%"></div>
+                        </div>
+                        <p class="text-sm text-text-light">Kubernetes, CI/CD, monitoring</p>
+                    </div>
+
+                    <!-- Business Acumen -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-medium">Business & Product Sense</span>
+                            <span class="text-sm text-text-light">Priorité: Moyenne</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                            <div class="skill-progress bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full" style="width: 30%"></div>
+                        </div>
+                        <p class="text-sm text-text-light">Compréhension des enjeux business</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Roadmap -->
+            <div class="bg-white rounded-xl p-8 shadow-sm">
+                <h3 class="text-xl font-bold text-primary mb-6">📚 Plan d'apprentissage</h3>
+                
+                <div class="space-y-6">
+                    <!-- Q1 2024 -->
+                    <div class="timeline-item">
+                        <h4 class="font-semibold text-primary mb-2">Q1 2024 - Leadership Foundations</h4>
+                        <ul class="space-y-2 text-sm text-text-light">
+                            <li class="flex items-center">
+                                <span class="material-icons text-success text-base mr-2">check_circle</span>
+                                Formation "Management pour développeurs"
+                            </li>
+                            <li class="flex items-center">
+                                <span class="material-icons text-warning text-base mr-2">schedule</span>
+                                Mentorat d'un développeur junior
+                            </li>
+                            <li class="flex items-center">
+                                <span class="material-icons text-gray-300 text-base mr-2">radio_button_unchecked</span>
+                                Lecture: "The Manager's Path"
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Q2 2024 -->
+                    <div class="timeline-item">
+                        <h4 class="font-semibold text-primary mb-2">Q2 2024 - Architecture Avancée</h4>
+                        <ul class="space-y-2 text-sm text-text-light">
+                            <li class="flex items-center">
+                                <span class="material-icons text-gray-300 text-base mr-2">radio_button_unchecked</span>
+                                Certification AWS Solutions Architect
+                            </li>
+                            <li class="flex items-center">
+                                <span class="material-icons text-gray-300 text-base mr-2">radio_button_unchecked</span>
+                                Projet personnel: Architecture microservices
+                            </li>
+                            <li class="flex items-center">
+                                <span class="material-icons text-gray-300 text-base mr-2">radio_button_unchecked</span>
+                                Conférence: Devoxx France
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Q3 2024 -->
+                    <div class="timeline-item">
+                        <h4 class="font-semibold text-primary mb-2">Q3 2024 - DevOps & Automation</h4>
+                        <ul class="space-y-2 text-sm text-text-light">
+                            <li class="flex items-center">
+                                <span class="material-icons text-gray-300 text-base mr-2">radio_button_unchecked</span>
+                                Formation Kubernetes (CKA)
+                            </li>
+                            <li class="flex items-center">
+                                <span class="material-icons text-gray-300 text-base mr-2">radio_button_unchecked</span>
+                                Mise en place CI/CD avancé
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alternative Paths -->
+        <div class="bg-white rounded-xl p-8 shadow-sm mb-12">
+            <h3 class="text-2xl font-bold text-primary mb-6">🔀 Chemins alternatifs</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Technical Expert Path -->
+                <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-accent transition cursor-pointer">
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="material-icons text-2xl text-white">code</span>
+                        </div>
+                        <h4 class="font-semibold text-primary">Expert Technique</h4>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-sm">Staff Engineer</span>
+                            <span class="text-sm font-semibold">95K€</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm">Principal Engineer</span>
+                            <span class="text-sm font-semibold">120K€</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm">Distinguished Engineer</span>
+                            <span class="text-sm font-semibold">150K€</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-text-light mt-4">Focus sur l'expertise technique profonde</p>
+                </div>
+
+                <!-- Product Path -->
+                <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-accent transition cursor-pointer">
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="material-icons text-2xl text-white">inventory</span>
+                        </div>
+                        <h4 class="font-semibold text-primary">Product & Strategy</h4>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-sm">Product Manager</span>
+                            <span class="text-sm font-semibold">75K€</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm">Senior PM</span>
+                            <span class="text-sm font-semibold">95K€</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm">VP Product</span>
+                            <span class="text-sm font-semibold">130K€</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-text-light mt-4">Transition vers le product management</p>
+                </div>
+
+                <!-- Entrepreneurship Path -->
+                <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-accent transition cursor-pointer">
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="material-icons text-2xl text-white">rocket_launch</span>
+                        </div>
+                        <h4 class="font-semibold text-primary">Entrepreneuriat</h4>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-sm">Freelance Senior</span>
+                            <span class="text-sm font-semibold">600€/j</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm">Consultant Expert</span>
+                            <span class="text-sm font-semibold">800€/j</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm">Startup Founder</span>
+                            <span class="text-sm font-semibold">Variable</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-text-light mt-4">Indépendance et création d'entreprise</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Plan -->
+        <div class="roadmap-card text-white p-8 mb-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h3 class="text-3xl font-bold mb-4">🚀 Votre plan d'action personnalisé</h3>
+                    <p class="text-white/90 mb-6 text-lg">
+                        Basé sur votre profil et vos objectifs, voici les prochaines étapes 
+                        concrètes pour accélérer votre évolution de carrière.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <span class="material-icons text-sm">check</span>
+                            </div>
+                            <span>Plan personnalisé sur 24 mois</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <span class="material-icons text-sm">check</span>
+                            </div>
+                            <span>Formations et certifications recommandées</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <span class="material-icons text-sm">check</span>
+                            </div>
+                            <span>Suivi des progrès et ajustements</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="floating-element">
+                        <div class="w-48 h-48 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="material-icons text-6xl">timeline</span>
+                        </div>
+                    </div>
+                    <button onclick="generateDetailedPlan()" 
+                            class="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:bg-white/90 transition">
+                        Générer mon plan détaillé
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Metrics -->
+        <div class="bg-white rounded-xl p-8 shadow-sm">
+            <h3 class="text-2xl font-bold text-primary mb-6">📈 Métriques de succès</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center p-6 bg-gray-50 rounded-xl">
+                    <div class="text-3xl font-bold text-success mb-2">+31%</div>
+                    <div class="text-sm text-text-light">Augmentation salariale prévue</div>
+                    <div class="text-xs text-text-light mt-1">Dans 18 mois</div>
+                </div>
+                <div class="text-center p-6 bg-gray-50 rounded-xl">
+                    <div class="text-3xl font-bold text-info mb-2">85%</div>
+                    <div class="text-sm text-text-light">Probabilité de promotion</div>
+                    <div class="text-xs text-text-light mt-1">Avec ce plan</div>
+                </div>
+                <div class="text-center p-6 bg-gray-50 rounded-xl">
+                    <div class="text-3xl font-bold text-warning mb-2">12</div>
+                    <div class="text-sm text-text-light">Nouvelles compétences</div>
+                    <div class="text-xs text-text-light mt-1">À acquérir</div>
+                </div>
+                <div class="text-center p-6 bg-gray-50 rounded-xl">
+                    <div class="text-3xl font-bold text-accent mb-2">24</div>
+                    <div class="text-sm text-text-light">Mois pour atteindre</div>
+                    <div class="text-xs text-text-light mt-1">Votre objectif</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('/login');
+        }
+
+        function generateDetailedPlan() {
+            Notifications.info('Génération de votre plan détaillé... 🚀');
+            
+            setTimeout(() => {
+                Notifications.success('Plan détaillé généré ! Consultez votre email pour le télécharger.');
+                Analytics.trackEvent('career_plan_generated', {
+                    current_role: 'full_stack_developer',
+                    target_role: 'tech_lead',
+                    timeline: '24_months'
+                });
+            }, 2000);
+        }
+
+        // Animation des barres de progression au scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const progressBars = entry.target.querySelectorAll('.skill-progress');
+                    progressBars.forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0%';
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 100);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observer les sections avec des barres de progression
+        document.querySelectorAll('.bg-white').forEach(section => {
+            if (section.querySelector('.skill-progress')) {
+                observer.observe(section);
+            }
+        });
+
+        // Gestion des chemins alternatifs
+        document.querySelectorAll('.border-2').forEach(card => {
+            card.addEventListener('click', function() {
+                const pathType = this.querySelector('h4').textContent;
+                Analytics.trackEvent('alternative_path_viewed', {
+                    path_type: pathType
+                });
+                
+                // Highlight temporaire
+                this.classList.add('border-accent');
+                setTimeout(() => {
+                    this.classList.remove('border-accent');
+                    this.classList.add('border-gray-200');
+                }, 2000);
+            });
+        });
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animer l'apparition des éléments
+            const elements = document.querySelectorAll('.career-step, .timeline-item');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    el.style.transition = 'all 0.5s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

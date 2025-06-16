@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotivAI - Analyseur de Salaire IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        accent: '#e17055',
+                        'accent-dark': '#c44569',
+                        'text-dark': '#2d3436',
+                        'text-light': '#636e72',
+                        'bg-light': '#fff5f3',
+                        success: '#00b894',
+                        error: '#d63031',
+                        warning: '#fdcb6e',
+                        info: '#74b9ff',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'brand': ['Abril Fatface', 'cursive'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .salary-card {
+            transition: all 0.3s ease;
+        }
+        
+        .salary-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .animate-counter {
+            animation: countUp 2s ease-out;
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="font-brand text-3xl text-accent">MotivAI</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard" class="text-text-light hover:text-primary transition">Dashboard</a>
+                    <a href="/ai-coach" class="text-text-light hover:text-primary transition">Coach IA</a>
+                    <a href="/salary-analyzer" class="text-primary font-semibold">Salaires</a>
+                    <a href="/market-insights" class="text-text-light hover:text-primary transition">Marché</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white font-semibold">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-display font-bold text-primary mb-4">
+                Analyseur de Salaire IA
+            </h1>
+            <p class="text-xl text-text-light max-w-3xl mx-auto">
+                Découvrez votre valeur sur le marché avec notre IA qui analyse en temps réel 
+                les données salariales de milliers d'offres d'emploi.
+            </p>
+        </div>
+
+        <!-- Salary Analysis Form -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <!-- Form -->
+            <div class="lg:col-span-2 bg-white rounded-xl p-8 shadow-sm">
+                <h2 class="text-2xl font-bold text-primary mb-6">Analysez votre salaire</h2>
+                
+                <form id="salaryForm" class="space-y-6">
+                    <!-- Job Title -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Intitulé du poste</label>
+                        <input type="text" id="jobTitle" placeholder="Ex: Développeur Full Stack Senior" 
+                               class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Années d'expérience</label>
+                            <select id="experience" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                                <option value="">Sélectionnez</option>
+                                <option value="0-1">0-1 an</option>
+                                <option value="2-3">2-3 ans</option>
+                                <option value="4-6">4-6 ans</option>
+                                <option value="7-10">7-10 ans</option>
+                                <option value="10+">10+ ans</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Niveau d'études</label>
+                            <select id="education" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                                <option value="">Sélectionnez</option>
+                                <option value="bac">Bac</option>
+                                <option value="bac+2">Bac+2</option>
+                                <option value="bac+3">Bac+3</option>
+                                <option value="bac+5">Bac+5</option>
+                                <option value="phd">Doctorat</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ville</label>
+                            <input type="text" id="city" placeholder="Ex: Paris" 
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Type de contrat</label>
+                            <select id="contractType" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                                <option value="cdi">CDI</option>
+                                <option value="cdd">CDD</option>
+                                <option value="freelance">Freelance</option>
+                                <option value="stage">Stage</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Company Size -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Taille de l'entreprise</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-accent transition">
+                                <input type="radio" name="companySize" value="startup" class="mr-2">
+                                <span class="text-sm">Startup (1-50)</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-accent transition">
+                                <input type="radio" name="companySize" value="pme" class="mr-2">
+                                <span class="text-sm">PME (51-250)</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-accent transition">
+                                <input type="radio" name="companySize" value="eti" class="mr-2">
+                                <span class="text-sm">ETI (251-5000)</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-accent transition">
+                                <input type="radio" name="companySize" value="grand-groupe" class="mr-2">
+                                <span class="text-sm">Grand groupe (5000+)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Compétences principales</label>
+                        <div class="flex flex-wrap gap-2 mb-3" id="skillsContainer">
+                            <!-- Skills will be added here -->
+                        </div>
+                        <input type="text" id="skillInput" placeholder="Tapez une compétence et appuyez sur Entrée" 
+                               class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                    </div>
+
+                    <!-- Current Salary (Optional) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Salaire actuel (optionnel)</label>
+                        <div class="relative">
+                            <input type="number" id="currentSalary" placeholder="45000" 
+                                   class="w-full px-4 py-3 pr-12 border border-gray-200 rounded-lg focus:outline-none focus:border-accent">
+                            <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500">€/an</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Cette information nous aide à personnaliser l'analyse</p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" 
+                            class="w-full bg-accent text-white py-4 rounded-lg font-semibold hover:bg-accent-dark transition flex items-center justify-center">
+                        <span class="material-icons mr-2">analytics</span>
+                        Analyser mon salaire
+                    </button>
+                </form>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="space-y-6">
+                <!-- Market Overview -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">📊 Aperçu du marché</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Salaire médian Tech</span>
+                            <span class="font-semibold">52K€</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Évolution annuelle</span>
+                            <span class="font-semibold text-success">+8.5%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Postes disponibles</span>
+                            <span class="font-semibold">12,450</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-text-light">Tension du marché</span>
+                            <span class="font-semibold text-warning">Élevée</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Skills -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">🔥 Compétences recherchées</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">React</span>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-16 h-2 bg-gray-200 rounded-full">
+                                    <div class="w-14 h-2 bg-accent rounded-full"></div>
+                                </div>
+                                <span class="text-xs text-accent">+15%</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">Python</span>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-16 h-2 bg-gray-200 rounded-full">
+                                    <div class="w-12 h-2 bg-success rounded-full"></div>
+                                </div>
+                                <span class="text-xs text-success">+12%</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">AWS</span>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-16 h-2 bg-gray-200 rounded-full">
+                                    <div class="w-10 h-2 bg-info rounded-full"></div>
+                                </div>
+                                <span class="text-xs text-info">+10%</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">Docker</span>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-16 h-2 bg-gray-200 rounded-full">
+                                    <div class="w-8 h-2 bg-warning rounded-full"></div>
+                                </div>
+                                <span class="text-xs text-warning">+8%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Analysis -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-primary mb-4">🕒 Analyses récentes</h3>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-sm font-medium">Product Manager</span>
+                                <span class="text-xs text-text-light">Il y a 2h</span>
+                            </div>
+                            <span class="text-sm text-success">65-75K€</span>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-sm font-medium">Data Scientist</span>
+                                <span class="text-xs text-text-light">Il y a 5h</span>
+                            </div>
+                            <span class="text-sm text-success">58-68K€</span>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-sm font-medium">DevOps Engineer</span>
+                                <span class="text-xs text-text-light">Hier</span>
+                            </div>
+                            <span class="text-sm text-success">62-72K€</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section (Hidden by default) -->
+        <div id="resultsSection" class="hidden">
+            <!-- Salary Overview -->
+            <div class="bg-gradient-to-r from-accent to-accent-dark rounded-xl p-8 text-white mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold mb-2 animate-counter" id="estimatedSalary">65,000€</div>
+                        <div class="text-white/80">Salaire estimé</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold mb-2 animate-counter" id="marketPosition">75%</div>
+                        <div class="text-white/80">Position sur le marché</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold mb-2 animate-counter" id="confidenceScore">92%</div>
+                        <div class="text-white/80">Fiabilité de l'analyse</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Analysis -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Salary Range Chart -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Fourchette salariale</h3>
+                    <div class="chart-container">
+                        <canvas id="salaryRangeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Comparison Chart -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Comparaison par expérience</h3>
+                    <div class="chart-container">
+                        <canvas id="experienceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Factors Analysis -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Location Impact -->
+                <div class="salary-card bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                            <span class="material-icons text-white">location_on</span>
+                        </div>
+                        <span class="text-success font-semibold">+12%</span>
+                    </div>
+                    <h4 class="font-semibold text-primary mb-2">Localisation</h4>
+                    <p class="text-sm text-text-light">Paris offre une prime de 12% par rapport à la moyenne nationale</p>
+                </div>
+
+                <!-- Experience Impact -->
+                <div class="salary-card bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                            <span class="material-icons text-white">trending_up</span>
+                        </div>
+                        <span class="text-success font-semibold">+25%</span>
+                    </div>
+                    <h4 class="font-semibold text-primary mb-2">Expérience</h4>
+                    <p class="text-sm text-text-light">Votre niveau d'expérience vous place dans le top 25%</p>
+                </div>
+
+                <!-- Skills Impact -->
+                <div class="salary-card bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="material-icons text-white">psychology</span>
+                        </div>
+                        <span class="text-warning font-semibold">+8%</span>
+                    </div>
+                    <h4 class="font-semibold text-primary mb-2">Compétences</h4>
+                    <p class="text-sm text-text-light">Vos compétences techniques sont très demandées</p>
+                </div>
+
+                <!-- Company Size Impact -->
+                <div class="salary-card bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                            <span class="material-icons text-white">business</span>
+                        </div>
+                        <span class="text-info font-semibold">+5%</span>
+                    </div>
+                    <h4 class="font-semibold text-primary mb-2">Taille entreprise</h4>
+                    <p class="text-sm text-text-light">Les grandes entreprises paient généralement mieux</p>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="bg-white rounded-xl p-8 shadow-sm">
+                <h3 class="text-2xl font-bold text-primary mb-6">🎯 Recommandations personnalisées</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Salary Negotiation -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-primary mb-4">💰 Négociation salariale</h4>
+                        <div class="space-y-3">
+                            <div class="p-4 bg-success/10 border border-success/20 rounded-lg">
+                                <h5 class="font-medium text-success mb-1">Votre position est forte</h5>
+                                <p class="text-sm text-text-light">Vous pouvez négocier une augmentation de 10-15%</p>
+                            </div>
+                            <div class="p-4 bg-info/10 border border-info/20 rounded-lg">
+                                <h5 class="font-medium text-info mb-1">Arguments clés</h5>
+                                <p class="text-sm text-text-light">Mettez en avant vos compétences React et votre expérience</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Career Development -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-primary mb-4">🚀 Évolution de carrière</h4>
+                        <div class="space-y-3">
+                            <div class="p-4 bg-warning/10 border border-warning/20 rounded-lg">
+                                <h5 class="font-medium text-warning mb-1">Compétences à développer</h5>
+                                <p class="text-sm text-text-light">Apprenez Kubernetes pour augmenter votre valeur de 15%</p>
+                            </div>
+                            <div class="p-4 bg-purple-100 border border-purple-200 rounded-lg">
+                                <h5 class="font-medium text-purple-600 mb-1">Évolution possible</h5>
+                                <p class="text-sm text-text-light">Tech Lead dans 2-3 ans : +20-30K€</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-4 mt-8 justify-center">
+                    <button onclick="downloadSalaryReport()" 
+                            class="px-6 py-3 bg-accent text-white rounded-lg font-medium hover:bg-accent-dark transition">
+                        <span class="material-icons mr-2">download</span>
+                        Télécharger le rapport
+                    </button>
+                    <button onclick="scheduleNegotiationCoaching()" 
+                            class="px-6 py-3 bg-success text-white rounded-lg font-medium hover:bg-green-600 transition">
+                        <span class="material-icons mr-2">school</span>
+                        Coaching négociation
+                    </button>
+                    <button onclick="findSimilarJobs()" 
+                            class="px-6 py-3 bg-info text-white rounded-lg font-medium hover:bg-blue-600 transition">
+                        <span class="material-icons mr-2">search</span>
+                        Voir les offres similaires
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Vérification de l'authentification
+        if (!Auth.isAuthenticated()) {
+            Navigation.redirectTo('/login');
+        }
+
+        const skills = new Set();
+
+        // Gestion des compétences
+        document.getElementById('skillInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const skill = this.value.trim();
+                if (skill && !skills.has(skill)) {
+                    skills.add(skill);
+                    updateSkillsDisplay();
+                    this.value = '';
+                }
+            }
+        });
+
+        function updateSkillsDisplay() {
+            const container = document.getElementById('skillsContainer');
+            container.innerHTML = '';
+            skills.forEach(skill => {
+                const skillElement = document.createElement('span');
+                skillElement.className = 'inline-flex items-center px-3 py-1 bg-accent/10 text-accent rounded-full text-sm';
+                skillElement.innerHTML = `
+                    ${skill}
+                    <button onclick="removeSkill('${skill}')" class="ml-2 text-accent/60 hover:text-accent">
+                        <span class="material-icons text-sm">close</span>
+                    </button>
+                `;
+                container.appendChild(skillElement);
+            });
+        }
+
+        function removeSkill(skill) {
+            skills.delete(skill);
+            updateSkillsDisplay();
+        }
+
+        // Gestion du formulaire
+        document.getElementById('salaryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                jobTitle: document.getElementById('jobTitle').value,
+                experience: document.getElementById('experience').value,
+                education: document.getElementById('education').value,
+                city: document.getElementById('city').value,
+                contractType: document.getElementById('contractType').value,
+                companySize: document.querySelector('input[name="companySize"]:checked')?.value,
+                skills: Array.from(skills),
+                currentSalary: document.getElementById('currentSalary').value
+            };
+
+            if (!formData.jobTitle || !formData.experience || !formData.city) {
+                Notifications.warning('Veuillez remplir tous les champs obligatoires');
+                return;
+            }
+
+            analyzeSalary(formData);
+        });
+
+        function analyzeSalary(data) {
+            // Simuler l'analyse
+            Notifications.info('Analyse en cours... 🔍');
+            
+            setTimeout(() => {
+                // Afficher les résultats
+                document.getElementById('resultsSection').classList.remove('hidden');
+                
+                // Animer les compteurs
+                animateCounter('estimatedSalary', 65000, '€');
+                animateCounter('marketPosition', 75, '%');
+                animateCounter('confidenceScore', 92, '%');
+                
+                // Créer les graphiques
+                createSalaryRangeChart();
+                createExperienceChart();
+                
+                // Analytics
+                Analytics.trackEvent('salary_analysis_completed', {
+                    job_title: data.jobTitle,
+                    experience: data.experience,
+                    city: data.city
+                });
+
+                Notifications.success('Analyse terminée ! Consultez vos résultats ci-dessous.');
+                
+                // Scroll vers les résultats
+                document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        }
+
+        function animateCounter(elementId, targetValue, suffix = '') {
+            const element = document.getElementById(elementId);
+            let currentValue = 0;
+            const increment = targetValue / 50;
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    currentValue = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(currentValue).toLocaleString() + suffix;
+            }, 40);
+        }
+
+        function createSalaryRangeChart() {
+            const ctx = document.getElementById('salaryRangeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Min', 'P25', 'Médiane', 'Votre estimation', 'P75', 'Max'],
+                    datasets: [{
+                        label: 'Salaire (K€)',
+                        data: [45, 55, 62, 65, 72, 85],
+                        backgroundColor: [
+                            '#e5e7eb',
+                            '#d1d5db',
+                            '#9ca3af',
+                            '#e17055',
+                            '#9ca3af',
+                            '#d1d5db'
+                        ],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + 'K€';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createExperienceChart() {
+            const ctx = document.getElementById('experienceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['0-1 ans', '2-3 ans', '4-6 ans', '7-10 ans', '10+ ans'],
+                    datasets: [{
+                        label: 'Salaire moyen',
+                        data: [38, 48, 62, 75, 90],
+                        borderColor: '#e17055',
+                        backgroundColor: 'rgba(225, 112, 85, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#e17055',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + 'K€';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function downloadSalaryReport() {
+            Notifications.success('Rapport de salaire téléchargé !');
+            Analytics.trackEvent('salary_report_downloaded');
+        }
+
+        function scheduleNegotiationCoaching() {
+            Navigation.redirectTo('/ai-coach');
+        }
+
+        function findSimilarJobs() {
+            Navigation.redirectTo('/jobs');
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Pré-remplir avec les données du profil utilisateur si disponibles
+            const user = Auth.getUser();
+            if (user && user.profile) {
+                if (user.profile.jobTitle) {
+                    document.getElementById('jobTitle').value = user.profile.jobTitle;
+                }
+                if (user.profile.city) {
+                    document.getElementById('city').value = user.profile.city;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
